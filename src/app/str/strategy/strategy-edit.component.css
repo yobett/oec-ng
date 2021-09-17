@@ -1,0 +1,86 @@
+.toolbar-sub-title {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8em;
+  margin-top: 0.4em;
+  margin-left: 3em;
+}
+
+.toolbar-sub-title .prop {
+  display: inline-block;
+  margin-right: 2em;
+}
+
+.toolbar-sub-title .ccy-logo {
+  width: 20px;
+  vertical-align: text-bottom;
+}
+
+.container {
+  margin: 1em;
+}
+
+.section {
+  margin-bottom: 1em;
+}
+
+.reference-section {
+  margin-bottom: 3em;
+}
+
+.section-title {
+  display: block;
+  margin-bottom: 1em;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.title-bar {
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.section-content {
+  margin-left: 2em;
+}
+
+.info-bar {
+  display: flex;
+  flex-wrap: wrap;
+  line-height: 36px;
+  align-items: baseline;
+  /*margin-bottom: 2em;*/
+}
+
+.props {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.props > div {
+  margin-left: 2em;
+}
+
+.prop-name {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.field-box {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.short-field {
+  width: 10em;
+}
+
+.ratio-field {
+  width: 6em;
+}
+
+[hidden] {
+  display: inline-block;
+  visibility: hidden;
+}

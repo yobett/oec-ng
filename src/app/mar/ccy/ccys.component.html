@@ -1,0 +1,167 @@
+<div class="mat-elevation-z1">
+  <mat-toolbar>
+    币种
+    &nbsp;&nbsp;
+    <mat-button-toggle-group [value]="filterForm['concerned']? 'concerned':'all'"
+                             (change)="concernedGroupChanged($event)">
+      <mat-button-toggle value="concerned">
+        <mat-icon class="favorite">star</mat-icon>关注
+      </mat-button-toggle>
+      <mat-button-toggle value="all">全部</mat-button-toggle>
+    </mat-button-toggle-group>
+    <span class="spacer"></span>
+    <!--<button class="flex-button" mat-stroked-button color="primary" (click)="syncCurrencies()"
+            [disabled]="processes.syncCurrencies">
+      <mat-icon>sync</mat-icon>
+      Sync
+    </button>-->
+    <button mat-button [matMenuTriggerFor]="syncActions">
+      同步
+      <mat-icon>more_horiz</mat-icon>
+    </button>
+    <mat-menu #syncActions="matMenu">
+      <button mat-menu-item (click)="syncCurrencies(100)" [disabled]="processes.syncCurrencies">
+        <mat-icon>sync</mat-icon>
+        前 100
+      </button>
+      <button mat-menu-item (click)="syncCurrencies(1000)" [disabled]="processes.syncCurrencies">
+        <mat-icon>sync</mat-icon>
+        前 1000
+      </button>
+      <button mat-menu-item (click)="syncCurrencies(5000)" [disabled]="processes.syncCurrencies">
+        <mat-icon>sync</mat-icon>
+        前 5000
+      </button>
+      <button mat-menu-item (click)="syncCurrenciesFromPairs()" [disabled]="processes.syncCurrencies">
+        <mat-icon>sync</mat-icon>
+        交易对所涉币种
+      </button>
+    </mat-menu>
+    <!--<button mat-stroked-button color="primary" (click)="editNew()">
+      <mat-icon>add_circle_outline</mat-icon>
+      New
+    </button>-->
+  </mat-toolbar>
+
+  <div class="table-filter-form">
+
+    <mat-form-field>
+      <input matInput placeholder="Code" name="code" [(ngModel)]="filterForm['code']" (keyup.enter)="filter()">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Name" name="name" [(ngModel)]="filterForm['name']" (keyup.enter)="filter()">
+    </mat-form-field>
+
+    <button mat-button (click)="filter()">
+      <mat-icon>search</mat-icon>
+      筛选
+    </button>
+    <button mat-button (click)="resetFilter()">
+      <mat-icon>block</mat-icon>
+      全部
+    </button>
+  </div>
+
+  <table mat-table class="full-width" matSort matSortActive="no" matSortDirection="asc">
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1 + (paginator ? paginator.pageIndex * paginator.pageSize : 0)}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="concerned">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header start="desc">
+        <mat-icon>star_outline</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon class="clickable" [class.favorite]="row.concerned" (click)="toggleConcern(row)">
+          {{row.concerned ? 'star' : 'star_outline'}}
+        </mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC排名</th>
+      <td mat-cell *matCellDef="let row">{{row.no}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="code">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>代号</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="staticBase+row.logoPath" alt="">
+        <div class="ccy-code">{{row.code}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>名称</th>
+      <td mat-cell *matCellDef="let row">{{row.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>初次同步</th>
+      <td mat-cell *matCellDef="let row">{{row.createdAt | date:'y-MM-dd'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" align="end">
+
+        <button mat-button (click)="showMeta(row)">
+          <mat-icon>list</mat-icon>
+          元数据
+        </button>
+
+        <button mat-button [matMenuTriggerFor]="actions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #actions="matMenu">
+          <a mat-menu-item class="mat-icon-20"
+             href="https://coinmarketcap.com/currencies/{{row.slug}}" target="_blank">
+            <mat-icon>link</mat-icon>
+            CMC
+          </a>
+          <a mat-menu-item class="mat-icon-20"
+             href="https://www.okex.com/markets/prices/{{row.slug}}-{{row.code | lowercase}}" target="_blank">
+            <mat-icon>link</mat-icon>
+            OE
+          </a>
+          <a mat-menu-item class="mat-icon-20"
+             href="https://research.binance.com/cn/projects/{{row.slug}}" target="_blank">
+            <!-- -or- (row.code | lowercase) eg. bnb,dai -->
+            <mat-icon>link</mat-icon>
+            BA
+          </a>
+          <a mat-menu-item class="mat-icon-20"
+             href="https://www.huobi.com/zh-cn/assetintro/#{{row.code | lowercase}}" target="_blank">
+            <mat-icon>link</mat-icon>
+            HB
+          </a>
+          <!--<button mat-menu-item (click)="edit(row)">
+            <mat-icon>edit</mat-icon>
+            Edit
+          </button>-->
+          <button mat-menu-item (click)="remove(row)">
+            <mat-icon>remove_circle_outline</mat-icon>
+            删除
+          </button>
+        </mat-menu>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource?.total"
+                 [pageIndex]="0"
+                 [pageSize]="20"
+                 [pageSizeOptions]="[10, 20, 50, 100]">
+  </mat-paginator>
+
+</div>

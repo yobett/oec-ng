@@ -1,0 +1,26 @@
+.table-filter-form {
+  margin-bottom: 1em;
+}
+
+.limit-field {
+  width: 6em;
+}
+
+.ex-toggle-group {
+  margin-right: 1em;
+}
+
+.field-label {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.operation-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chart {
+  margin: 8px;
+}

@@ -1,0 +1,194 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "./styles/material-icons/material-icons.css";
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@media print {
+  .not-print, .not-print * {
+    display: none;
+  }
+}
+
+.main-content {
+  display: block;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/*
+tr.mat-header-row {
+  height: 48px !important;
+}
+
+tr.mat-row, tr.mat-footer-row {
+  height: 40px !important;
+}
+*/
+
+.multi-lines-tooltip {
+  white-space: pre-line;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
+.mat-tab-body {
+  padding: 1em;
+}
+
+.mat-icon.clickable {
+  cursor: pointer;
+}
+
+img.ccy-logo {
+  width: 20px;
+  display: inline-block;
+}
+
+.ccy-logo-code img.ccy-logo {
+  vertical-align: bottom;
+}
+
+.ccy-logo-code .ccy-code {
+  display: inline-block;
+  margin-left: .5em;
+}
+
+.mat-menu-item img.ccy-logo {
+  width: 18px;
+  vertical-align: text-top;
+}
+
+.mat-option img.ccy-logo {
+  width: 18px;
+  vertical-align: text-top;
+}
+
+.mat-button img.ccy-logo {
+  width: 16px;
+  vertical-align: text-top;
+}
+
+.mat-header-cell.sum-row {
+  font-size: 1.1em;
+}
+
+.table-filter-form {
+  margin-left: 16px;
+  margin-right: 16px;
+  padding-top: 8px;
+}
+
+.table-filter-form .mat-form-field {
+  margin-right: 0.5em;
+  width: 120px;
+}
+
+.mat-button.secondary:not([disabled]):hover {
+  color: inherit;
+}
+
+button .mat-icon, .mat-icon.mat-icon-20 {
+  /*height: 22px !important;*/
+  /*width: 20px !important;*/
+  font-size: 20px !important;
+  vertical-align: middle !important;
+}
+
+.mat-table .mat-icon, .mat-table .mat-header-row .mat-icon, .mat-icon.mat-icon-16 {
+  height: 18px !important;
+  width: 16px !important;
+  font-size: 16px !important;
+}
+
+.mat-button i.mat-icon.icon {
+  vertical-align: top !important;
+  margin: 0 0;
+}
+
+.mat-table i.mat-icon.icon {
+  height: 14px !important;
+  width: 14px !important;
+  font-size: 14px !important;
+}
+
+
+.sidenav .mat-expansion-panel-body {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.sidenav .mat-expansion-panel-body .mat-nav-list {
+  padding-top: 0;
+}
+
+.sidenav .mat-expansion-panel-body .mat-nav-list .mat-list-item span {
+  padding-left: 24px;
+}
+
+.content-container {
+  padding: 16px;
+  min-width: 640px;
+  display: inline-block;
+}
+
+.mat-expansion-indicator {
+  display: flex;
+}
+
+.mat-expansion-panel-header {
+  /*background: #303030 !important;*/
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.selectable {
+  cursor: pointer;
+}
+
+.field-box {
+  width: 100%;
+  margin: 1em 0;
+}
+
+.slide-field {
+  display: inline-block;
+  margin: 1em 0;
+}
+
+.field-box .mat-form-field:not(:last-child) {
+  margin-right: 2em;
+}
+
+.radio-group-order-type {
+  display: inline-block;
+}
+
+.order-type-option {
+  margin-right: 2em;
+}
+
+@media(max-width: 759px) {
+  .mat-toolbar {
+    flex-wrap: wrap;
+    min-height: 64px;
+    height: auto !important;
+  }
+}

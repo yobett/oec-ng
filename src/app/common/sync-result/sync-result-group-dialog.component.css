@@ -1,0 +1,20 @@
+.result-group + .result-group {
+  margin-top: 1em;
+}
+
+.group-name {
+  font-weight: bold;
+}
+
+li {
+  list-style: none;
+}
+
+.dt {
+  display: inline-block;
+  min-width: 6em;
+}
+
+.dd {
+  display: inline-block;
+}

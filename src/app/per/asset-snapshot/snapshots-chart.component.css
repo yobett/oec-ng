@@ -1,0 +1,23 @@
+.table-filter-form {
+  margin-bottom: 1em;
+}
+
+.limit-field {
+  width: 6em;
+}
+
+.field-label {
+  display: inline-block;
+  min-width: 4em;
+  margin-right: 8px;
+}
+
+.operation-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.chart {
+  margin: 8px;
+}

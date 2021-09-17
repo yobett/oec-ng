@@ -1,0 +1,138 @@
+<div class="mat-elevation-z1">
+  <mat-toolbar>
+    交易对价格
+    <span class="spacer"></span>
+    <button class="flex-button" mat-stroked-button color="primary" (click)="fetchPrices()"
+            [disabled]="processes.fetchPrices">
+      <mat-icon>refresh</mat-icon>
+      刷新价格
+    </button>
+  </mat-toolbar>
+
+  <table mat-table class="full-width" matSort matSortActive="updateTs" matSortDirection="desc">
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef rowspan="2">#</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1 + (paginator ? paginator.pageIndex * paginator.pageSize : 0)}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="baseCcy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header rowspan="2">基础币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.baseCcy)" alt="">
+        <div class="ccy-code">{{row.baseCcy}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quoteCcy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header rowspan="2">报价币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.quoteCcy)" alt="">
+        <div class="ccy-code">{{row.quoteCcy}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ex">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header class="no-padding-left">交易所</th>
+      <td mat-cell *matCellDef="let row">{{row.lastTrans?.ex}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="updateTs">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>时间</th>
+      <td mat-cell *matCellDef="let row">{{row.lastTrans?.updateTs | date:'MM-dd HH:mm'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="side">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>方向</th>
+      <td mat-cell *matCellDef="let row"
+          [class.order-side-buy]="row.lastTrans?.side==='buy'"
+          [class.order-side-sell]="row.lastTrans?.side==='sell'">
+        {{row.lastTrans?.side}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="avgPrice">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>均价</th>
+      <td mat-cell *matCellDef="let row"
+          [matTooltip]="transAmountTooltip(row)"
+          matTooltipShowDelay="200"
+          matTooltipHideDelay="200"
+          matTooltipClass="multi-lines-tooltip">
+        {{row.lastTrans?.avgPrice | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="priceSource">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>价格来源</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.currentPrice?.source}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>价格</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.currentPrice?.price | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="priceChangePercent">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>升/降</th>
+      <td mat-cell *matCellDef="let row"
+          [class.price-up]="row.priceChangePercent>0"
+          [class.price-down]="row.priceChangePercent<0">
+        {{row.priceChangePercent | rawpercent }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef rowspan="2" class="op-head">操作</th>
+      <td mat-cell *matCellDef="let row" align="end">
+        <button mat-button (click)="openKlineChart(row)">
+          <mat-icon>show_chart</mat-icon>
+          K线
+        </button>
+        <button mat-button [matMenuTriggerFor]="actions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #actions="matMenu">
+          <button mat-menu-item (click)="showOrders(row)">
+            <mat-icon>list</mat-icon>
+            订单
+          </button>
+          <ng-container *ngFor="let exch of $exchs | async">
+            <button mat-menu-item [class.accent-color]="row.lastTrans?.ex===exch.code"
+                    (click)="openOrderForm(row,exch.code,row.oeSymbol)" *ngIf="row[exch.code+'Symbol']">
+              <mat-icon>shopping_cart</mat-icon>
+              下单（{{exch.name}}）
+            </button>
+          </ng-container>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastTrans">
+      <th mat-header-cell *matHeaderCellDef colspan="4">上次交易</th>
+    </ng-container>
+
+    <ng-container matColumnDef="currentPrice">
+      <th mat-header-cell *matHeaderCellDef colspan="3">当前价格</th>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsH0"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsH1"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource?.data?.length"
+                 [pageIndex]="0"
+                 [pageSize]="20"
+                 [pageSizeOptions]="[10, 20, 50, 100]">
+  </mat-paginator>
+
+</div>
+
+<p>&nbsp;</p>

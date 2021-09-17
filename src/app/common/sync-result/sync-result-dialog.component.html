@@ -1,0 +1,24 @@
+<h3 mat-dialog-title>
+  <span>{{title}}</span>
+</h3>
+
+<mat-dialog-content>
+  <ul>
+    <li>
+      <div class="dt">更新</div>
+      <div class="dd" [class.accent-color]="syncResult.update>0">{{syncResult.update}}</div>
+    </li>
+    <li>
+      <div class="dt">创建</div>
+      <div class="dd" [class.accent-color]="syncResult.create>0">{{syncResult.create}}</div>
+    </li>
+    <li>
+      <div class="dt">忽略</div>
+      <div class="dd">{{syncResult.skip}}</div>
+    </li>
+  </ul>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close="">确定</button>
+</div>

@@ -1,0 +1,43 @@
+<h3 mat-dialog-title>密码重置</h3>
+
+<form [formGroup]="form" class="login-form">
+
+  <mat-form-field appearance="standard">
+    <mat-label>登录名</mat-label>
+    <input matInput placeholder="登录名" formControlName="username" readonly>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>新密码</mat-label>
+    <input matInput [type]="hidePassword ? 'password' : 'text'"
+           autocomplete="off" formControlName="password">
+    <button mat-icon-button matSuffix (click)="hidePassword=!hidePassword">
+      <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="form.controls['password'].hasError('required')">
+      新密码设置不能为<strong>空</strong>
+    </mat-error>
+    <mat-error *ngIf="form.controls['password'].hasError('minlength')">
+      密码长度至少<strong>4个字符</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>确认新密码</mat-label>
+    <input matInput type="password" formControlName="passwordConfirm">
+    <mat-error *ngIf="form.controls['passwordConfirm'].hasError('required')">
+      确认密码不能为<strong>空</strong>
+    </mat-error>
+    <mat-error *ngIf="form.controls['passwordConfirm'].hasError('minlength')">
+      密码长度至少<strong>4个字符</strong>
+    </mat-error>
+    <mat-error *ngIf="form.controls['passwordConfirm'].hasError('pattern')">
+      两次输入的密码<strong>不一致</strong>
+    </mat-error>
+  </mat-form-field>
+</form>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">取消</button>
+  <button mat-button color="primary" (click)="save()" cdkFocusInitial>重置</button>
+</div>

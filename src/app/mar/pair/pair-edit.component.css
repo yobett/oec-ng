@@ -1,0 +1,14 @@
+.read-only-field {
+  display: block;
+  margin: 1em 0;
+}
+
+.read-only-field img.ccy-logo {
+  vertical-align: bottom;
+}
+
+.read-only-field mat-label {
+  margin-right: 1em;
+  display: inline-block;
+  min-width: 5em;
+}

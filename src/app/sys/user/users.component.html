@@ -1,0 +1,75 @@
+<div class="mat-elevation-z1">
+  <mat-toolbar>
+    用户
+    <span class="spacer"></span>
+    <button mat-stroked-button color="primary" (click)="editNew()">
+      <mat-icon>add_circle_outline</mat-icon>
+      新建
+    </button>
+  </mat-toolbar>
+
+  <table mat-table class="full-width" matSort>
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1 + (paginator ? paginator.pageIndex * paginator.pageSize : 0)}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>登录名</th>
+      <td mat-cell *matCellDef="let row">{{row.username}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>角色</th>
+      <td mat-cell *matCellDef="let row">{{row.role}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>邮箱</th>
+      <td mat-cell *matCellDef="let row">{{row.email}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>创建于</th>
+      <td mat-cell *matCellDef="let row">{{row.createdAt | date:'y-MM-dd'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" align="end">
+        <button mat-button (click)="edit(row)">
+          <mat-icon>edit</mat-icon>
+          修改
+        </button>
+
+        <button mat-button [matMenuTriggerFor]="actions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #actions="matMenu">
+          <!--<button mat-menu-item (click)="resetPwd(row)">
+            <mat-icon>lock</mat-icon>
+            重置密码
+          </button>-->
+          <button mat-menu-item (click)="remove(row)">
+            <mat-icon>remove_circle_outline</mat-icon>
+            删除
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource?.data?.length"
+                 [pageIndex]="0"
+                 [pageSize]="20"
+                 [pageSizeOptions]="[10, 20, 50, 100]">
+  </mat-paginator>
+
+</div>

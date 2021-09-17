@@ -1,0 +1,27 @@
+
+.title-bar {
+  display: flex;
+  margin-bottom: 1em;
+  align-items: baseline;
+}
+
+.title-bar .section-title {
+  font-weight: bold;
+}
+
+.info-bar {
+  display: flex;
+  flex-wrap: wrap;
+  line-height: 36px;
+  align-items: baseline;
+  /*margin-bottom: 2em;*/
+}
+
+.prop {
+  margin-left: 2em;
+}
+
+.prop-name {
+  display: inline-block;
+  margin-right: 1em;
+}

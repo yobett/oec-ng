@@ -1,0 +1,27 @@
+<h3 mat-dialog-title>
+  <span>{{title}}</span>
+</h3>
+
+<mat-dialog-content>
+  <div class="result-group" *ngFor="let sr of syncResultArray">
+    <div class="group-name">{{sr.name}}</div>
+    <ul class="sync-result">
+      <li>
+        <div class="dt">更新</div>
+        <div class="dd" [class.accent-color]="sr.result.update>0">{{sr.result.update}}</div>
+      </li>
+      <li>
+        <div class="dt">创建</div>
+        <div class="dd" [class.accent-color]="sr.result.create>0">{{sr.result.create}}</div>
+      </li>
+      <li>
+        <div class="dt">忽略</div>
+        <div class="dd">{{sr.result.skip}}</div>
+      </li>
+    </ul>
+  </div>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close="">确定</button>
+</div>

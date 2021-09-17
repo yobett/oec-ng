@@ -1,0 +1,74 @@
+<h3 mat-dialog-title>
+  新建策略
+</h3>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate>
+    <div class="field-box props">
+      <div class="prop">
+        <span class="prop-name subordinated">类型</span>
+        <span>{{getTypeLabel(strategy.type)}}</span>
+      </div>
+      <div class="prop">
+        <span class="prop-name subordinated">方向</span>
+        <span [class.order-side-buy]="strategy.side==='buy'"
+              [class.order-side-sell]="strategy.side==='sell'">
+        {{strategy.side}}
+        </span>
+      </div>
+      <div class="prop">
+        <span class="prop-name subordinated">关注价格方向</span>
+        <span>{{strategy.watchDirection}}</span>
+      </div>
+    </div>
+
+    <div class="field-box">
+      <mat-form-field floatLabel="always">
+        <mat-label>交易所</mat-label>
+        <mat-select formControlName="ex">
+          <mat-option *ngFor="let exch of $exchs | async" [value]="exch.code">
+            {{exch.code}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      &nbsp;&nbsp;
+      <mat-label class="subordinated">交易对&nbsp;&nbsp;</mat-label>
+      <ng-template [ngIf]="form.value['baseCcy']&&form.value['quoteCcy']">
+        <span class="primary-color" *ngIf="pair&&pair[form.value['ex'] + 'Symbol']">
+          {{pair[form.value['ex'] + 'Symbol']}}
+        </span>
+        <span class="warn-color" *ngIf="!loadingPair&&(!pair||!pair[form.value['ex'] + 'Symbol'])">
+          未找到
+        </span>
+      </ng-template>
+    </div>
+
+    <div class="field-box">
+      <mat-form-field floatLabel="always">
+        <mat-label>基础币种</mat-label>
+        <mat-select formControlName="baseCcy" (selectionChange)="ccyChanged($event)">
+          <mat-option *ngFor="let ccy of $ccys | async" [value]="ccy.code">
+            <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt=""> &nbsp;
+            {{ccy.code}} &nbsp; {{ccy.nameZh}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field floatLabel="always">
+        <mat-label>报价币种</mat-label>
+        <mat-select formControlName="quoteCcy" (selectionChange)="ccyChanged($event)">
+          <mat-option *ngFor="let ccy of $ccys | async" [value]="ccy.code">
+            <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt=""> &nbsp;
+            {{ccy.code}} &nbsp; {{ccy.nameZh}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>取消</button>
+  <button mat-button color="primary" cdkFocusInitial (click)="save()">保存</button>
+</div>

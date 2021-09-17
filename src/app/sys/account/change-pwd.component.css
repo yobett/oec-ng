@@ -1,0 +1,17 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/*.login-form > * {
+  width: 100%;
+}*/
+
+.login-error-message {
+  font-size: 12px;
+}
+.detail-prop-name {
+  display: inline-block;
+  min-width: 4em;
+  font-weight: bold;
+}

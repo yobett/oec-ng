@@ -1,0 +1,180 @@
+<div class="title-bar">
+  <span class="section-title primary-color">选择交易对</span>
+  <span class="spacer"></span>
+  <mat-checkbox [(ngModel)]="showAll" (change)="setDataSource()">显示全部</mat-checkbox>
+  <button mat-button (click)="refreshAssets()" [disabled]="refreshingAssets">
+    <mat-icon>sync</mat-icon>
+    刷新资产
+  </button>
+  <button mat-button (click)="refreshPrices()" [disabled]="refreshingPrices">
+    <mat-icon>sync</mat-icon>
+    刷新价格
+  </button>
+</div>
+
+<table mat-table class="full-width" matSort>
+
+  <ng-container matColumnDef="selected">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      <mat-icon>check-box</mat-icon>
+    </th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox [(ngModel)]="row.selected"></mat-checkbox>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="index">
+    <th mat-header-cell *matHeaderCellDef>#</th>
+    <td mat-cell *matCellDef="let row; let index=index">
+      {{index + 1 }}&nbsp;
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="newStrategy">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>修改/新建</th>
+    <td mat-cell *matCellDef="let row">
+      {{row.newStrategy ? '新建' : '修改'}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="baseCcy">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>基础币种</th>
+    <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+      <img class="ccy-logo" [src]="CoinLogoPath(row.pair.baseCcy)" alt="">
+      <div class="ccy-code">{{row.pair.baseCcy}}</div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="baseAssetPrice">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>币价（美元）</th>
+    <td mat-cell *matCellDef="let row">
+      {{row.baseAsset?.price | effectdigits}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="baseAssetHoldingValue">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>共持有（折美元）</th>
+    <td mat-cell *matCellDef="let row">
+      {{row.baseAsset?.holdingValue | effectdigits}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="baseAssetFrozenValue">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>冻结（折美元）</th>
+    <td mat-cell *matCellDef="let row">
+      {{row.baseAsset?.frozenValue | effectdigits}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="quoteCcy">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>报价币种</th>
+    <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+      <img class="ccy-logo" [src]="CoinLogoPath(row.pair.quoteCcy)" alt="">
+      <div class="ccy-code">{{row.pair.quoteCcy}}</div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="currentPrice">
+    <th mat-header-cell *matHeaderCellDef>交易对价格</th>
+    <td mat-cell *matCellDef="let row">
+      {{row.currentPrice?.price | effectdigits}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="basePoint">
+    <th mat-header-cell *matHeaderCellDef>基点</th>
+    <td mat-cell *matCellDef="let row">
+      <ng-template [ngIf]="row.strategy">
+        {{row.strategy.basePoint | effectdigits}}
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="expectingPercent">
+    <th mat-header-cell *matHeaderCellDef>期望</th>
+    <td mat-cell *matCellDef="let row">
+      <ng-template [ngIf]="row.strategy">
+        <ng-template [ngIf]="row.strategy.expectingPercent">
+          {{row.strategy.expectingPercent}}% <br>
+        </ng-template>
+        <span *ngIf="row.strategy.expectingPoint" class="subordinated">
+          {{row.strategy.expectingPoint | effectdigits}}
+        </span>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="tradeVol">
+    <th mat-header-cell *matHeaderCellDef>交易量</th>
+    <td mat-cell *matCellDef="let row">
+      <ng-template [ngIf]="row.strategy">
+        <span *ngIf="row.strategy.tradeVolByValue">{{row.strategy.tradeVol}}</span>
+        <span *ngIf="!row.strategy.tradeVolByValue">{{row.strategy.tradeVolPercent | rawpercent}}</span>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="tradingPoint">
+    <th mat-header-cell *matHeaderCellDef>交易点</th>
+    <td mat-cell *matCellDef="let row">
+      <ng-template [ngIf]="row.strategy&&row.strategy.tradingPoint">
+        {{row.strategy.watchDirection === 'up' ? '>=' : '<='}}
+        {{row.strategy.tradingPoint | effectdigits}}
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="peak">
+    <th mat-header-cell *matHeaderCellDef>已达峰值</th>
+    <td mat-cell *matCellDef="let row">
+      <ng-template [ngIf]="row.strategy">
+        {{row.strategy.peak | effectdigits}}<br>
+        <span class="subordinated">{{row.strategy.peakTime | date:'MM-dd HH:mm'}}</span>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="valley">
+    <th mat-header-cell *matHeaderCellDef>已达谷值</th>
+    <td mat-cell *matCellDef="let row">
+      <ng-template [ngIf]="row.strategy">
+        {{row.strategy.valley | effectdigits}}<br>
+        <span class="subordinated">{{row.strategy.valleyTime | date:'MM-dd HH:mm'}}</span>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>策略创建于</th>
+    <td mat-cell *matCellDef="let row">
+      <ng-template [ngIf]="row.strategy">
+        {{row.strategy.createdAt | date:'y-MM-dd'}}
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let row" align="end">
+      <button mat-button (click)="openKlineChart(row)">
+        <mat-icon>show_chart</mat-icon>
+        K线
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.subordinated]="row.selected"></tr>
+</table>
+
+<div class="info-bar">
+  泰达币（USDT）：
+  <ng-template [ngIf]="assetUsdt">
+    <div class="prop">
+      <span class="prop-name">共持有（折美元）</span>{{assetUsdt.holdingValue | moneysum}}
+    </div>
+    <div class="prop">
+      <span class="prop-name">（其中）冻结（折美元）</span>{{assetUsdt.frozenValue | moneysum}}
+    </div>
+  </ng-template>
+</div>

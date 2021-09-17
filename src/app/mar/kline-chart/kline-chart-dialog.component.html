@@ -1,0 +1,58 @@
+<h3 mat-dialog-title class="header">
+  K线
+  &nbsp;&nbsp;
+  <span class="pair-info accent-color">
+    <img class="ccy-logo" [src]="CoinLogoPath(queryForm.pair.baseCcy)" alt="">
+    {{queryForm.pair.baseCcy}}-{{queryForm.pair.quoteCcy}}
+  </span>
+  &nbsp;&nbsp;
+  <span class="label subordinated">数据源</span>&nbsp;&nbsp;{{queryForm.ex}}
+</h3>
+
+<mat-dialog-content>
+  <div class="table-filter-form">
+
+    <div>
+      <span class="field-label subordinated">间隔</span>
+      <button mat-button [color]="queryForm.intervalOption.key===option.key? 'accent':null"
+              *ngFor="let option of intervals" (click)="intervalSelected(option)">
+        {{option.label}}
+      </button>
+    </div>
+
+    <div class="operation-bar">
+      <span class="field-label subordinated">条数</span>
+
+      <mat-form-field class="limit-field">
+        <mat-select [(ngModel)]="queryForm.limit">
+          <mat-option *ngFor="let limit of limitOptions" [value]="limit">
+            {{limit}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-button color="primary" (click)="loadData()" [disabled]="processes.queryKlines">
+        <mat-icon>file_download</mat-icon>
+        加载
+      </button>
+
+      <span class="spacer"></span>
+
+      <div *ngIf="currentData">
+        <button mat-button (click)="loadMore()" [disabled]="currentForm.noMoreData||processes.loadMore"
+                *ngIf="currentForm.ex!=='hb'">
+          <mat-icon>add</mat-icon>
+          更多（更早）
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div [style.width.px]="chartWidth" [style.height.px]="chartHeight" class="kline-chart" #chart></div>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial>关闭</button>
+</div>

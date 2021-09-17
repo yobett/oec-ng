@@ -1,0 +1,128 @@
+<h3 mat-dialog-title>
+  订单（最新10条）
+  &nbsp;&nbsp;
+  <span class="head-field">
+      <img class="ccy-logo" [src]="CoinLogoPath(baseCcy)" alt="">
+      <span class="ccy-code">{{baseCcy}}</span>
+    <ng-template [ngIf]="quoteCcy">
+      &nbsp;-&nbsp;
+      <img class="ccy-logo" [src]="CoinLogoPath(quoteCcy)" alt="">
+      <span class="ccy-code">{{quoteCcy}}</span>
+    </ng-template>
+  </span>
+  <span class="head-field" *ngIf="ex">
+    <span class="label subordinated">交易所</span>
+    {{ex}}
+  </span>
+</h3>
+
+<mat-dialog-content>
+
+  <table mat-table class="full-width">
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ex">
+      <th mat-header-cell *matHeaderCellDef>交易所</th>
+      <td mat-cell *matCellDef="let row">{{row.ex}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="baseCcy">
+      <th mat-header-cell *matHeaderCellDef>基础币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.baseCcy)" alt="">
+        <div class="ccy-code">{{row.baseCcy}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quoteCcy">
+      <th mat-header-cell *matHeaderCellDef>报价币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.quoteCcy)" alt="">
+        <div class="ccy-code">{{row.quoteCcy}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="pairSymbol">
+      <th mat-header-cell *matHeaderCellDef>交易对</th>
+      <td mat-cell *matCellDef="let row">{{row.pairSymbol}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="orderId">
+      <th mat-header-cell *matHeaderCellDef>订单号</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.orderId | truncate: 8}}
+        <ng-template [ngIf]="row.clientOrderId">
+          <br>
+          {{row.clientOrderId | truncate: 8 }}
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="side">
+      <th mat-header-cell *matHeaderCellDef>方向</th>
+      <td mat-cell *matCellDef="let row"
+          [class.order-side-buy]="row.side==='buy'"
+          [class.order-side-sell]="row.side==='sell'">
+        {{row.side}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>类型</th>
+      <td mat-cell *matCellDef="let row">{{row.type}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>状态</th>
+      <td mat-cell *matCellDef="let row"
+          [class.order-status-canceled]="row.status==='canceled'">
+        {{row.status}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="avgPrice">
+      <th mat-header-cell *matHeaderCellDef>价格（执行/下单）</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.avgPrice | money}} <br>
+        <span class="subordinated">{{row.askPrice | money}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="execQty">
+      <th mat-header-cell *matHeaderCellDef>数量（执行/下单）</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.execQty | money}} <br>
+        <span class="subordinated">{{row.askQty | money}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quoteAmount">
+      <th mat-header-cell *matHeaderCellDef>报价币种数量</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.quoteAmount | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createTs">
+      <th mat-header-cell *matHeaderCellDef>创建时间</th>
+      <td mat-cell *matCellDef="let row">
+        <!--{{row.updateTs | date:'MM-dd HH:mm:ss'}} <br>-->
+        {{row.createTs | date:'MM-dd HH:mm'}}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>关闭</button>
+</div>

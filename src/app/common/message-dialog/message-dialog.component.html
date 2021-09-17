@@ -1,0 +1,15 @@
+<h3 mat-dialog-title>
+  <mat-icon class="title-icon" [class.warn-color]="type==='error'"
+            [class.primary-color]="type==='info'" *ngIf="type">
+    {{type === 'error' ? 'error_outline' : 'info'}}
+  </mat-icon>
+  <span *ngIf="title">{{title}}</span>
+</h3>
+
+<mat-dialog-content>
+  <div class="pre-wrap">{{msg}}</div>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close="">确定</button>
+</div>

@@ -1,0 +1,136 @@
+<div mat-dialog-title>
+  <span [class.order-side-buy]="orderForm.side==='buy'" [class.order-side-sell]="orderForm.side==='sell'"
+        class="dialog-title">
+    {{orderForm.side === 'buy' ? '买入' : '卖出'}}
+  </span>
+
+  <span class="spacer"></span>
+
+  <span>
+    交易所：{{exchangePair.ex}}
+    &nbsp;
+    <a mat-button class="mat-icon-20" target="_blank" *ngIf="exchangePair.ex==='oe'"
+       href="https://www.okex.com/trade-spot/{{exchangePair.baseCcy | lowercase}}-{{exchangePair.quoteCcy | lowercase}}">
+      <mat-icon>launch</mat-icon>
+      官网
+    </a>
+    <a mat-button class="mat-icon-20" target="_blank" *ngIf="exchangePair.ex==='ba'"
+       href="https://www.binance.com/zh-CN/trade/{{exchangePair.baseCcy}}_{{exchangePair.quoteCcy}}?layout=pro&type=spot">
+      <mat-icon>launch</mat-icon>
+      官网
+    </a>
+    <a mat-button class="mat-icon-20" target="_blank" *ngIf="exchangePair.ex==='hb'"
+       href="https://www.huobi.com/zh-cn/exchange/{{exchangePair.baseCcy | lowercase}}_{{exchangePair.quoteCcy | lowercase}}">
+      <mat-icon>launch</mat-icon>
+      官网
+    </a>
+  </span>
+</div>
+
+
+<mat-dialog-content>
+
+  <div class="info-bar">
+    <div>
+      <span class="prop-name subordinated">基础</span>
+      <img class="ccy-logo" [src]="CoinLogoPath(exchangePair.baseCcy)" alt="">
+      {{exchangePair.baseCcy}}
+      &nbsp;&nbsp;
+      <span class="prop-name subordinated">可用</span>
+      {{availableBaseAsset | money}}
+    </div>
+    <div>
+      <span class="prop-name subordinated">报价</span>
+      <img class="ccy-logo" [src]="CoinLogoPath(exchangePair.quoteCcy)" alt="">
+      {{exchangePair.quoteCcy}}
+      &nbsp;&nbsp;
+      <span class="prop-name subordinated">可用</span>
+      {{(quoteAsset ? availableQuoteAsset : 0.0) | money}}
+    </div>
+
+    <div>
+      <span class="prop-name subordinated"> 价格 ({{exchangePair.symbol}})</span>
+      <span class="accent-color">{{ tickerPriceAdjusted }}</span>
+      &nbsp;&nbsp;
+      <button mat-button (click)="refreshPrice()" [disabled]="refreshingPrice">
+        <mat-icon>sync</mat-icon>
+        刷新
+      </button>
+    </div>
+  </div>
+
+  <div class="field-box">
+    <mat-radio-group [(ngModel)]="orderForm.side" [color]="orderForm.side === 'buy' ? 'accent' : 'primary'">
+      <mat-radio-button name="order-type" value="buy" class="order-type-option">买入</mat-radio-button>
+      <mat-radio-button name="order-type" value="sell" class="order-type-option">卖出</mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <div class="field-box" *ngIf="orderForm.side==='sell'">
+    <mat-form-field class="form-field">
+      <input matInput placeholder="基础币种数量" [(ngModel)]="orderForm.quantity">
+      <span matSuffix class="subordinated">最大：{{availableBaseAsset | effectdigits}}</span>
+      <mat-hint *ngIf="tickerPrice">
+        {{exchangePair.quoteCcy}} ≈ {{(orderForm.quantity * tickerPrice) | effectdigits}}
+      </mat-hint>
+    </mat-form-field>
+    <div class="slider-bar">
+      <span class="ccy">{{exchangePair.baseCcy}}</span>
+      <mat-slider
+        [min]="0"
+        [max]="sliderSteps"
+        [step]="1"
+        [tickInterval]="sliderTickInterval"
+        [thumbLabel]="true"
+        [displayWith]="sliderLabel"
+        color="primary"
+        (change)="quantitySliderChanged($event)">
+      </mat-slider>
+    </div>
+  </div>
+
+  <div class="field-box" *ngIf="orderForm.side==='buy'">
+    <mat-form-field class="form-field">
+      <input matInput placeholder="报价币种数量" [(ngModel)]="orderForm.quoteQuantity">
+      <span matSuffix class="subordinated">最大：{{availableQuoteAsset || 0 | effectdigits}}</span>
+      <mat-hint *ngIf="tickerPrice">
+        {{exchangePair.baseCcy}} ≈ {{(orderForm.quoteQuantity / tickerPrice) | effectdigits}}
+      </mat-hint>
+    </mat-form-field>
+    <div class="slider-bar">
+      <span class="ccy">{{exchangePair.quoteCcy}}</span>
+      <mat-slider
+        [min]="0"
+        [max]="sliderSteps"
+        [step]="1"
+        [tickInterval]="sliderTickInterval"
+        [thumbLabel]="true"
+        [displayWith]="sliderLabel"
+        color="accent"
+        (change)="quoteQuantitySliderChanged($event)">
+      </mat-slider>
+    </div>
+  </div>
+
+  <div class="field-box price-limit-field">
+    <mat-checkbox [(ngModel)]="priceLimit" [color]="orderForm.side === 'buy' ? 'accent' : 'primary'">
+      限价
+    </mat-checkbox>
+    <mat-form-field class="form-field" *ngIf="!priceLimit">
+      <input matInput placeholder="价格" [value]="''+(tickerPriceAdjusted||'')" [disabled]="true">
+      <span matPrefix>≈&nbsp;</span>
+    </mat-form-field>
+    <mat-form-field class="form-field" *ngIf="priceLimit">
+      <input matInput placeholder="价格" [(ngModel)]="orderForm.price">
+      <mat-hint>当前：{{tickerPriceAdjusted}}</mat-hint>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">关闭</button>
+  <button mat-button [color]="orderForm.side === 'buy' ? 'accent' : 'primary'" (click)="placeOrder()"
+          [disabled]="placingOrder||!!orderPlacedAt">
+    {{orderForm.side === 'buy' ? '买入' : '卖出'}}
+  </button>
+</div>

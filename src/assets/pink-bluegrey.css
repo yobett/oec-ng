@@ -1,0 +1,16 @@
+@import "./styles/pink-bluegrey.css";
+@import "./dark.css";
+
+.primary-color {
+  color: #607d8b !important;
+}
+
+.accent-color {
+  /*color: #e91e63 !important;*/
+  color: gold !important;
+}
+
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  /*color: #c2185b;*/
+  color: gold;
+}

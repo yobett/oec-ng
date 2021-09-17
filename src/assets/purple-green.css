@@ -1,0 +1,14 @@
+@import "./styles/purple-green.css";
+@import "./dark.css";
+
+.primary-color {
+  color: #9c27b0 !important;
+}
+
+.accent-color {
+  color: #4caf50 !important;
+}
+
+.active-link {
+  color: #49ea36 !important;
+}

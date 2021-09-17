@@ -1,0 +1,28 @@
+.header .ccy-logo {
+  vertical-align: text-bottom;
+}
+
+.header .label {
+  font-size: 0.9em;
+}
+
+.table-filter-form {
+  margin: 0 0 1em 0;
+  padding-top: 0;
+}
+
+.limit-field {
+  width: 6em;
+}
+
+.field-label {
+  display: inline-block;
+  min-width: 4em;
+  margin-right: 8px;
+}
+
+.operation-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}

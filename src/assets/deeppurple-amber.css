@@ -1,0 +1,20 @@
+@import "./styles/deeppurple-amber.css";
+@import "./light.css";
+
+.primary-color {
+  color: #673ab7 !important;
+}
+
+.accent-color {
+  /*color: #ffc107 !important;*/
+  color: #ff5707 !important;
+}
+
+
+.active-link {
+  color: #ff5707 !important;
+}
+
+.sum-amount {
+  color: #ff5707;
+}

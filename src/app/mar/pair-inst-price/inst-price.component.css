@@ -1,0 +1,11 @@
+.mat-header-cell.no-padding-left {
+  padding-left: 0;
+}
+
+.mat-header-cell.align-center {
+  text-align: center;
+}
+
+th.op-head {
+  text-align: right;
+}

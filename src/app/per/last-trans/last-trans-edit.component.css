@@ -1,0 +1,8 @@
+.radio-group-side {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.radio-group-side .mat-radio-button:not(:first-child) {
+  margin-left: 1em;
+}

@@ -1,0 +1,55 @@
+<mat-toolbar>
+  资产趋势图
+  <span class="spacer"></span>
+
+</mat-toolbar>
+
+<div class="table-filter-form">
+
+  <div>
+    <span class="field-label subordinated">币种</span>
+    <button mat-button [color]="queryForm.ccy===ccyAll? 'accent':null"
+            (click)="ccySelected(ccyAll)">
+      {{ccyAllLabel}}
+    </button>
+    <button mat-button [color]="queryForm.ccy===ccy? 'accent':null"
+            *ngFor="let ccy of ccys"
+            (click)="ccySelected(ccy)">
+      <img class="ccy-logo" [src]="CoinLogoPath(ccy)" alt="">
+      {{ccy}}
+    </button>
+  </div>
+
+  <div class="operation-bar">
+    <span class="field-label subordinated">Limit</span>
+
+    <mat-form-field class="limit-field">
+      <mat-select [(ngModel)]="queryForm.limit">
+        <mat-option *ngFor="let limit of limitOptions" [value]="limit">
+          {{limit}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-button color="primary" (click)="loadData()" [disabled]="processes.queryKlines">
+      <mat-icon>file_download</mat-icon>
+      加载
+    </button>
+
+    <span class="spacer"></span>
+
+    <div *ngIf="currentForm">
+      <button mat-button (click)="loadMore()" [disabled]="currentForm.noMoreData">
+        <mat-icon>add</mat-icon>
+        更多（更早）
+      </button>
+    </div>
+  </div>
+
+
+</div>
+
+<div [style.width.px]="chartWidth" [style.height.px]="chartHeight" class="chart" #chart></div>
+
+
+<p>&nbsp;</p>

@@ -1,0 +1,7 @@
+{
+  "/oec/api": {
+    "target": "https://176.80.132.68",
+    "changeOrigin": true,
+    "secure": false
+  }
+}

@@ -1,0 +1,44 @@
+<h3 mat-dialog-title>
+  交易所API（{{exapi && exapi.id ? '修改' : '新建'}}）
+</h3>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate>
+
+    <mat-form-field class="full-width">
+      <mat-label>平台</mat-label>
+      <mat-select formControlName="ex">
+        <mat-option *ngFor="let exch of $exchs | async" [value]="exch.code">
+          {{exch.code}}
+        </mat-option>
+        <mat-option value="cmc">CMC</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Phase" formControlName="phase">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Key" formControlName="key">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Secret" formControlName="secret">
+    </mat-form-field>
+
+    <div class="slide-field full-width">
+      <mat-slide-toggle formControlName="enabled">启用</mat-slide-toggle>
+    </div>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="备注" formControlName="memo">
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>取消</button>
+  <button mat-button color="primary" cdkFocusInitial (click)="save()">保存</button>
+</div>

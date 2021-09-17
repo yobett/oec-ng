@@ -1,0 +1,62 @@
+.mat-dialog-title {
+  display: flex;
+}
+
+.dialog-title {
+  font-weight: bold;
+  margin-right: 2em;
+}
+
+.info-bar {
+  line-height: 36px;
+  margin-bottom: 2em;
+}
+
+.prop-name {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.info-bar .ccy-logo {
+  width: 20px;
+  vertical-align: middle;
+}
+
+.mat-dialog-content {
+  margin-top: 2em;
+}
+
+.price-limit-field {
+  display: flex;
+  align-items: center;
+}
+
+.price-limit-field .mat-checkbox {
+  margin-right: 1em;
+}
+
+.price-limit-field .form-field {
+  width: 6em;
+  flex-grow: 1;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.field-box .mat-form-field:not(:last-child) {
+  margin-right: 0;
+}
+
+.slider-bar {
+  display: flex;
+  align-items: center;
+}
+
+.slider-bar .ccy {
+  margin-right: 8px;
+}
+
+.mat-slider {
+  width: 100%;
+}

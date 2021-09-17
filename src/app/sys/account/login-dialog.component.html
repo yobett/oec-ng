@@ -1,0 +1,23 @@
+<h3 mat-dialog-title>登录</h3>
+
+<div class="warn-color login-error-message" *ngIf="message">{{message}}</div>
+
+<div class="login-form">
+  <mat-form-field appearance="standard">
+    <mat-label>账号</mat-label>
+    <input matInput value="wsx" #name>
+  </mat-form-field>
+
+  <mat-form-field appearance="standard">
+    <mat-label>密码</mat-label>
+    <input matInput [type]="hidePassword ? 'password' : 'text'" value="123" (keyup)="onPassKeyup(name.value, password.value, $event)" #password>
+    <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword">
+      <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">取消</button>
+  <button mat-button color="primary" (click)="login(name.value, password.value)" cdkFocusInitial>登录</button>
+</div>

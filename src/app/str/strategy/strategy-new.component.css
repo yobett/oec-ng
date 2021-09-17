@@ -1,0 +1,14 @@
+.props {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.prop:not(:last-child) {
+  margin-right: 2em;
+}
+
+.prop-name {
+  display: inline-block;
+  margin-right: 1em;
+}

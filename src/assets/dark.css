@@ -1,0 +1,66 @@
+
+.primary-color {
+  color: #9c27b0 !important;
+}
+
+.accent-color {
+  color: #4caf50 !important;
+}
+
+.warn-color {
+  color: #f44336;
+}
+
+.subordinated {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.active-link {
+  color: yellow !important;
+}
+
+.mat-icon.favorite {
+  color: gold;
+}
+
+.mat-icon.check {
+  color: yellow;
+}
+
+.order-side-sell {
+  color: lightpink;
+}
+
+.order-side-buy {
+  color: cyan;
+}
+
+.order-status-canceled {
+  color: rgba(235, 255, 235, 0.7);;
+}
+
+.price-up {
+  color: lightgreen;
+}
+
+.status-done {
+  color: lightgreen;
+}
+
+.price-down {
+  /*color: lightcoral;*/
+  color: #ff8080;
+}
+
+.sum-amount {
+  /*font-weight: bold;*/
+  color: gold;
+}
+
+a.meta-link {
+  color: cyan;
+}
+
+table tbody tr:nth-child(2n-1), table > tr:nth-child(2n-1) {
+  background-color: rgba(0, 0, 0, .05);
+}

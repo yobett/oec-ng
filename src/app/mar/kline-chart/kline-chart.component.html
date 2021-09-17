@@ -1,0 +1,75 @@
+<mat-toolbar>
+  K线
+  <span class="spacer"></span>
+
+  <label>数据源&nbsp;&nbsp;</label>
+  <mat-button-toggle-group [value]="queryForm.ex"
+                           (change)="datasourceChanged($event)">
+    <mat-button-toggle [value]="ex.code" *ngFor="let ex of exchs">
+      {{ex.name}}
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</mat-toolbar>
+
+<div class="table-filter-form">
+
+  <div>
+    <span class="field-label subordinated">交易对</span>
+    <button mat-button [color]="queryForm.pair===option? 'accent':null"
+            *ngFor="let option of pairOptions"
+            (click)="pairSelected(option)">
+      <img class="ccy-logo" [src]="CoinLogoPath(option.baseCcy)" alt="">
+      {{option.baseCcy}}-{{option.quoteCcy}}
+    </button>
+  </div>
+  <div>
+    <span class="field-label subordinated">间隔</span>
+    <button mat-button [color]="queryForm.intervalOption.key===option.key? 'accent':null"
+            *ngFor="let option of intervals" (click)="intervalSelected(option)">
+      {{option.label}}
+    </button>
+  </div>
+
+  <div class="operation-bar">
+    <span class="field-label subordinated">条数</span>
+
+    <mat-form-field class="limit-field">
+      <mat-select [(ngModel)]="queryForm.limit">
+        <mat-option *ngFor="let limit of limitOptions" [value]="limit">
+          {{limit}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-button color="primary" (click)="loadData()" [disabled]="processes.queryKlines">
+      <mat-icon>file_download</mat-icon>
+      加载
+    </button>
+
+    <span class="spacer"></span>
+
+    <div *ngIf="currentData">
+      <button mat-button (click)="loadMore()" [disabled]="currentForm.noMoreData||processes.loadMore"
+              *ngIf="currentForm.ex!=='hb'">
+        <mat-icon>add</mat-icon>
+        更多（更早）
+      </button>
+      <button mat-button (click)="loadNew()" [disabled]="processes.renewData"
+              *ngIf="currentForm.intervalOption.key.endsWith('m')||currentForm.intervalOption.key==='1H'">
+        <mat-icon>plus_one</mat-icon>
+        刷新
+      </button>
+      <mat-checkbox [(ngModel)]="autoRenew" (change)="checkAutoUpdate()"
+                    *ngIf="currentForm.intervalOption.key==='1m'">
+        自动刷新
+      </mat-checkbox>
+    </div>
+  </div>
+
+
+</div>
+
+<div [style.width.px]="chartWidth" [style.height.px]="chartHeight" class="kline-chart" #chart></div>
+
+
+<p>&nbsp;</p>

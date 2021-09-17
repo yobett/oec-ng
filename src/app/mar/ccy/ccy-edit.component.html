@@ -1,0 +1,38 @@
+<h3 mat-dialog-title>
+  币种（{{ccy && ccy.id ? '修改' : '新建'}}）
+</h3>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate>
+
+    <mat-form-field class="full-width">
+      <input matInput [readonly]="ccy && !!ccy.id" placeholder="代号（Symbol）" formControlName="code">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Slug" formControlName="slug">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Name" formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="中文" formControlName="nameZh">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput type="number" placeholder="Rank" formControlName="no">
+    </mat-form-field>
+
+    <div class="slide-field full-width">
+      <mat-slide-toggle formControlName="concerned">关注</mat-slide-toggle>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>取消</button>
+  <button mat-button color="primary" cdkFocusInitial (click)="save()">保存</button>
+</div>

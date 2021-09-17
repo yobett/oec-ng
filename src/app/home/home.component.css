@@ -1,0 +1,43 @@
+
+.sidenav-container {
+  height: calc(100% - 64px);
+  flex: 1;
+}
+
+.sidenav {
+  width: 208px;
+}
+
+.mat-sidenav-content {
+  /*padding: 15px;*/
+}
+
+.mat-expansion-panel {
+  border-radius: unset;
+}
+
+.mat-accordion .mat-expansion-panel:last-of-type {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.mat-expansion-panel-header {
+  /*background: #fafafa;*/
+}
+
+.mat-expansion-panel-header.mat-expanded:focus {
+  /*background: rgba(0, 0, 0, .04);*/
+}
+
+/*.mat-expansion-panel:not([class*=mat-elevation-z]) {
+  box-shadow: none;
+}*/
+
+.nav-a a {
+  line-height: 48px;
+  width: 100%;
+}
+
+.current-user-info {
+  font-size: 14px;
+}

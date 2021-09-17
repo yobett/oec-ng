@@ -1,0 +1,41 @@
+<h3 mat-dialog-title>
+  元数据（{{meta.symbol}}）
+</h3>
+
+<mat-dialog-content>
+  <dl>
+    <dt>Name</dt>
+    <dd>{{meta.name}}</dd>
+    <dt>Logo/Symbol</dt>
+    <dd class="ccy-logo-code">
+      <img class="ccy-logo" [src]="staticBase+ccy.logoPath" alt="">
+      <div class="ccy-code">{{meta.symbol}}</div>
+    </dd>
+    <dt>Description</dt>
+    <dd>{{meta.description}}</dd>
+    <ng-template [ngIf]="meta.notice">
+      <dt>Notice</dt>
+      <dd>{{meta.notice}}</dd>
+    </ng-template>
+    <ng-template [ngIf]="meta['tag-names']">
+      <dt>Tags</dt>
+      <dd>
+        <mat-chip-list aria-label="Tags">
+          <mat-chip *ngFor="let tag of meta['tag-names']">{{tag}}</mat-chip>
+        </mat-chip-list>
+      </dd>
+    </ng-template>
+    <ng-template ngFor let-linkItem [ngForOf]="linkItems">
+      <dt>{{linkItem.name}}</dt>
+      <dd>
+        <ng-template ngFor let-url [ngForOf]="linkItem.links">
+          <a class="meta-link" href="{{url}}" target="_blank">{{url}}</a><br>
+        </ng-template>
+      </dd>
+    </ng-template>
+  </dl>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close="">关闭</button>
+</div>

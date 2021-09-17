@@ -1,0 +1,93 @@
+<h3 mat-dialog-title>
+  订单详情
+</h3>
+
+<mat-dialog-content>
+  <div class="props">
+    <div class="prop">
+      <span class="prop-name subordinated">交易所</span>
+      <span class="prop-value">{{order.ex}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">交易对</span>
+      <span class="prop-value">{{order.pairSymbol}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">基础币种</span>
+      <span class="prop-value">
+        <img class="ccy-logo" [src]="CoinLogoPath(order.baseCcy)" alt="">
+        {{order.baseCcy}}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">报价币种</span>
+      <span class="prop-value">
+        <img class="ccy-logo" [src]="CoinLogoPath(order.quoteCcy)" alt="">
+        {{order.quoteCcy}}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">方向</span>
+      <span class="prop-value"
+            [class.order-side-buy]="order.side==='buy'"
+            [class.order-side-sell]="order.side==='sell'">{{order.side}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">类型</span>
+      <span class="prop-value">{{order.type}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">订单号</span>
+      <span class="prop-value">{{order.orderId}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">客户订单号</span>
+      <span class="prop-value">{{order.clientOrderId}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">状态</span>
+      <span class="prop-value" [class.order-status-canceled]="order.status==='canceled'">{{order.status}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">下单价格</span>
+      <span class="prop-value">{{order.askPrice | effectdigits}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">执行均价</span>
+      <span class="prop-value">{{order.avgPrice | effectdigits}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">下单数量</span>
+      <span class="prop-value">{{order.askQty | effectdigits}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">实际执行数量</span>
+      <span class="prop-value">{{order.execQty | effectdigits}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">报价币种数量</span>
+      <span class="prop-value">{{order.quoteAmount | effectdigits}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">创建时间</span>
+      <span class="prop-value">{{order.createTs | date:'y-MM-dd HH:mm:ss'}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">更新时间</span>
+      <span class="prop-value">
+        <ng-template [ngIf]="order.updateTs!==order.createTs">
+          {{order.updateTs | date:'y-MM-dd HH:mm:ss'}}
+        </ng-template>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">初次同步</span>
+      <span class="prop-value">{{order.createdAt | date:'y-MM-dd HH:mm:ss'}}</span>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>关闭</button>
+</div>

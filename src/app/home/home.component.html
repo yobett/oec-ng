@@ -1,0 +1,173 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="snav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h1>OEC 现货交易助手</h1>
+  <span class="spacer"></span>
+  <mat-icon class="current-user-icon" aria-hidden="false" aria-label="user icon">account_circle</mat-icon>
+  <div class="current-user-info">
+    <ng-template [ngIf]="currentUser">
+      <button mat-button [matMenuTriggerFor]="currentUserMenu">{{currentUser.username}}</button>
+      <mat-menu #currentUserMenu="matMenu">
+        <button mat-menu-item (click)="showDetail()">
+          <mat-icon>info</mat-icon>
+          用户信息
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>exit_to_app</mat-icon>
+          退出登录
+        </button>
+        <!--<button mat-menu-item (click)="openLoginDialog()">
+          <mat-icon>supervisor_account</mat-icon>
+          切换用户
+        </button>-->
+      </mat-menu>
+      <button mat-button (click)="disableNotification()" *ngIf="notificationsOn">
+        <mat-icon>notifications</mat-icon>
+      </button>
+      <button mat-button (click)="enableNotification()" *ngIf="!notificationsOn">
+        <mat-icon>notifications_off</mat-icon>
+      </button>
+    </ng-template>
+    <a mat-button *ngIf="!currentUser" (click)="openLoginDialog()">（未登录）</a>
+  </div>
+
+  <app-theme-switch></app-theme-switch>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+               [attr.role]="mobileQuery.matches ? 'dialog' : 'navigation'"
+               [mode]="mobileQuery.matches ? 'over' : 'side'"
+               [opened]="mobileQuery.matches === false" #snav
+               [fixedInViewport]="mobileQuery.matches" fixedTopGap="56"
+               (openedChange)="drawerChange($event,drawer.mode)">
+
+    <mat-accordion displayMode="flat" [multi]="true" *ngIf="beenLogin">
+
+      <mat-expansion-panel class="mat-elevation-z1" [expanded]="true">
+        <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-panel-title>市场</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/ccys" class="menu-item"
+             routerLinkActive="active-link">
+            <span>币种</span>
+          </a>
+          <a mat-list-item routerLink="/quotes" class="menu-item"
+             routerLinkActive="active-link">
+            <span>币价</span>
+          </a>
+          <a mat-list-item routerLink="/pairs" class="menu-item"
+             routerLinkActive="active-link">
+            <span>交易对</span>
+          </a>
+          <a mat-list-item routerLink="/prices" class="menu-item"
+             routerLinkActive="active-link">
+            <span>价格</span>
+          </a>
+          <a mat-list-item routerLink="/klines" class="menu-item"
+             routerLinkActive="active-link">
+            <span>K线</span>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z1" [expanded]="true">
+        <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-panel-title>资产 &amp; 订单</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/assets" class="menu-item"
+             routerLinkActive="active-link">
+            <span>资产</span>
+          </a>
+          <a mat-list-item routerLink="/assets-merged" class="menu-item"
+             routerLinkActive="active-link">
+            <span>资产（合并）</span>
+          </a>
+          <a mat-list-item routerLink="/assets-trend" class="menu-item"
+             routerLinkActive="active-link">
+            <span>资产趋势</span>
+          </a>
+          <a mat-list-item routerLink="/orders" class="menu-item"
+             routerLinkActive="active-link">
+            <span>订单</span>
+          </a>
+          <a mat-list-item routerLink="/orders-chart" class="menu-item"
+             routerLinkActive="active-link">
+            <span>订单图表</span>
+          </a>
+          <a mat-list-item routerLink="/last-trans" class="menu-item"
+             routerLinkActive="active-link">
+            <span>上次交易</span>
+          </a>
+          <a mat-list-item routerLink="/orders-pending" class="menu-item"
+             routerLinkActive="active-link">
+            <span>未完成订单</span>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z1" [expanded]="true">
+        <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-panel-title>策略</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/strategies/all" class="menu-item"
+             routerLinkActive="active-link">
+            <span>全部策略</span>
+          </a>
+          <a mat-list-item routerLink="/strategies/lb" class="menu-item"
+             routerLinkActive="active-link">
+            <span>低买</span>
+          </a>
+          <a mat-list-item routerLink="/strategies/hs" class="menu-item"
+             routerLinkActive="active-link">
+            <span>高卖</span>
+          </a>
+          <a mat-list-item routerLink="/strategies/hb" class="menu-item"
+             routerLinkActive="active-link">
+            <span>跟涨（买）</span>
+          </a>
+          <a mat-list-item routerLink="/strategies/ls" class="menu-item"
+             routerLinkActive="active-link">
+            <span>止损（卖）</span>
+          </a>
+          <a mat-list-item routerLink="/hist-strategies" class="menu-item"
+             routerLinkActive="active-link">
+            <span>历史策略</span>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z1" [expanded]="false">
+        <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-panel-title>系统</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/exchs" class="menu-item"
+             routerLinkActive="active-link">
+            <span>交易所</span>
+          </a>
+          <a mat-list-item routerLink="/exapis" class="menu-item"
+             routerLinkActive="active-link">
+            <span>交易所API</span>
+          </a>
+          <a mat-list-item routerLink="/users" class="menu-item"
+             routerLinkActive="active-link">
+            <span>用户</span>
+          </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+    </mat-accordion>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet>
+    </router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

@@ -1,0 +1,16 @@
+ul {
+  padding-left: 1em;
+}
+
+li {
+  list-style: none;
+}
+
+.dt {
+  display: inline-block;
+  min-width: 6em;
+}
+
+.dd {
+  display: inline-block;
+}

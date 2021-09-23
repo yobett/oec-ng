@@ -312,7 +312,7 @@ export class OrdersChartComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       yAxis: {
         type: 'value',
-        name: 'Quote Amount',
+        name: '交易额（报价币种）',
         // scale: true,
         splitArea: {
           show: true

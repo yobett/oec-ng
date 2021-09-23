@@ -115,7 +115,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     }
     const quantityStr = this.effectDigits.transform(execQty, 5);
     let amountStr = this.effectDigits.transform(lastTrans.quoteAmount, 5);
-    return `基础币种数量（${pp.baseCcy}）： ${quantityStr}\n 报价币种数量：（${pp.quoteCcy}）： ${amountStr}`;
+    return `基础币种数量（${pp.baseCcy}）： ${quantityStr}\n 报价币种数量（${pp.quoteCcy}）： ${amountStr}`;
   }
 
   private setPrice(pp: PairPrice) {

@@ -1,6 +1,6 @@
 {
   "name": "oec-ng",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy-local.conf.json",

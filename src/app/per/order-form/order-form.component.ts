@@ -12,6 +12,7 @@ import { PairService } from '../../services/mar/pair.service';
 import { EffectDigitsPipe } from '../../common/pipe/effect-digits-pipe';
 import { AssetService } from '../../services/per/asset.service';
 import { PlaceOrderRefreshDelay } from '../../config';
+import { Exch } from '../../models/sys/exch';
 
 export interface OrderFormParams {
   exchangePair: ExchangePair;
@@ -212,9 +213,7 @@ export class OrderFormComponent implements OnInit {
         return;
       }
       orderForm.quoteQuantity = +orderForm.quoteQuantity;
-      if (form.type === 'market') {
-        form.quoteQuantity = orderForm.quoteQuantity;
-      } else {
+      if (ex === Exch.CODE_HB && form.type === 'limit') {
         let price;
         if (this.priceLimit) {
           price = +orderForm.price;
@@ -227,6 +226,8 @@ export class OrderFormComponent implements OnInit {
         }
         const quant = orderForm.quoteQuantity / price;
         form.quantity = +this.effectDigits.transform(quant);
+      } else {
+        form.quoteQuantity = orderForm.quoteQuantity;
       }
     } else {
       if (!orderForm.quantity) {

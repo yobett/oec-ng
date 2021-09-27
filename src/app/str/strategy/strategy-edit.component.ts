@@ -209,7 +209,7 @@ export class StrategyEditComponent implements OnInit {
           }
           Object.assign(this.strategy, toSave);
           Object.assign(this.oriStrategy, toSave);
-          this.snackBar.open('Save Success');
+          this.snackBar.open('已保存');
         },
         error => this.saving = false,
         () => this.saving = false);

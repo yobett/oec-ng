@@ -14,7 +14,7 @@ export class SyncResultDialogComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { title?: string, syncResult: SyncResult }) {
-    this.title = data.title || 'Sync Success';
+    this.title = data.title || '同步完成';
     this.syncResult = data.syncResult;
   }
 

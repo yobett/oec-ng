@@ -87,18 +87,16 @@
     </ng-container>
 
     <ng-container matColumnDef="avgPrice">
-      <th mat-header-cell *matHeaderCellDef>价格（执行/下单）</th>
+      <th mat-header-cell *matHeaderCellDef>执行均价</th>
       <td mat-cell *matCellDef="let row">
-        {{row.avgPrice | money}} <br>
-        <span class="subordinated">{{row.askPrice | money}}</span>
+        {{row.avgPrice | money}}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="execQty">
-      <th mat-header-cell *matHeaderCellDef>数量（执行/下单）</th>
+      <th mat-header-cell *matHeaderCellDef>基础币种数量</th>
       <td mat-cell *matCellDef="let row">
-        {{row.execQty | money}} <br>
-        <span class="subordinated">{{row.askQty | money}}</span>
+        {{row.execQty | money}}
       </td>
     </ng-container>
 

@@ -116,11 +116,7 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
     this.dataHolder.merge(form, data);
     form.noMoreData = this.dataHolder.isNoMoreData(form);
     this.currentForm = form;
-    if (!this.chartInitialized) {
-      this.resetChart();
-    } else {
-      this.updateChartData();
-    }
+    this.resetOrUpdateChart();
   }
 
   loadData(): void {
@@ -129,8 +125,13 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
 
     const currentData: AssetSnapshot[] = this.dataHolder.getData(form);
     if (currentData && currentData.length > 0) {
-      this.onDataLoaded(form, currentData);
-      return;
+      let noMoreData = this.dataHolder.isNoMoreData(form);
+      if (currentData.length >= form.limit || noMoreData) {
+        form.noMoreData = noMoreData;
+        this.currentForm = form;
+        this.resetOrUpdateChart();
+        return;
+      }
     }
 
     this.snapshotService.query(form)
@@ -186,7 +187,7 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
 
     const option: EChartsOption = {
       title: {
-        text: `币种：${form.ccy}`,
+        text: `币种：${ccyName}`,
         subtext: `条数：${data.length}`
       },
       dataset: {
@@ -346,6 +347,14 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
     };
 
     this.chart.setOption(option, true);
+  }
+
+  resetOrUpdateChart(): void {
+    if (!this.chartInitialized) {
+      this.resetChart();
+    } else {
+      this.updateChartData();
+    }
   }
 
   resetChart(): void {

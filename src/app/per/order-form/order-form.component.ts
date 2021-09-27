@@ -213,7 +213,7 @@ export class OrderFormComponent implements OnInit {
         return;
       }
       orderForm.quoteQuantity = +orderForm.quoteQuantity;
-      if (ex === Exch.CODE_HB && form.type === 'limit') {
+      if ((ex === Exch.CODE_HB || ex === Exch.CODE_BA) && form.type === 'limit') {
         let price;
         if (this.priceLimit) {
           price = +orderForm.price;

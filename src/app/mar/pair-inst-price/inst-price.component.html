@@ -104,7 +104,7 @@
           </button>
           <ng-container *ngFor="let exch of $exchs | async">
             <button mat-menu-item [class.accent-color]="row.lastTrans?.ex===exch.code"
-                    (click)="openOrderForm(row,exch.code,row.oeSymbol)" *ngIf="row[exch.code+'Symbol']">
+                    (click)="openOrderForm(row,exch.code,row[exch.code+'Symbol'])" *ngIf="row[exch.code+'Symbol']">
               <mat-icon>shopping_cart</mat-icon>
               下单（{{exch.name}}）
             </button>

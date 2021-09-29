@@ -9,7 +9,7 @@
       <mat-label>平台</mat-label>
       <mat-select formControlName="ex">
         <mat-option *ngFor="let exch of $exchs | async" [value]="exch.code">
-          {{exch.code}}
+          {{exch.name}}
         </mat-option>
         <mat-option value="cmc">CMC</mat-option>
       </mat-select>

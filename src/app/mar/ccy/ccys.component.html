@@ -1,7 +1,6 @@
 <div class="mat-elevation-z1">
   <mat-toolbar>
-    币种
-    &nbsp;&nbsp;
+    <span class="toolbar-title">币种</span>
     <mat-button-toggle-group [value]="filterForm['concerned']? 'concerned':'all'"
                              (change)="concernedGroupChanged($event)">
       <mat-button-toggle value="concerned">
@@ -10,11 +9,6 @@
       <mat-button-toggle value="all">全部</mat-button-toggle>
     </mat-button-toggle-group>
     <span class="spacer"></span>
-    <!--<button class="flex-button" mat-stroked-button color="primary" (click)="syncCurrencies()"
-            [disabled]="processes.syncCurrencies">
-      <mat-icon>sync</mat-icon>
-      Sync
-    </button>-->
     <button mat-button [matMenuTriggerFor]="syncActions">
       同步
       <mat-icon>more_horiz</mat-icon>
@@ -37,20 +31,16 @@
         交易对所涉币种
       </button>
     </mat-menu>
-    <!--<button mat-stroked-button color="primary" (click)="editNew()">
-      <mat-icon>add_circle_outline</mat-icon>
-      New
-    </button>-->
   </mat-toolbar>
 
   <div class="table-filter-form">
 
     <mat-form-field>
-      <input matInput placeholder="Code" name="code" [(ngModel)]="filterForm['code']" (keyup.enter)="filter()">
+      <input matInput placeholder="代号" name="code" [(ngModel)]="filterForm['code']" (keyup.enter)="filter()">
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput placeholder="Name" name="name" [(ngModel)]="filterForm['name']" (keyup.enter)="filter()">
+      <input matInput placeholder="名称" name="name" [(ngModel)]="filterForm['name']" (keyup.enter)="filter()">
     </mat-form-field>
 
     <button mat-button (click)="filter()">

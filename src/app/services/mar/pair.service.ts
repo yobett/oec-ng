@@ -36,8 +36,11 @@ export class PairService extends ModelCurdService<ExPair> {
     return this.list2(this.baseUrl + '/concern/withLastTrans') as Observable<PairPrice[]>;
   }
 
-  inquirePrices(): Observable<CurrentPrices> {
-    const url = `${this.baseUrl}/concern/inquirePrices`;
+  inquirePrices(preferDS: string = null): Observable<CurrentPrices> {
+    let url = `${this.baseUrl}/concern/inquirePrices`;
+    if (preferDS) {
+      url = url + '?preferDS=' + preferDS
+    }
     return this.pipeDefault(this.http.post<ValueResult<CurrentPrices>>(url, null))
       .pipe(map(result => result.value));
   }

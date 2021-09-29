@@ -1,7 +1,6 @@
 <div class="mat-elevation-z1">
   <mat-toolbar>
-    交易对
-    &nbsp;&nbsp;
+    <span class="toolbar-title">交易对</span>
     <mat-button-toggle-group [value]="filterForm['concerned']? 'concerned':'all'"
                              (change)="concernedGroupChanged($event)">
       <mat-button-toggle value="concerned">

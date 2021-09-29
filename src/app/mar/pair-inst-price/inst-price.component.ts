@@ -54,6 +54,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
 
   prices: CurrentPrices;
   $exchs: Observable<Exch[]>;
+  preferDS: string = Exch.CODE_BA;
 
   processes: { [name: string]: boolean } = {};
 
@@ -134,7 +135,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   fetchPrices(first?: boolean) {
     this.processes.fetchPrices = true;
 
-    this.pairService.inquirePrices()
+    this.pairService.inquirePrices(this.preferDS)
       .subscribe((cps: CurrentPrices) => {
           this.processes.fetchPrices = false;
           this.prices = cps;

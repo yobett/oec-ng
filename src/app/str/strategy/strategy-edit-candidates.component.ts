@@ -152,7 +152,7 @@ export class StrategyEditCandidatesComponent implements OnInit, AfterViewInit {
 
   refreshPrices(): void {
     this.refreshingPrices = true;
-    this.pairService.inquirePrices()
+    this.pairService.inquirePrices(this.ex)
       .subscribe((cps: CurrentPrices) => {
           this.refreshingPrices = false;
           for (const sep of this.strategyExPairs) {

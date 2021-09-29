@@ -27,15 +27,15 @@ body {
   width: 100%;
 }
 
-/*
-tr.mat-header-row {
-  height: 48px !important;
+.mat-toolbar {
+  font-size: 1rem !important;
 }
 
-tr.mat-row, tr.mat-footer-row {
-  height: 40px !important;
+.mat-toolbar .toolbar-title {
+  font-size: 20px;
+  display: inline-block;
+  margin-right: 2rem;
 }
-*/
 
 .multi-lines-tooltip {
   white-space: pre-line;
@@ -185,7 +185,7 @@ button .mat-icon, .mat-icon.mat-icon-20 {
   margin-right: 2em;
 }
 
-@media(max-width: 759px) {
+@media (max-width: 759px) {
   .mat-toolbar {
     flex-wrap: wrap;
     min-height: 64px;

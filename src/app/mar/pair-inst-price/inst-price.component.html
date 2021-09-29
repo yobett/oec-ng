@@ -1,7 +1,16 @@
 <div class="mat-elevation-z1">
   <mat-toolbar>
-    交易对价格
+    <span class="toolbar-title">现货价格</span>
     <span class="spacer"></span>
+    价格来源（首选）&nbsp;&nbsp;
+    <mat-form-field class="ds-select">
+      <mat-select [(ngModel)]="preferDS">
+        <mat-option *ngFor="let exch of $exchs | async" [value]="exch.code">
+          {{exch.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    &nbsp;&nbsp;
     <button class="flex-button" mat-stroked-button color="primary" (click)="fetchPrices()"
             [disabled]="processes.fetchPrices">
       <mat-icon>refresh</mat-icon>

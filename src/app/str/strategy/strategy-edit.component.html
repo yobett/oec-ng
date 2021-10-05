@@ -210,7 +210,7 @@
         </mat-form-field>
 
         <div class="slide-field">
-          <mat-slide-toggle [(ngModel)]="strategy.tradeVolByValue">设置交易量数值</mat-slide-toggle>
+          <mat-slide-toggle [(ngModel)]="strategy.tradeVolByValue">交易量：数值</mat-slide-toggle>
         </div>
       </div>
 
@@ -278,6 +278,15 @@
           <input matInput type="number" placeholder="顺序" [(ngModel)]="strategy.applyOrder">
         </mat-form-field>
       </div>-->
+
+      <div class="field-box" *ngIf="strategy.type==='LB'||strategy.type==='HS'">
+        <div class="slide-field mat-form-field short-field">
+          <mat-slide-toggle [(ngModel)]="strategy.autoStartNext">自动接续</mat-slide-toggle>
+        </div>
+        <div class="slide-field mat-form-field short-field" *ngIf="strategy.peak||strategy.valley">
+          <mat-slide-toggle [(ngModel)]="clearPeak">清除峰/谷值</mat-slide-toggle>
+        </div>
+      </div>
 
     </div>
 

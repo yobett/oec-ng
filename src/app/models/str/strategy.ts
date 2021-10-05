@@ -5,7 +5,7 @@ export class Strategy extends Model {
   static TypeHS = 'HS';
   static TypeLS = 'LS';
   static TypeHB = 'HB';
-  // static Types = [Strategy.TypeLB, Strategy.TypeHS, Strategy.TypeLS, Strategy.TypeHB];
+  static Types = [Strategy.TypeLB, Strategy.TypeHS, Strategy.TypeLS, Strategy.TypeHB];
 
   static TypeLabels = {
     [Strategy.TypeLB]: '低买',
@@ -14,7 +14,7 @@ export class Strategy extends Model {
     [Strategy.TypeHB]: '跟涨',
   };
 
-  // static TypeOptions = Strategy.Types.map(type => ({value: type, label: Strategy.TypeLabels[type]}));
+  static TypeOptions = Strategy.Types.map(type => ({value: type, label: Strategy.TypeLabels[type]}));
 
   static getTypeLabel(type: string): string {
     return Strategy.TypeLabels[type] || type;
@@ -78,7 +78,7 @@ export class Strategy extends Model {
   beyondExpect?: boolean;
 
   tradeVol?: number; // base for sell, quote for buy
-  tradeVolPercent?: number; // base for sell, quote for buy
+  tradeVolPercent?: number = 100; // base for sell, quote for buy
   tradeVolByValue = false
 
   firstCheckAt?: Date;
@@ -89,6 +89,8 @@ export class Strategy extends Model {
   clientOrderId?: string;
 
   completedAt?: Date;
+
+  autoStartNext: boolean;
 
   watchLevel: 'loose' | 'medium' | 'intense' = 'loose';
   status: 'initial' | 'started' | 'paused' | 'placed' = 'initial';

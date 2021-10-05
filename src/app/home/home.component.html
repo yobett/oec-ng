@@ -2,7 +2,7 @@
   <button mat-icon-button (click)="snav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <h1>OEC 现货交易助手</h1>
+  <h1>OEC</h1>
   <span class="spacer"></span>
   <mat-icon class="current-user-icon" aria-hidden="false" aria-label="user icon">account_circle</mat-icon>
   <div class="current-user-info">
@@ -17,10 +17,6 @@
           <mat-icon>exit_to_app</mat-icon>
           退出登录
         </button>
-        <!--<button mat-menu-item (click)="openLoginDialog()">
-          <mat-icon>supervisor_account</mat-icon>
-          切换用户
-        </button>-->
       </mat-menu>
       <button mat-button (click)="disableNotification()" *ngIf="notificationsOn">
         <mat-icon>notifications</mat-icon>
@@ -118,21 +114,9 @@
              routerLinkActive="active-link">
             <span>全部策略</span>
           </a>
-          <a mat-list-item routerLink="/strategies/lb" class="menu-item"
-             routerLinkActive="active-link">
-            <span>低买</span>
-          </a>
-          <a mat-list-item routerLink="/strategies/hs" class="menu-item"
-             routerLinkActive="active-link">
-            <span>高卖</span>
-          </a>
-          <a mat-list-item routerLink="/strategies/hb" class="menu-item"
-             routerLinkActive="active-link">
-            <span>跟涨（买）</span>
-          </a>
-          <a mat-list-item routerLink="/strategies/ls" class="menu-item"
-             routerLinkActive="active-link">
-            <span>止损（卖）</span>
+          <a mat-list-item [routerLink]="'/strategies/'+st.value.toLowerCase()" class="menu-item"
+             routerLinkActive="active-link" *ngFor="let st of strategyTypes">
+            <span>{{st.label}}</span>
           </a>
           <a mat-list-item routerLink="/hist-strategies" class="menu-item"
              routerLinkActive="active-link">

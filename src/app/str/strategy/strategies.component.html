@@ -1,12 +1,10 @@
 <div class="mat-elevation-z1">
   <mat-toolbar>
-    <span class="toolbar-title">策略</span>
-    <ng-template [ngIf]="strategyType">
-      （{{getTypeLabel(strategyType)}}）
-    </ng-template>
-    <ng-template [ngIf]="!strategyType">
-      （全部）
-    </ng-template>
+    <span class="toolbar-title">
+      策略
+      <ng-template [ngIf]="strategyType">（{{getTypeLabel(strategyType)}}）</ng-template>
+      <ng-template [ngIf]="!strategyType">（全部）</ng-template>
+    </span>
     <span class="spacer"></span>
     <button mat-stroked-button color="primary" (click)="editNew()" *ngIf="strategyType">
       <mat-icon>add_circle_outline</mat-icon>
@@ -110,7 +108,7 @@
     <ng-container matColumnDef="type">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>类型</th>
       <td mat-cell *matCellDef="let row">
-        {{row.type}}
+        {{getTypeLabel(row.type)}}
       </td>
     </ng-container>
 
@@ -231,6 +229,13 @@
           [class.status-done]="row.status==='placed'"
           [class.subordinated]="row.status==='initial'">
         {{row.status}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="autoStartNext">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>自动接续</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon class="check" *ngIf="row.autoStartNext">check</mat-icon>
       </td>
     </ng-container>
 

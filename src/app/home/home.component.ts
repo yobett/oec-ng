@@ -16,6 +16,7 @@ import { UserDetailComponent } from '../sys/user/user-detail.component';
 import { NotificationService } from '../services/sys/notification.service';
 import { Notification } from '../models/sys/notification';
 import { LocalStorageKeys } from '../config';
+import { Strategy } from '../models/str/strategy';
 
 
 @Component({
@@ -33,6 +34,8 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
 
   beenLogin = false;
   notificationsOn = true;
+
+  strategyTypes = Strategy.TypeOptions;
 
   constructor(protected sessionService: SessionService,
               private userService: UserService,

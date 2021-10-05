@@ -52,11 +52,15 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
   processes: { [name: string]: boolean } = {};
 
   displayedColumns1: string[] = ['index', 'baseCcy', 'quoteCcy', 'ex', 'side', 'basePoint', 'expectingPercent', 'tradeVol'];
-  displayedColumns2: string[] = ['tradingPoint', 'lastCheckAt', 'watchLevel', 'status', 'createdAt', 'actions'];
+  displayedColumns21: string[] = ['tradingPoint', 'lastCheckAt', 'watchLevel', 'status',];
+  displayedColumns22: string[] = ['createdAt', 'actions'];
+  displayedColumns2: string[] = [...this.displayedColumns21, ...this.displayedColumns22];
 
   displayedColumnsByType = {
-    [Strategy.TypeLB]: [...this.displayedColumns1, 'drawbackPercent', 'valley', 'beyondExpect', ...this.displayedColumns2],
-    [Strategy.TypeHS]: [...this.displayedColumns1, 'drawbackPercent', 'peak', 'beyondExpect', ...this.displayedColumns2],
+    [Strategy.TypeLB]: [...this.displayedColumns1, 'drawbackPercent', 'valley', 'beyondExpect',
+      ...this.displayedColumns21, 'autoStartNext', ...this.displayedColumns22],
+    [Strategy.TypeHS]: [...this.displayedColumns1, 'drawbackPercent', 'peak', 'beyondExpect',
+      ...this.displayedColumns21, 'autoStartNext', ...this.displayedColumns22],
     [Strategy.TypeLS]: [...this.displayedColumns1, 'valley', ...this.displayedColumns2],
     [Strategy.TypeHB]: [...this.displayedColumns1, 'peak', ...this.displayedColumns2]
   }

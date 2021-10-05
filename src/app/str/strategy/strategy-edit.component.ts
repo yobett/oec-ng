@@ -34,6 +34,7 @@ export class StrategyEditComponent implements OnInit {
   refreshingPrice = false;
   saving = false;
   drawbackField = false;
+  clearPeak = false;
 
   constructor(private strategyService: StrategyService,
               private pairService: PairService,
@@ -190,14 +191,23 @@ export class StrategyEditComponent implements OnInit {
     const {
       id, status, basePoint, expectingPercent, expectingPoint,
       drawbackPercent, intenseWatchPercent, mediumWatchPercent,
-      tradeVolByValue, tradeVolPercent, tradeVol, applyOrder
+      tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
+      autoStartNext
     } = strategy;
 
     const toSave = {
       id, status, basePoint, expectingPercent, expectingPoint,
       drawbackPercent, intenseWatchPercent, mediumWatchPercent,
-      tradeVolByValue, tradeVolPercent, tradeVol, applyOrder
+      tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
+      autoStartNext
     } as Strategy;
+    if (this.clearPeak) {
+      toSave.peak = null;
+      toSave.peakTime = null;
+      toSave.valley = null;
+      toSave.valleyTime = null;
+      toSave.beyondExpect = false;
+    }
 
     this.saving = true;
     this.strategyService.update(toSave)

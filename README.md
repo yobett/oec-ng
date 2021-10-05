@@ -35,7 +35,7 @@ npm run start
 
 ### 生产环境
 
-打开`src/environments/environment.prod.ts`，配置生产环境的后端地址。
+进入`src/environments/`目录，把`environment.prod-temp.ts`拷贝到`environment.prod.ts`，配置生产环境的后端地址。
 
 构建：
 

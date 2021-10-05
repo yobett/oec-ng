@@ -77,6 +77,7 @@ export class KlineChartDialogComponent implements OnInit, AfterViewInit {
       KlineChartDialogComponent, {
         disableClose: true,
         width: '100%',
+        maxWidth: '96vw',
         data
       });
   }

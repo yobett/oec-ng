@@ -51,6 +51,7 @@ export class SpotOrdersDialogComponent implements AfterViewInit {
       SpotOrdersDialogComponent, {
         disableClose: true,
         width: '100%',
+        maxWidth: '96vw',
         data
       });
   }

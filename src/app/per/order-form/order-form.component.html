@@ -6,7 +6,7 @@
 
   <span class="spacer"></span>
 
-  <span>
+  <span class="exch-info">
     交易所：{{exchangePair.ex}}
     &nbsp;
     <a mat-button class="mat-icon-20" target="_blank" *ngIf="exchangePair.ex==='oe'"
@@ -127,10 +127,15 @@
   </div>
 </mat-dialog-content>
 
-<div mat-dialog-actions align="end">
-  <button mat-button (click)="closeDialog()">关闭</button>
-  <button mat-button [color]="orderForm.side === 'buy' ? 'accent' : 'primary'" (click)="placeOrder()"
-          [disabled]="placingOrder||!!orderPlacedAt">
-    {{orderForm.side === 'buy' ? '买入' : '卖出'}}
+<div mat-dialog-actions align="end" class="actions">
+  <button mat-button (click)="showExchangeInfo()" [disabled]="loadingExchangeInfo">
+    交易对参数
   </button>
+  <span>
+    <button mat-button (click)="closeDialog()">关闭</button>
+    <button mat-button [color]="orderForm.side === 'buy' ? 'accent' : 'primary'" (click)="placeOrder()"
+            [disabled]="placingOrder||!!orderPlacedAt">
+      {{orderForm.side === 'buy' ? '买入' : '卖出'}}
+    </button>
+  </span>
 </div>

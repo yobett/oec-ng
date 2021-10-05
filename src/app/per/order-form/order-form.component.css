@@ -7,6 +7,10 @@
   margin-right: 2em;
 }
 
+.mat-dialog-title .exch-info {
+  font-size: 1rem;
+}
+
 .info-bar {
   line-height: 36px;
   margin-bottom: 2em;
@@ -59,4 +63,8 @@
 
 .mat-slider {
   width: 100%;
+}
+
+.actions {
+  justify-content: space-between;
 }

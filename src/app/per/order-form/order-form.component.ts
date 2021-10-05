@@ -13,6 +13,8 @@ import { EffectDigitsPipe } from '../../common/pipe/effect-digits-pipe';
 import { AssetService } from '../../services/per/asset.service';
 import { PlaceOrderRefreshDelay } from '../../config';
 import { Exch } from '../../models/sys/exch';
+import { ValueResult } from '../../models/result';
+import { MessageDialogComponent } from '../../common/message-dialog/message-dialog.component';
 
 export interface OrderFormParams {
   exchangePair: ExchangePair;
@@ -50,6 +52,9 @@ export class OrderFormComponent implements OnInit {
 
   orderPlacedAt: number;
 
+  loadingExchangeInfo = false;
+  exchangeInfo: any = null;
+
   sliderLabel = (value: number): string => {
     if (value === 0) {
       return '0';
@@ -72,7 +77,8 @@ export class OrderFormComponent implements OnInit {
               private snackBar: MatSnackBar,
               private effectDigits: EffectDigitsPipe,
               public dialogRef: MatDialogRef<OrderFormComponent, number>,
-              @Inject(MAT_DIALOG_DATA) public data: OrderFormParams) {
+              @Inject(MAT_DIALOG_DATA) public data: OrderFormParams,
+              private dialog: MatDialog) {
 
     this.exchangePair = data.exchangePair;
     this.orderForm = data.orderForm;
@@ -91,6 +97,7 @@ export class OrderFormComponent implements OnInit {
       OrderFormComponent, {
         disableClose: true,
         width: '420px',
+        maxWidth: '96vw',
         data
       });
   }
@@ -151,6 +158,34 @@ export class OrderFormComponent implements OnInit {
         () => this.refreshingPrice = false);
   }
 
+  showExchangeInfo() {
+    if (this.exchangeInfo) {
+      return this.doShowExchangeInfo();
+    }
+    const exp = this.exchangePair;
+    this.loadingExchangeInfo = true;
+    this.pairService.getExchangeInfo(exp.ex, exp.symbol)
+      .subscribe((result: ValueResult<any>) => {
+          this.loadingExchangeInfo = false;
+          this.exchangeInfo = result.value;
+          this.doShowExchangeInfo();
+        },
+        error => this.loadingExchangeInfo = false,
+        () => this.loadingExchangeInfo = false);
+  }
+
+  private doShowExchangeInfo() {
+    const exchangeInfo = this.exchangeInfo;
+    if (!exchangeInfo) {
+      return;
+    }
+    const exp = this.exchangePair;
+    const msg = JSON.stringify(exchangeInfo, null, 2);
+    const title = `交易对参数（${exp.ex}: ${exp.baseCcy}-${exp.quoteCcy}）`;
+    const data = {msg, type: '', title};
+    MessageDialogComponent.ShowMessageDialog(data, this.dialog);
+  }
+
   quantitySliderChanged(change: MatSliderChange) {
     if (change.value === null) {
       return;
@@ -158,7 +193,7 @@ export class OrderFormComponent implements OnInit {
     if (!this.availableBaseAsset) {
       return;
     }
-    const ratio = (change.value === this.sliderSteps) ? 0.999 : change.value / this.sliderSteps;
+    const ratio = (change.value === this.sliderSteps) ? 1 : change.value / this.sliderSteps;
     const quant = this.availableBaseAsset * ratio;
     this.orderForm.quantity = +this.effectDigits.transform(quant);
   }
@@ -170,7 +205,7 @@ export class OrderFormComponent implements OnInit {
     if (!this.availableQuoteAsset) {
       return;
     }
-    const ratio = (change.value === this.sliderSteps) ? 0.999 : change.value / this.sliderSteps;
+    const ratio = (change.value === this.sliderSteps) ? 1 : change.value / this.sliderSteps;
     const quant = this.availableQuoteAsset * ratio;
     this.orderForm.quoteQuantity = +this.effectDigits.transform(quant);
   }

@@ -110,6 +110,11 @@
 
       </div>
 
+      <div class="field-box">
+        <div class="slide-field mat-form-field short-field" *ngIf="strategy.type==='LS'||strategy.type==='HB'">
+          <mat-slide-toggle [(ngModel)]="strategy.updateBasePoint">更新基点</mat-slide-toggle>
+        </div>
+      </div>
 
       <div class="field-box-prompt">对于修改：</div>
       <div class="field-box">

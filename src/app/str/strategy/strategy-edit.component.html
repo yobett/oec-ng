@@ -1,8 +1,10 @@
 <mat-toolbar>
-  <span class="toolbar-title">策略设置</span>
-  <ng-template [ngIf]="strategy">
-    （{{getTypeLabel(strategy.type)}}）
-  </ng-template>
+  <span class="toolbar-title">
+    策略设置
+    <ng-template [ngIf]="strategy">
+      （{{getTypeLabel(strategy.type)}}）
+    </ng-template>
+  </span>
   <div class="toolbar-sub-title" *ngIf="strategy">
     <div class="prop">
       <span class="prop-name subordinated">基础</span>
@@ -279,9 +281,12 @@
         </mat-form-field>
       </div>-->
 
-      <div class="field-box" *ngIf="strategy.type==='LB'||strategy.type==='HS'">
-        <div class="slide-field mat-form-field short-field">
+      <div class="field-box">
+        <div class="slide-field mat-form-field short-field" *ngIf="strategy.type==='LB'||strategy.type==='HS'">
           <mat-slide-toggle [(ngModel)]="strategy.autoStartNext">自动接续</mat-slide-toggle>
+        </div>
+        <div class="slide-field mat-form-field short-field" *ngIf="strategy.type==='LS'||strategy.type==='HB'">
+          <mat-slide-toggle [(ngModel)]="strategy.updateBasePoint">更新基点</mat-slide-toggle>
         </div>
         <div class="slide-field mat-form-field short-field" *ngIf="strategy.peak||strategy.valley">
           <mat-slide-toggle [(ngModel)]="clearPeak">清除峰/谷值</mat-slide-toggle>

@@ -61,14 +61,17 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
       ...this.displayedColumns21, 'autoStartNext', ...this.displayedColumns22],
     [Strategy.TypeHS]: [...this.displayedColumns1, 'drawbackPercent', 'peak', 'beyondExpect',
       ...this.displayedColumns21, 'autoStartNext', ...this.displayedColumns22],
-    [Strategy.TypeLS]: [...this.displayedColumns1, 'valley', ...this.displayedColumns2],
-    [Strategy.TypeHB]: [...this.displayedColumns1, 'peak', ...this.displayedColumns2]
+    [Strategy.TypeLS]: [...this.displayedColumns1, 'valley',
+      ...this.displayedColumns21, 'updateBasePoint', ...this.displayedColumns22],
+    [Strategy.TypeHB]: [...this.displayedColumns1, 'peak',
+      ...this.displayedColumns21, 'updateBasePoint', ...this.displayedColumns22]
   }
 
   displayedColumnsTypeAll: string[] = ['index', 'baseCcy', 'quoteCcy', 'ex',
-    'type', 'watchDirection',
+    'type', /*'watchDirection',*/
     'side', 'basePoint', 'expectingPercent', 'tradeVol',
-    'drawbackPercent', 'peak', 'valley', 'beyondExpect', ...this.displayedColumns2];
+    'drawbackPercent', 'peak', 'valley', 'beyondExpect',
+    ...this.displayedColumns21, 'updateBasePoint', 'autoStartNext', ...this.displayedColumns22];
 
   displayedColumns: string[] = this.displayedColumnsTypeAll;
 

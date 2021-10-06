@@ -39,9 +39,11 @@ export class Strategy extends Model {
     } else if (this.type === Strategy.TypeHB) {
       this.watchDirection = 'up';
       this.side = 'buy';
+      this.updateBasePoint = true;
     } else if (this.type === Strategy.TypeLS) {
       this.watchDirection = 'down';
       this.side = 'sell';
+      this.updateBasePoint = true;
     } else if (this.type === Strategy.TypeLB) {
       this.watchDirection = 'down';
       this.side = 'buy';
@@ -91,6 +93,7 @@ export class Strategy extends Model {
   completedAt?: Date;
 
   autoStartNext: boolean;
+  updateBasePoint: boolean;
 
   watchLevel: 'loose' | 'medium' | 'intense' = 'loose';
   status: 'initial' | 'started' | 'paused' | 'placed' = 'initial';

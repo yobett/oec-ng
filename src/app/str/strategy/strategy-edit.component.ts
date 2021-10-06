@@ -192,14 +192,14 @@ export class StrategyEditComponent implements OnInit {
       id, status, basePoint, expectingPercent, expectingPoint,
       drawbackPercent, intenseWatchPercent, mediumWatchPercent,
       tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
-      autoStartNext
+      autoStartNext, updateBasePoint
     } = strategy;
 
     const toSave = {
       id, status, basePoint, expectingPercent, expectingPoint,
       drawbackPercent, intenseWatchPercent, mediumWatchPercent,
       tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
-      autoStartNext
+      autoStartNext, updateBasePoint
     } as Strategy;
     if (this.clearPeak) {
       toSave.peak = null;

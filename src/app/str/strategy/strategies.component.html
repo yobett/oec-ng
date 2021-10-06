@@ -232,6 +232,13 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="updateBasePoint">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>更新基点</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon class="check" *ngIf="row.updateBasePoint">check</mat-icon>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="autoStartNext">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>自动接续</th>
       <td mat-cell *matCellDef="let row">

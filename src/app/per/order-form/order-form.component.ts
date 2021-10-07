@@ -15,6 +15,7 @@ import { PlaceOrderRefreshDelay } from '../../config';
 import { Exch } from '../../models/sys/exch';
 import { ValueResult } from '../../models/result';
 import { MessageDialogComponent } from '../../common/message-dialog/message-dialog.component';
+import { RoundDownPipe } from '../../common/pipe/round-down-pipe';
 
 export interface OrderFormParams {
   exchangePair: ExchangePair;
@@ -76,6 +77,7 @@ export class OrderFormComponent implements OnInit {
               private assetService: AssetService,
               private snackBar: MatSnackBar,
               private effectDigits: EffectDigitsPipe,
+              private roundDown: RoundDownPipe,
               public dialogRef: MatDialogRef<OrderFormComponent, number>,
               @Inject(MAT_DIALOG_DATA) public data: OrderFormParams,
               private dialog: MatDialog) {
@@ -195,7 +197,7 @@ export class OrderFormComponent implements OnInit {
     }
     const ratio = (change.value === this.sliderSteps) ? 1 : change.value / this.sliderSteps;
     const quant = this.availableBaseAsset * ratio;
-    this.orderForm.quantity = +this.effectDigits.transform(quant);
+    this.orderForm.quantity = +this.roundDown.transform(quant);
   }
 
   quoteQuantitySliderChanged(change: MatSliderChange) {
@@ -207,7 +209,7 @@ export class OrderFormComponent implements OnInit {
     }
     const ratio = (change.value === this.sliderSteps) ? 1 : change.value / this.sliderSteps;
     const quant = this.availableQuoteAsset * ratio;
-    this.orderForm.quoteQuantity = +this.effectDigits.transform(quant);
+    this.orderForm.quoteQuantity = +this.roundDown.transform(quant);
   }
 
 
@@ -260,7 +262,7 @@ export class OrderFormComponent implements OnInit {
           price = this.tickerPrice;
         }
         const quant = orderForm.quoteQuantity / price;
-        form.quantity = +this.effectDigits.transform(quant);
+        form.quantity = +this.roundDown.transform(quant);
       } else {
         form.quoteQuantity = orderForm.quoteQuantity;
       }

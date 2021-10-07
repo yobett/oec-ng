@@ -28,6 +28,7 @@ import { StrategyHistoryService } from './str/strategy-history.service';
 import { LocalStorageKeys, DATE_FORMATS, PaginatorIntl } from '../config';
 import { AssetSnapshotService } from './per/asset-snapshot.service';
 import { NotificationService } from './sys/notification.service';
+import { RoundDownPipe } from '../common/pipe/round-down-pipe';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { NotificationService } from './sys/notification.service';
     DecimalPipe,
     PercentPipe,
     EffectDigitsPipe,
+    RoundDownPipe,
     LastTransService,
     ThemeService,
     StyleManagerService,

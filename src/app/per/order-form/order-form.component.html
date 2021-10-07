@@ -69,9 +69,9 @@
   <div class="field-box" *ngIf="orderForm.side==='sell'">
     <mat-form-field class="form-field">
       <input matInput placeholder="基础币种数量" [(ngModel)]="orderForm.quantity">
-      <span matSuffix class="subordinated">最大：{{availableBaseAsset | effectdigits}}</span>
+      <span matSuffix class="subordinated">最大：{{availableBaseAsset | rounddown}}</span>
       <mat-hint *ngIf="tickerPrice">
-        {{exchangePair.quoteCcy}} ≈ {{(orderForm.quantity * tickerPrice) | effectdigits}}
+        {{exchangePair.quoteCcy}} ≈ {{(orderForm.quantity * tickerPrice) | rounddown}}
       </mat-hint>
     </mat-form-field>
     <div class="slider-bar">
@@ -92,9 +92,9 @@
   <div class="field-box" *ngIf="orderForm.side==='buy'">
     <mat-form-field class="form-field">
       <input matInput placeholder="报价币种数量" [(ngModel)]="orderForm.quoteQuantity">
-      <span matSuffix class="subordinated">最大：{{availableQuoteAsset || 0 | effectdigits}}</span>
+      <span matSuffix class="subordinated">最大：{{availableQuoteAsset || 0 | rounddown}}</span>
       <mat-hint *ngIf="tickerPrice">
-        {{exchangePair.baseCcy}} ≈ {{(orderForm.quoteQuantity / tickerPrice) | effectdigits}}
+        {{exchangePair.baseCcy}} ≈ {{(orderForm.quoteQuantity / tickerPrice) | rounddown}}
       </mat-hint>
     </mat-form-field>
     <div class="slider-bar">

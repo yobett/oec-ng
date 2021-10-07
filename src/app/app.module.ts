@@ -57,6 +57,7 @@ import { StrategyEditCandidatesComponent } from './str/strategy/strategy-edit-ca
 import { SnapshotsChartComponent } from './per/asset-snapshot/snapshots-chart.component';
 import { AssetsStructureComponent } from './per/asset/assets-structure.component';
 import { OrdersChartComponent } from './per/order-chart/orders-chart.component';
+import { RoundDownPipe } from './common/pipe/round-down-pipe';
 
 
 @NgModule({
@@ -95,6 +96,7 @@ import { OrdersChartComponent } from './per/order-chart/orders-chart.component';
     MoneyPipe,
     MoneySumPipe,
     EffectDigitsPipe,
+    RoundDownPipe,
     RawPercentPipe,
     TruncatePipe,
     LastTransComponent,

@@ -1,8 +1,8 @@
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { map, switchMap } from 'rxjs/operators';
-import { Observable, merge, BehaviorSubject } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { Observable, merge, BehaviorSubject, EMPTY } from 'rxjs';
 import { ModelCurdService } from '../services/model-curd.service';
 import { QueryParams } from '../models/query-params';
 
@@ -15,6 +15,8 @@ export class PageableDatasource<T> extends DataSource<T> {
 
   data: T[];
   total: number;
+
+  paramsTransformer: (params: any) => any;
 
   protected reloadEmitter: BehaviorSubject<number> = new BehaviorSubject<number>(1);
 
@@ -33,7 +35,11 @@ export class PageableDatasource<T> extends DataSource<T> {
     return merge(...dataMutations).pipe(switchMap(() => {
       const params = new QueryParams();
       if (this.filter) {
-        Object.assign(params, this.filter);
+        let filter = this.filter;
+        if (this.paramsTransformer) {
+          filter = this.paramsTransformer(filter);
+        }
+        Object.assign(params, filter);
       }
 
       if (this.sort.active && this.sort.direction !== '') {
@@ -47,11 +53,14 @@ export class PageableDatasource<T> extends DataSource<T> {
       params.pageSize = pag.pageSize;
 
       return this.service.page2(null, params)
-        .pipe(map((cl) => {
-          this.total = cl.count;
-          this.data = cl.list;
-          return cl.list;
-        }));
+        .pipe(
+          map((cl) => {
+            this.total = cl.count;
+            this.data = cl.list;
+            return cl.list;
+          }),
+          catchError(err => EMPTY)
+        );
     }));
   }
 

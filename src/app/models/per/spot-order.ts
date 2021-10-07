@@ -1,4 +1,3 @@
-import * as moment from 'moment';
 import { Model } from '../model';
 import { mergeTsData } from '../../common/utils';
 
@@ -29,6 +28,7 @@ export interface SpotOrderFilter {
   pairSymbolLike?: string;
   baseCcy?: string;
   quoteCcy?: string;
+  createTsTo?: number;
 }
 
 export class OrderTimeLineQueryForm {

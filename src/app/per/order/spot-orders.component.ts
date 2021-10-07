@@ -5,6 +5,7 @@ import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonToggleChange } from '@angular/material/button-toggle/button-toggle';
 import { Observable } from 'rxjs';
+import { Moment } from 'moment';
 
 import { SpotOrder, SpotOrderFilter } from '../../models/per/spot-order';
 import { Result } from '../../models/result';
@@ -46,6 +47,7 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
 
   filterEx: string = 'all';
   filterForm: any & SpotOrderFilter = {};
+  today: Date = new Date();
 
   processes: { [name: string]: boolean } = {};
 
@@ -60,6 +62,19 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
   protected onInit() {
     super.onInit();
     this.dataSource = new PageableDatasource<SpotOrder>(this.spotOrderService);
+    this.dataSource.paramsTransformer = (form) => {
+      form = {...form};
+      let mom = form.createTsTo;
+      if (mom) {
+        if (mom.constructor.name === 'Moment' || mom['_isAMomentObject'] === true) {
+          const dayMills = 24 * 60 * 60 * 1000;
+          form.createTsTo = (mom as Moment).valueOf() + dayMills;
+        }
+      } else {
+        delete form.createTsTo;
+      }
+      return form;
+    };
   }
 
   protected withSession(user: User) {
@@ -114,11 +129,11 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
   syncOrdersFor(ex: string) {
     this.processes['syncOrders-' + ex] = true;
     let obs: Observable<SyncResult>;
-    if (ex === 'ba') {
+    if (ex === Exch.CODE_BA) {
       obs = this.dataSyncService.syncOrdersBa();
-    } else if (ex === 'oe') {
+    } else if (ex === Exch.CODE_OE) {
       obs = this.dataSyncService.syncOrdersOe();
-    } else if (ex === 'hb') {
+    } else if (ex === Exch.CODE_HB) {
       obs = this.dataSyncService.syncOrdersHb();
     }
     obs.subscribe((syncResult: SyncResult) => {

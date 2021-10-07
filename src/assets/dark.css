@@ -61,6 +61,6 @@ a.meta-link {
   color: cyan;
 }
 
-table tbody tr:nth-child(2n-1), table > tr:nth-child(2n-1) {
+table.mat-table tbody tr:nth-child(2n-1), table > tr:nth-child(2n-1) {
   background-color: rgba(0, 0, 0, .05);
 }

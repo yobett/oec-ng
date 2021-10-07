@@ -44,6 +44,13 @@
              (keyup.enter)="filter()">
     </mat-form-field>
 
+    <mat-form-field>
+      <input matInput [matDatepicker]="dateToPicker" placeholder="截止日期" [max]="today"
+             [(ngModel)]="filterForm['createTsTo']" (dblclick)="filterForm['createTsTo']=undefined">
+      <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+      <mat-datepicker #dateToPicker></mat-datepicker>
+    </mat-form-field>
+
     <button mat-button (click)="filter()">
       <mat-icon>search</mat-icon>
       筛选

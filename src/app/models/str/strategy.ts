@@ -83,7 +83,6 @@ export class Strategy extends Model {
   tradeVolPercent?: number = 100; // base for sell, quote for buy
   tradeVolByValue = false
 
-  firstCheckAt?: Date;
   lastCheckAt?: Date;
   lastCheckPrice?: number;
 
@@ -96,7 +95,7 @@ export class Strategy extends Model {
   updateBasePoint: boolean;
 
   watchLevel: 'loose' | 'medium' | 'intense' = 'loose';
-  status: 'initial' | 'started' | 'paused' | 'placed' = 'initial';
+  status: 'initial' | 'started' | 'paused' | 'placed' | 'completed' = 'initial';
 }
 
 

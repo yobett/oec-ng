@@ -25,6 +25,7 @@ import { KlineChartDialogComponent } from '../../mar/kline-chart/kline-chart-dia
 import { OrderForm } from '../../models/per/order-form';
 import { OrderFormComponent, OrderFormParams } from '../../per/order-form/order-form.component';
 import { LocalStorageKeys } from '../../config';
+import { StrategyDetailDialogComponent } from './strategy-detail-dialog.component';
 
 @Component({
   selector: 'app-strategies',
@@ -361,6 +362,10 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
         }
       });
     }
+  }
+
+  showDetail(strategy: Strategy) {
+    StrategyDetailDialogComponent.showStrategyDetail(this.dialog, strategy);
   }
 
   remove(strategy: Strategy) {

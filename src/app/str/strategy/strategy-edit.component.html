@@ -118,23 +118,20 @@
     </div>
 
     <div class="info-bar">
-      <!--      <div class="title"></div>-->
       <div class="props">
         <div>
           <span class="prop-name subordinated">状态</span>
           <span class="prop-value" [class.accent-color]="strategy.status==='started'">{{strategy.status }}</span>
         </div>
-        <!--<div>
+        <div>
           <span class="prop-name subordinated">关注级别</span>
           <span class="prop-value"
                 [class.primary-color]="strategy.watchLevel==='medium'"
-                [class.accent-color]="strategy.watchLevel==='intense'">{{strategy.watchLevel }}</span>
-        </div>-->
-        <div *ngIf="strategy.firstCheckAt">
-          <span class="prop-name subordinated">初次检查</span>
-          <span class="prop-value">{{strategy.firstCheckAt | date: 'MM-dd HH:mm' }}</span>
+                [class.accent-color]="strategy.watchLevel==='intense'">
+            {{strategy.watchLevel }}
+          </span>
         </div>
-        <div *ngIf="strategy.lastCheckAt&&strategy.lastCheckAt!==strategy.firstCheckAt">
+        <div *ngIf="strategy.lastCheckAt">
           <span class="prop-name subordinated">上次检查</span>
           <span class="prop-value">
             {{strategy.lastCheckPrice | effectdigits }}
@@ -156,17 +153,6 @@
             <span class="primary-color">{{strategy.valley | effectdigits }}</span>
             &nbsp;&nbsp;
             {{strategy.valleyTime | date: 'MM-dd HH:mm' }}
-          </span>
-        </div>
-      </div>
-
-      <div class="props" *ngIf="strategy.status==='placed'">
-        <div *ngIf="strategy.clientOrderId">
-          <span class="prop-name subordinated">订单</span>
-          <span class="prop-value">
-            {{strategy.clientOrderId}}
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            {{strategy.orderPlacedAt | date: 'MM-dd HH:mm' }}
           </span>
         </div>
       </div>

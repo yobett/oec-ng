@@ -1,0 +1,154 @@
+<h3 mat-dialog-title>
+  策略详情
+</h3>
+
+<mat-dialog-content>
+  <div class="props">
+    <div class="prop">
+      <span class="prop-name subordinated">类型</span>
+      <span class="prop-value">{{getTypeLabel(strategy.type)}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">交易所</span>
+      <span class="prop-value">{{strategy.ex}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">基础币种</span>
+      <span class="prop-value">
+        <img class="ccy-logo" [src]="CoinLogoPath(strategy.baseCcy)" alt="">
+        {{strategy.baseCcy}}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">报价币种</span>
+      <span class="prop-value">
+        <img class="ccy-logo" [src]="CoinLogoPath(strategy.quoteCcy)" alt="">
+        {{strategy.quoteCcy}}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">方向</span>
+      <span class="prop-value"
+            [class.order-side-buy]="strategy.side==='buy'"
+            [class.order-side-sell]="strategy.side==='sell'">{{strategy.side}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">基点</span>
+      <span class="prop-value">{{strategy.basePoint | effectdigits}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">期望</span>
+      <span class="prop-value">
+        <ng-template [ngIf]="strategy.expectingPercent">
+          {{strategy.expectingPercent}}%
+          <span class="subordinated"> &nbsp;&nbsp;{{strategy.expectingPoint | effectdigits}}</span>
+        </ng-template>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">最大回落</span>
+      <span class="prop-value">
+        <ng-template [ngIf]="strategy.drawbackPercent">{{strategy.drawbackPercent}}%</ng-template>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">交易点</span>
+      <span class="prop-value">{{strategy.tradingPoint | effectdigits}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">交易量</span>
+      <span class="prop-value">
+        <ng-template [ngIf]="strategy.tradeVolByValue">{{strategy.tradeVol | effectdigits}}</ng-template>
+        <ng-template [ngIf]="!strategy.tradeVolByValue && strategy.tradeVolPercent">
+          {{strategy.tradeVolPercent}}%
+        </ng-template>
+        <span class="subordinated">&nbsp;&nbsp;（{{strategy.side === 'buy' ? '报价币种' : '基础币种'}}）</span>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">中度/密切关注</span>
+      <span class="prop-value">
+        {{strategy.mediumWatchPercent}}% &nbsp;&nbsp;
+        {{strategy.intenseWatchPercent}}%</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">已达峰值</span>
+      <span class="prop-value">
+        {{strategy.peak | effectdigits}} &nbsp;&nbsp;
+        <span class="subordinated">{{strategy.peakTime | date:'MM-dd HH:mm'}}</span>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">已达谷值</span>
+      <span class="prop-value">
+        {{strategy.valley | effectdigits}} &nbsp;&nbsp;
+        <span class="subordinated">{{strategy.valleyTime | date:'MM-dd HH:mm'}}</span>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">上次检查</span>
+      <span class="prop-value">{{strategy.lastCheckPrice | effectdigits}} &nbsp;&nbsp;
+        <span class="subordinated">{{strategy.lastCheckAt | date:'MM-dd HH:mm'}}</span>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">已达期望</span>
+      <span class="prop-value">
+        <mat-icon class="check" *ngIf="strategy.beyondExpect">check</mat-icon>
+      </span>
+    </div>
+    <div class="prop" *ngIf="strategy.type==='LB'||strategy.type==='HS'">
+      <span class="prop-name subordinated">自动接续</span>
+      <span class="prop-value">
+        <mat-icon class="check" *ngIf="strategy.autoStartNext">check</mat-icon>
+      </span>
+    </div>
+    <div class="prop" *ngIf="strategy.type==='LS'||strategy.type==='HB'">
+      <span class="prop-name subordinated">更新基点</span>
+      <span class="prop-value">
+        <mat-icon class="check" *ngIf="strategy.updateBasePoint">check</mat-icon>
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">创建时间</span>
+      <span class="prop-value">{{strategy.createdAt | date:'y-MM-dd HH:mm:ss'}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">关注级别</span>
+      <span class="prop-value"
+            [class.primary-color]="strategy.watchLevel==='medium'"
+            [class.accent-color]="strategy.watchLevel==='intense'">
+          {{strategy.watchLevel}}
+        </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">状态</span>
+      <span class="prop-value">
+        <span [class.accent-color]="strategy.status==='started'"
+              [class.status-done]="strategy.status==='placed'||strategy.status==='completed'"
+              [class.subordinated]="strategy.status==='initial'">
+          {{strategy.status}}
+        </span>
+      </span>
+    </div>
+    <div class="prop" *ngIf="strategy.orderPlacedAt">
+      <span class="prop-name subordinated">下单时间</span>
+      <span class="prop-value">{{strategy.orderPlacedAt | date:'y-MM-dd HH:mm:ss'}}</span>
+    </div>
+    <div class="prop" *ngIf="strategy.clientOrderId">
+      <span class="prop-name subordinated">客户订单号</span>
+      <span class="prop-value">{{strategy.clientOrderId}}</span>
+    </div>
+    <div class="prop" *ngIf="strategy.status==='completed'">
+      <span class="prop-name subordinated">完成时间</span>
+      <span class="prop-value">
+          {{strategy.completedAt | date:'y-MM-dd HH:mm:ss'}}
+      </span>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>关闭</button>
+</div>

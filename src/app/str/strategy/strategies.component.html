@@ -191,7 +191,7 @@
     </ng-container>
 
     <ng-container matColumnDef="beyondExpect">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>超过期望</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>已达期望</th>
       <td mat-cell *matCellDef="let row">
         <mat-icon class="check" *ngIf="row.beyondExpect">check</mat-icon>
       </td>
@@ -249,7 +249,8 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" align="end">
-        <a mat-button routerLink="/strategies/{{strategyType.toLowerCase()}}/{{row.id}}" *ngIf="strategyType">
+        <a mat-button routerLink="/strategies/{{strategyType.toLowerCase()}}/{{row.id}}"
+           *ngIf="strategyType&&row.status!=='placed'">
           <mat-icon>edit</mat-icon>
           设置
         </a>
@@ -257,6 +258,10 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #actions="matMenu">
+          <button mat-menu-item (click)="showDetail(row)">
+            <mat-icon>list</mat-icon>
+            详情
+          </button>
           <button mat-menu-item (click)="openKlineChart(row)">
             <mat-icon>show_chart</mat-icon>
             K线

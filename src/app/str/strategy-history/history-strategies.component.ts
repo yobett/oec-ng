@@ -18,6 +18,7 @@ import { SpotOrder } from '../../models/per/spot-order';
 import { OrderDetailDialogComponent } from '../../per/order/order-detail-dialog.component';
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { Strategy } from '../../models/str/strategy';
+import { StrategyDetailDialogComponent } from '../strategy/strategy-detail-dialog.component';
 
 @Component({
   selector: 'app-strategies',
@@ -85,12 +86,17 @@ export class HistoryStrategiesComponent extends SessionSupportComponent implemen
     this.filterData();
   }
 
+  showStrategyDetail(strategy: Strategy) {
+    StrategyDetailDialogComponent.showStrategyDetail(this.dialog, strategy);
+  }
+
   showOrderDetail(st: StrategyHistory) {
     if (st.order) {
       OrderDetailDialogComponent.showOrderDetail(this.dialog, st.order);
     } else {
       this.spotOrderService.getByClientOrderId(st.clientOrderId)
         .subscribe((order: SpotOrder) => {
+          st.order = order;
           OrderDetailDialogComponent.showOrderDetail(this.dialog, order);
         });
     }

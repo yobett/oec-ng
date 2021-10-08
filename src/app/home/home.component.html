@@ -2,7 +2,10 @@
   <button mat-icon-button (click)="snav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
-  <h1>OEC</h1>
+  <h1>
+    OEC
+    <span class="full-title">现货交易助手</span>
+  </h1>
   <span class="spacer"></span>
   <mat-icon class="current-user-icon" aria-hidden="false" aria-label="user icon">account_circle</mat-icon>
   <div class="current-user-info">
@@ -81,6 +84,10 @@
           <a mat-list-item routerLink="/assets-merged" class="menu-item"
              routerLinkActive="active-link">
             <span>资产（合并）</span>
+          </a>
+          <a mat-list-item routerLink="/snapshots" class="menu-item"
+             routerLinkActive="active-link">
+            <span>资产快照</span>
           </a>
           <a mat-list-item routerLink="/assets-trend" class="menu-item"
              routerLinkActive="active-link">

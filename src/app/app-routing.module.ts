@@ -21,6 +21,7 @@ import { KlineChartComponent } from './mar/kline-chart/kline-chart.component';
 import { StrategyEditManyComponent } from './str/strategy/strategy-edit-many.component';
 import { SnapshotsChartComponent } from './per/asset-snapshot/snapshots-chart.component';
 import { OrdersChartComponent } from './per/order-chart/orders-chart.component';
+import { SnapshotsComponent } from './per/asset-snapshot/snapshots.component';
 
 const routes: Routes = [
   // {path: '', component: HomeComponent},
@@ -35,6 +36,7 @@ const routes: Routes = [
 
   {path: 'assets', component: AssetsComponent},
   {path: 'assets-merged', component: AssetsMergedComponent},
+  {path: 'snapshots', component: SnapshotsComponent},
   {path: 'assets-trend', component: SnapshotsChartComponent},
 
   {path: 'orders', component: SpotOrdersComponent},

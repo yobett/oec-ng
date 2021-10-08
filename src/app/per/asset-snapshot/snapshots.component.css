@@ -1,0 +1,14 @@
+.table-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.date-field {
+  width: 7em;
+  margin-right: 1em;
+}
+
+.hour-field {
+  width: 5em;
+}

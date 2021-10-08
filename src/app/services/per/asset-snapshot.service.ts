@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { BaseService } from '../base.service';
 import { AssetSnapshot, AssetSnapshotQueryForm } from '../../models/per/asset-snapshot';
 import { ListResult, Result } from '../../models/result';
-import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AssetSnapshotService extends BaseService<AssetSnapshot> {
@@ -42,6 +42,11 @@ export class AssetSnapshotService extends BaseService<AssetSnapshot> {
     }
     const url = `${this.baseUrl}/ccy/${ccy}`;
     return super.list2(url, params);
+  }
+
+  getSnapshots(ts: number): Observable<AssetSnapshot[]> {
+    const url = `${this.baseUrl}/ts/${ts}`;
+    return super.list2(url);
   }
 
 }

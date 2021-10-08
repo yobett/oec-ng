@@ -59,6 +59,7 @@ import { AssetsStructureComponent } from './per/asset/assets-structure.component
 import { OrdersChartComponent } from './per/order-chart/orders-chart.component';
 import { RoundDownPipe } from './common/pipe/round-down-pipe';
 import { StrategyDetailDialogComponent } from './str/strategy/strategy-detail-dialog.component';
+import { SnapshotsComponent } from './per/asset-snapshot/snapshots.component';
 
 
 @NgModule({
@@ -123,7 +124,8 @@ import { StrategyDetailDialogComponent } from './str/strategy/strategy-detail-di
     SnapshotsChartComponent,
     AssetsStructureComponent,
     OrdersChartComponent,
-    StrategyDetailDialogComponent
+    StrategyDetailDialogComponent,
+    SnapshotsComponent
   ],
   entryComponents: [],
   providers: [],

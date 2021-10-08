@@ -1,0 +1,107 @@
+<div class="mat-elevation-z1">
+  <mat-toolbar>
+    <span class="toolbar-title">资产快照</span>
+    <span class="spacer"></span>
+  </mat-toolbar>
+
+  <div class="table-filter-form">
+
+    <mat-form-field class="date-field">
+      <input matInput [matDatepicker]="dateToPicker" placeholder="日期" [max]="today"
+             [(ngModel)]="snapshotDate">
+      <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+      <mat-datepicker #dateToPicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="hour-field">
+      <mat-label>时间</mat-label>
+      <mat-select [(ngModel)]="snapshotHour">
+        <mat-option [value]="0">00 : 00</mat-option>
+        <mat-option [value]="4">04 : 00</mat-option>
+        <mat-option [value]="8">08 : 00</mat-option>
+        <mat-option [value]="12">12 : 00</mat-option>
+        <mat-option [value]="16">16 : 00</mat-option>
+        <mat-option [value]="20">20 : 00</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-button (click)="refresh()">
+      <mat-icon>search</mat-icon>
+      查看
+    </button>
+
+    <span class="spacer"></span>
+
+    <button mat-button (click)="previousDay()">
+      <mat-icon>navigate_before</mat-icon>
+      前一天
+    </button>
+    <button mat-button (click)="nextDay()" [disabled]="nextDayDisabled">
+      后一天
+      <mat-icon>navigate_next</mat-icon>
+    </button>
+
+    <button mat-button (click)="showStructure()" [disabled]="!snapshots||snapshots.length===0">
+      <mat-icon>donut_large</mat-icon>
+      结构
+    </button>
+
+  </div>
+
+  <table mat-table class="full-width" matSort matSortActive="holdingValue" matSortDirection="desc">
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ccy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.ccy)" alt="">
+        <div class="ccy-code">{{row.ccy}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ts">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>时间</th>
+      <td mat-cell *matCellDef="let row">{{row.ts | date: 'MM-dd HH:mm'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>时价（美元）</th>
+      <td mat-cell *matCellDef="let row">{{row.price | money}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="holding">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>持有量</th>
+      <td mat-cell *matCellDef="let row">{{row.holding | money}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="holdingValue">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>折美元</th>
+      <td mat-cell *matCellDef="let row">{{row.holdingValue | moneysum}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" align="end">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="footer">
+      <th mat-header-cell *matFooterCellDef colspan="9" class="sum-row">
+        共持有（折美元）：<span class="sum-amount">{{holdingValueSum | moneysum}}</span>
+      </th>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-footer-row *matFooterRowDef="['footer']"></tr>
+  </table>
+
+</div>
+
+<p>&nbsp;</p>

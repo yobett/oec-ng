@@ -1,3 +1,8 @@
+@media (max-width: 480px) {
+  h1 .full-title {
+    display: none;
+  }
+}
 
 .sidenav-container {
   height: calc(100% - 64px);

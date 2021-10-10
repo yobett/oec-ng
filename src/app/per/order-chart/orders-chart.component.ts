@@ -4,6 +4,8 @@ import { ECharts, EChartsOption, init as echartsInit, ScatterSeriesOption } from
 import { DimensionDefinition } from 'echarts/types/src/util/types';
 import { Observable, Subscription } from 'rxjs';
 import { groupBy, toPairs } from 'lodash';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 import { Ccy } from '../../models/mar/ccy';
 import { SessionService } from '../../services/sys/session.service';
@@ -48,6 +50,8 @@ export class OrdersChartComponent implements OnInit, AfterViewInit, OnDestroy {
   currentForm: OrderTimeLineQueryForm;
 
   dataHolder: OrderChartDataHolder = new OrderChartDataHolder();
+  today = moment().startOf('day');
+  createTsTo: Moment;
 
   constructor(private sessionService: SessionService,
               private exchService: ExchService,
@@ -121,6 +125,20 @@ export class OrdersChartComponent implements OnInit, AfterViewInit, OnDestroy {
   loadData(): void {
     const form = {...this.queryForm};
     form.olderThan = undefined;
+
+    const currentForm = this.currentForm;
+    if (currentForm) {
+      if (this.createTsTo) {
+        const dayMills = 24 * 60 * 60 * 1000;
+        const olderThan = this.createTsTo.valueOf() + dayMills;
+        if (currentForm.olderThan !== olderThan) {
+          this.dataHolder.clear();
+          form.olderThan = olderThan;
+        }
+      } else if (currentForm.olderThan) {
+        this.dataHolder.clear();
+      }
+    }
 
     const currentData: SpotOrder[] = this.dataHolder.getData(form);
     if (currentData && currentData.length >= form.limit) {
@@ -345,7 +363,7 @@ export class OrdersChartComponent implements OnInit, AfterViewInit, OnDestroy {
       this.chartDarkTheme ? 'dark' : null,
       {
         // renderer: 'svg',
-        // locale: 'ZH'
+        locale: 'ZH'
       });
 
     this.setChartOption();

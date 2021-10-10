@@ -585,7 +585,7 @@ export class KlineChartComponent implements OnInit, AfterViewInit, OnDestroy {
       this.chartDarkTheme ? 'dark' : null,
       {
         // renderer: 'svg',
-        // locale: 'ZH'
+        locale: 'ZH'
       });
 
     this.setChartOption();

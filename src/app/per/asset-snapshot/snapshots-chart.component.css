@@ -2,14 +2,18 @@
   margin-bottom: 1em;
 }
 
+.date-field {
+  width: 7em;
+  margin-right: 1em;
+}
+
 .limit-field {
   width: 6em;
 }
 
 .field-label {
   display: inline-block;
-  min-width: 4em;
-  margin-right: 8px;
+  margin-right: 1em;
 }
 
 .operation-bar {

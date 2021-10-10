@@ -1,6 +1,8 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ECharts, EChartsOption, init as echartsInit } from 'echarts';
 import { Subscription } from 'rxjs';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 import { Ccy } from '../../models/mar/ccy';
 import { SessionService } from '../../services/sys/session.service';
@@ -40,11 +42,14 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
   processes: { [name: string]: boolean } = {};
 
   ccys: string[] = [];
+  latestCcys: string[] = [];
   limitOptions: number[] = [24, 100, 300];
   queryForm: AssetSnapshotQueryForm = {ccy: AssetSnapshot.CcyAll, limit: this.limitOptions[0], noMoreData: false};
   currentForm: AssetSnapshotQueryForm;
 
   dataHolder: AssetSnapshotDataHolder = new AssetSnapshotDataHolder();
+  today = moment().startOf('day');
+  createTsTo: Moment;
 
   constructor(private sessionService: SessionService,
               private themeService: ThemeService,
@@ -70,6 +75,7 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
     this.snapshotService.getAssetCodes()
       .subscribe(ccys => {
         this.ccys = ccys;
+        this.latestCcys = ccys;
       });
 
     this.windowWidth = window.innerWidth;
@@ -107,6 +113,23 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
     }, 200);
   }
 
+  clearDate() {
+    this.createTsTo = null;
+    this.ccys = this.latestCcys;
+  }
+
+  dateChanged() {
+    if (!this.createTsTo) {
+      return;
+    }
+    const dayMills = 24 * 60 * 60 * 1000;
+    const ts = this.createTsTo.valueOf() + dayMills;
+    this.snapshotService.getAssetCodes(ts)
+      .subscribe(ccys => {
+        this.ccys = ccys;
+      });
+  }
+
   ccySelected(ccy: string): void {
     this.queryForm.ccy = ccy;
     this.loadData();
@@ -122,6 +145,20 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
   loadData(): void {
     const form = {...this.queryForm};
     form.olderThan = undefined;
+
+    const currentForm = this.currentForm;
+    if (currentForm) {
+      if (this.createTsTo) {
+        const dayMills = 24 * 60 * 60 * 1000;
+        const olderThan = this.createTsTo.valueOf() + dayMills;
+        if (currentForm.olderThan !== olderThan) {
+          this.dataHolder.clear();
+          form.olderThan = olderThan;
+        }
+      } else if (currentForm.olderThan) {
+        this.dataHolder.clear();
+      }
+    }
 
     const currentData: AssetSnapshot[] = this.dataHolder.getData(form);
     if (currentData && currentData.length > 0) {
@@ -270,7 +307,7 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
         top: '90',
         left: '60',
         right: '40',
-        height: '66%'
+        height: '63%'
       },
       dataset: {
         dimensions: [
@@ -371,7 +408,7 @@ export class SnapshotsChartComponent implements OnInit, AfterViewInit, OnDestroy
       this.chartDarkTheme ? 'dark' : null,
       {
         // renderer: 'svg',
-        // locale: 'ZH'
+        locale: 'ZH'
       });
 
     this.setChartOption();

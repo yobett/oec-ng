@@ -55,7 +55,7 @@
         更多（更早）
       </button>
       <button mat-button (click)="loadNew()" [disabled]="processes.renewData"
-              *ngIf="currentForm.intervalOption.key.endsWith('m')||currentForm.intervalOption.key==='1H'">
+              *ngIf="currentForm.intervalOption.key.endsWith('m')">
         <mat-icon>plus_one</mat-icon>
         刷新
       </button>

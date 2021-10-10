@@ -45,6 +45,11 @@ export class OrderChartDataHolder {
   private dataCache: Map<string, SpotOrder[]> = new Map<string, SpotOrder[]>();
   private noMoreDataSet: Set<string> = new Set<string>();
 
+  clear(): void {
+    this.dataCache.clear();
+    this.noMoreDataSet.clear();
+  }
+
   getData(form: OrderTimeLineQueryForm): SpotOrder[] {
     return this.dataCache.get(form.ex);
   }

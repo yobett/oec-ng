@@ -2,6 +2,11 @@
   margin-bottom: 1em;
 }
 
+.date-field {
+  width: 7em;
+  margin-right: 1em;
+}
+
 .limit-field {
   width: 6em;
 }

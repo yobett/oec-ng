@@ -18,8 +18,11 @@ export class AssetSnapshotService extends BaseService<AssetSnapshot> {
   }
 
 
-  getAssetCodes(): Observable<string[]> {
-    const url = `${this.baseUrl}/codes`;
+  getAssetCodes(ts?: number): Observable<string[]> {
+    let url = `${this.baseUrl}/codes`;
+    if (ts) {
+      url += '?ts=' + ts;
+    }
     return this.pipeDefault(this.http.get<ListResult<string>>(url))
       .pipe(map(result => {
           if (result.code !== Result.CODE_SUCCESS) {

@@ -34,6 +34,11 @@ export class AssetSnapshotDataHolder {
   private dataCache: Map<string, AssetSnapshot[]> = new Map<string, AssetSnapshot[]>();
   private noMoreDataSet: Set<string> = new Set<string>();
 
+  clear(): void {
+    this.dataCache.clear();
+    this.noMoreDataSet.clear();
+  }
+
   getData(form: AssetSnapshotQueryForm): AssetSnapshot[] {
     return this.dataCache.get(form.ccy);
   }

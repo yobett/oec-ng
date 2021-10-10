@@ -21,8 +21,16 @@
   </div>
 
   <div class="operation-bar">
-    <span class="field-label subordinated">条数</span>
 
+    <span class="field-label subordinated">截止日期</span>
+    <mat-form-field class="date-field">
+      <input matInput [matDatepicker]="dateToPicker" placeholder="" [max]="today"
+             [(ngModel)]="createTsTo" (dblclick)="clearDate()" (dateChange)="dateChanged()">
+      <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+      <mat-datepicker #dateToPicker></mat-datepicker>
+    </mat-form-field>
+
+    <span class="field-label subordinated">条数</span>
     <mat-form-field class="limit-field">
       <mat-select [(ngModel)]="queryForm.limit">
         <mat-option *ngFor="let limit of limitOptions" [value]="limit">

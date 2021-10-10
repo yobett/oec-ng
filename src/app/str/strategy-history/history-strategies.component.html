@@ -107,7 +107,7 @@
     <ng-container matColumnDef="orderPlacedAt">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>下单时间</th>
       <td mat-cell *matCellDef="let row">
-        {{row.orderPlacedAt | date:'y-MM-dd HH:mm'}}
+        {{row.orderPlacedAt | date:'MM-dd HH:mm'}}
       </td>
     </ng-container>
 
@@ -115,7 +115,7 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" align="end">
         <button mat-button (click)="showStrategyDetail(row)">
-          <mat-icon>list</mat-icon>
+          <mat-icon>info</mat-icon>
           策略
         </button>
         <button mat-button (click)="showOrderDetail(row)" *ngIf="row.clientOrderId">

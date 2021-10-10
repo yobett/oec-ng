@@ -13,6 +13,9 @@ import { SpotOrderService } from '../../services/per/spot-order.service';
 import { TableDatasource } from '../../common/table-datasource';
 import { Exch } from '../../models/sys/exch';
 import { ExchService } from '../../services/sys/exch.service';
+import { Ccy } from '../../models/mar/ccy';
+import { OrderDetailDialogComponent } from './order-detail-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-pending-orders',
@@ -27,8 +30,9 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
 
   dataSource: TableDatasource<SpotOrder>;
   $exchs: Observable<Exch[]>;
+  CoinLogoPath = Ccy.LogoPath;
 
-  displayedColumns: string[] = ['index', 'ex', 'pairSymbol', 'orderId', 'side',
+  displayedColumns: string[] = ['index', 'ex', 'baseCcy', 'quoteCcy', /*'pairSymbol',*/ 'orderId', 'side',
     'type', 'status', 'askPrice', 'askQty', 'createTs', 'actions'];
 
   processes: { [name: string]: boolean } = {};
@@ -36,7 +40,8 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
   constructor(protected sessionService: SessionService,
               private spotOrderService: SpotOrderService,
               private exchService: ExchService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dialog: MatDialog) {
     super(sessionService);
   }
 
@@ -101,6 +106,10 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
         error => this.processes['cancelOrder-' + order.orderId] = false,
         () => this.processes['cancelOrder-' + order.orderId] = false
       );
+  }
+
+  showOrderDetail(order: SpotOrder) {
+    OrderDetailDialogComponent.showOrderDetail(this.dialog, order);
   }
 
   trackBy(index: number, order: SpotOrder) {

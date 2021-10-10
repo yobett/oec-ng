@@ -41,9 +41,8 @@ export class HistoryStrategiesComponent extends SessionSupportComponent implemen
 
   processes: { [name: string]: boolean } = {};
 
-  displayedColumns: string[] = ['index', 'baseCcy', 'quoteCcy', 'ex', 'type', 'watchDirection',
-    'side', 'basePoint', 'expectingPoint',
-    'peak', 'valley', 'clientOrderId', 'orderPlacedAt', 'actions'];
+  displayedColumns: string[] = ['index', 'baseCcy', 'quoteCcy', 'ex', 'type', /*'watchDirection',*/
+    'side', 'basePoint', 'expectingPoint', 'peak', 'valley', /*'clientOrderId',*/ 'orderPlacedAt', 'actions'];
 
   constructor(protected sessionService: SessionService,
               private strategyHistoryService: StrategyHistoryService,

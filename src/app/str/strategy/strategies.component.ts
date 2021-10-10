@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -81,6 +81,7 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
               private strategyService: StrategyService,
               private exchService: ExchService,
               private activatedRoute: ActivatedRoute,
+              private router: Router,
               private snackBar: MatSnackBar,
               private dialog: MatDialog) {
     super(sessionService);
@@ -242,7 +243,9 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
         return;
       }
       this.dataSource.append(strategy1);
-      // ..
+      this.router.navigate(['strategies', this.strategyType, strategy1.id])
+        .then(success => {
+        });
     });
   }
 

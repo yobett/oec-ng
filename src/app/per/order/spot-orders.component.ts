@@ -39,7 +39,7 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
 
   dataSource: PageableDatasource<SpotOrder>;
 
-  displayedColumns: string[] = ['index', 'ex', 'baseCcy', 'quoteCcy', 'pairSymbol', 'orderId', 'side',
+  displayedColumns: string[] = ['index', 'ex', 'baseCcy', 'quoteCcy', /*'pairSymbol',*/ 'orderId', 'side',
     'type', 'status', 'avgPrice', 'execQty', 'quoteAmount', 'createTs', /*'createdAt'/!*First Sync*!/,*/ 'actions'];
 
   CoinLogoPath = Ccy.LogoPath;

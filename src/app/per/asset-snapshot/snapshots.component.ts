@@ -38,7 +38,7 @@ export class SnapshotsComponent extends SessionSupportComponent implements After
   snapshots: AssetSnapshot[];
   holdingValueSum: number;
 
-  displayedColumns: string[] = ['index', 'ts', 'ccy', 'price', 'holding', 'holdingValue', 'actions'];
+  displayedColumns: string[] = ['index', 'ts', 'ccy', 'price', 'holding', 'holdingValue'/*, 'actions'*/];
 
   $exchs: Observable<Exch[]>;
 

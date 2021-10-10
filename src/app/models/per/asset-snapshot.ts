@@ -22,6 +22,8 @@ export class AssetSnapshotQueryForm {
   ccy: string;
   limit: number;
   olderThan?: number;
+  newerThan?: number;
+  hour?: number;
   hourMod?: number;
 
   noMoreData = false;

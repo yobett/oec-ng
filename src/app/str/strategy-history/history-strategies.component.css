@@ -1,1 +1,21 @@
+.table-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.table-filter-form .form-field:not(:last-child) {
+  margin-right: 1em;
+}
+
+.table-filter-form .label {
+  display: inline-block;
+  margin-right: .5em;
+}
+
+@media(max-width: 640px) {
+  .table-filter-form .label {
+    min-width: 3em;
+  }
+}
 

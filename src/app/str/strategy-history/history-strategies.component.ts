@@ -2,14 +2,13 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { MatButtonToggleChange } from '@angular/material/button-toggle/button-toggle';
 import { Observable } from 'rxjs';
+import { Moment } from 'moment';
 
-import { TableDatasource } from '../../common/table-datasource';
 import { SessionSupportComponent } from '../../common/session-support.component';
 import { SessionService } from '../../services/sys/session.service';
 import { User } from '../../models/sys/user';
-import { StrategyHistory } from '../../models/str/strategy-history';
+import { StrategyHistory, StrategyHistoryFilter } from '../../models/str/strategy-history';
 import { Ccy } from '../../models/mar/ccy';
 import { Exch } from '../../models/sys/exch';
 import { ExchService } from '../../services/sys/exch.service';
@@ -19,6 +18,9 @@ import { OrderDetailDialogComponent } from '../../per/order/order-detail-dialog.
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { Strategy } from '../../models/str/strategy';
 import { StrategyDetailDialogComponent } from '../strategy/strategy-detail-dialog.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { PageableDatasource } from '../../common/pageable-datasource';
+import { DATE_FORMAT } from '../../config';
 
 @Component({
   selector: 'app-strategies',
@@ -27,17 +29,19 @@ import { StrategyDetailDialogComponent } from '../strategy/strategy-detail-dialo
 })
 export class HistoryStrategiesComponent extends SessionSupportComponent implements AfterViewInit, OnInit {
 
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<StrategyHistory>;
 
   CoinLogoPath = Ccy.LogoPath;
   getTypeLabel = Strategy.getTypeLabel;
+  strategyTypes = Strategy.TypeOptions;
 
-  dataSource: TableDatasource<StrategyHistory>;
+  dataSource: PageableDatasource<StrategyHistory>;
   $exchs: Observable<Exch[]>;
 
-  allStrategies: StrategyHistory[];
-  filterEx: string = 'all';
+  today: Date = new Date();
+  filterForm: any & StrategyHistoryFilter = {ex: 'all', type: 'all', side: 'all'};
 
   processes: { [name: string]: boolean } = {};
 
@@ -54,35 +58,48 @@ export class HistoryStrategiesComponent extends SessionSupportComponent implemen
 
   protected onInit() {
     super.onInit();
-    this.dataSource = new TableDatasource<StrategyHistory>();
+    this.dataSource = new PageableDatasource<StrategyHistory>(this.strategyHistoryService);
+    this.dataSource.paramsTransformer = (form) => {
+      form = {...form};
+      if (form.ex === 'all') {
+        delete form.ex;
+      }
+      if (form.side === 'all') {
+        delete form.side;
+      }
+      if (form.type === 'all') {
+        delete form.type;
+      }
+      let mom = form.orderPlacedDateTo;
+      if (mom) {
+        if (mom.constructor.name === 'Moment' || mom['_isAMomentObject'] === true) {
+          form.orderPlacedDateTo = (mom as Moment).format(DATE_FORMAT);
+        }
+      } else {
+        delete form.orderPlacedDateTo;
+      }
+      return form;
+    };
   }
 
   protected withSession(user: User) {
     this.$exchs = this.exchService.list2();
-    this.strategyHistoryService.list2().subscribe(list => {
-      this.allStrategies = list;
-      this.filterData();
-    });
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.filter = this.filterForm;
     this.table.dataSource = this.dataSource;
   }
 
-  filterData() {
-    let filtered: StrategyHistory[];
-    if (this.filterEx === 'all') {
-      filtered = this.allStrategies;
-    } else {
-      filtered = this.allStrategies.filter(asset => asset.ex === this.filterEx);
-    }
-    this.dataSource.setData(filtered);
+  filter() {
+    this.dataSource.refresh(this.filterForm);
   }
 
-  exGroupChanged(event: MatButtonToggleChange) {
-    this.filterEx = event.value;
-    this.filterData();
+  resetFilter() {
+    this.filterForm = {ex: 'all', type: 'all', side: 'all'};
+    this.dataSource.refresh(this.filterForm);
   }
 
   showStrategyDetail(strategy: Strategy) {

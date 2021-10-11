@@ -1,8 +1,8 @@
 <div class="mat-elevation-z1">
   <mat-toolbar>
     <span class="toolbar-title">历史策略</span>
-    <mat-button-toggle-group [value]="filterEx"
-                             (change)="exGroupChanged($event)">
+    <mat-button-toggle-group [(ngModel)]="filterForm['ex']"
+                             (change)="filter()">
       <mat-button-toggle value="all">全部</mat-button-toggle>
       <mat-button-toggle [value]="ex.code" *ngFor="let ex of $exchs | async">
         {{ex.name}}
@@ -10,6 +10,50 @@
     </mat-button-toggle-group>
     <span class="spacer"></span>
   </mat-toolbar>
+
+  <div class="table-filter-form">
+
+    <div class="form-field">
+      <span class="label subordinated">方向</span>
+      <mat-button-toggle-group [(ngModel)]="filterForm['side']"
+                               (change)="filter()">
+        <mat-button-toggle value="all">不限</mat-button-toggle>
+        <mat-button-toggle value="buy">买入</mat-button-toggle>
+        <mat-button-toggle value="sell">卖出</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <!--<mat-form-field>
+      <mat-label>类型</mat-label>
+      <mat-select [(ngModel)]="filterForm['type']">
+        <mat-option value="all">不限</mat-option>
+        <mat-option *ngFor="let strategyType of strategyTypes" [value]="strategyType.value">
+          {{strategyType.label}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>-->
+
+    <mat-form-field>
+      <input matInput placeholder="基础币种" name="baseCcy" [(ngModel)]="filterForm['baseCcy']"
+             (keyup.enter)="filter()">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="dateToPicker" placeholder="截止日期" [max]="today"
+             [(ngModel)]="filterForm['orderPlacedDateTo']" (dblclick)="filterForm['orderPlacedDateTo']=undefined">
+      <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+      <mat-datepicker #dateToPicker></mat-datepicker>
+    </mat-form-field>
+
+    <button mat-button (click)="filter()">
+      <mat-icon>search</mat-icon>
+      筛选
+    </button>
+    <button mat-button (click)="resetFilter()">
+      <mat-icon>block</mat-icon>
+      全部
+    </button>
+  </div>
 
   <table mat-table class="full-width" matSort matSortActive="orderPlacedAt" matSortDirection="desc">
 
@@ -115,7 +159,7 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" align="end">
         <button mat-button (click)="showStrategyDetail(row)">
-          <mat-icon>info</mat-icon>
+          <mat-icon>schedule</mat-icon>
           策略
         </button>
         <button mat-button (click)="showOrderDetail(row)" *ngIf="row.clientOrderId">
@@ -129,5 +173,13 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
+  <mat-paginator #paginator
+                 [length]="dataSource?.total"
+                 [pageIndex]="0"
+                 [pageSize]="20"
+                 [pageSizeOptions]="[10, 20, 50, 100]">
+  </mat-paginator>
 
 </div>
+
+<p>&nbsp;</p>

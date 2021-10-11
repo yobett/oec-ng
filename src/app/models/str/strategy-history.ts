@@ -6,3 +6,11 @@ export class StrategyHistory extends Strategy {
 
   order?: SpotOrder;
 }
+
+export interface StrategyHistoryFilter {
+  type?: string;
+  ex?: string;
+  side?: string;
+  baseCcy?: string;
+  orderPlacedDateTo?: string; // 2021-10-11
+}

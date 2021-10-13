@@ -146,7 +146,7 @@ export class KlineChartDialogComponent implements OnInit, AfterViewInit {
     form.olderThan = undefined;
 
     const currentData: Kline[] = this.dataHolder.getData(form);
-    if (currentData && currentData.length > 0) {
+    if (currentData && currentData.length >= form.limit) {
       this.onDataLoaded(form, currentData);
       return;
     }

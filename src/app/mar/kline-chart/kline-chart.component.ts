@@ -231,7 +231,7 @@ export class KlineChartComponent implements OnInit, AfterViewInit, OnDestroy {
     form.olderThan = undefined;
 
     const currentData: Kline[] = this.dataHolder.getData(form);
-    if (currentData && currentData.length > 0) {
+    if (currentData && currentData.length >= form.limit) {
       this.onDataLoaded(form, currentData);
       return;
     }

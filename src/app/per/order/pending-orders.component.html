@@ -57,7 +57,7 @@
 
     <ng-container matColumnDef="orderId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>订单号</th>
-      <td mat-cell *matCellDef="let row">{{row.orderId}}</td>
+      <td mat-cell *matCellDef="let row">{{row.orderId | truncate: 8 }}</td>
     </ng-container>
 
     <ng-container matColumnDef="side">

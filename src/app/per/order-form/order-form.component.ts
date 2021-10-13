@@ -90,7 +90,7 @@ export class OrderFormComponent implements OnInit {
     }
     this.priceLimit = this.orderForm.type === 'limit';
     this.baseAsset = data.baseAsset;
-    this.quoteAsset = data.quoteAsset
+    this.quoteAsset = data.quoteAsset;
     this.setAvailableAsset();
   }
 
@@ -123,11 +123,18 @@ export class OrderFormComponent implements OnInit {
   }
 
   private setAvailableAsset() {
+    if (!this.baseAsset && !this.quoteAsset) {
+      return;
+    }
     if (this.baseAsset) {
       this.availableBaseAsset = this.baseAsset.holding - this.baseAsset.frozen;
+    } else {
+      this.availableBaseAsset = 0;
     }
     if (this.quoteAsset) {
       this.availableQuoteAsset = this.quoteAsset.holding - this.quoteAsset.frozen;
+    } else {
+      this.availableQuoteAsset = 0;
     }
   }
 

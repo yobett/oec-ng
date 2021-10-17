@@ -82,18 +82,11 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
   showDetail() {
     const cu = this.currentUser;
     if (!cu) {
-      // alert("尚未登录!")
       this.userService.showMessage('尚未登录');
       return;
     }
     UserDetailComponent.ShowDetail(cu, this.dialog);
   }
-
-  // @HostListener('window:visibilitychange', ['$event'])
-  // visibilityChange(event) {
-  //   console.log(event);
-  //   console.log(document.hidden);
-  // }
 
   enableNotification() {
     if (!window.Notification) {
@@ -116,6 +109,7 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
   }
 
   disableNotification() {
+    this.closeEventSource();
     this.notificationsOn = false;
     localStorage.setItem(LocalStorageKeys.Notifications, 'off');
     this.snackBar.open('已关闭通知');
@@ -161,6 +155,13 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
     }
   }
 
+  closeEventSource() {
+    if (this.eventSource) {
+      this.eventSource.close();
+      this.eventSource = null;
+    }
+  }
+
   withSession(user: User) {
     this.beenLogin = true;
     if (this.notificationsOn && !this.eventSource) {
@@ -171,10 +172,7 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
   ngOnDestroy(): void {
     super.ngOnDestroy();
     this.mobileQuery.removeEventListener('a', this.mobileQueryListener);
-    if (this.eventSource) {
-      this.eventSource.close();
-      this.eventSource = null;
-    }
+    this.closeEventSource();
   }
 
   openLoginDialog() {

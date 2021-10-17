@@ -49,6 +49,8 @@ const StaticResource = {
 
 const PlaceOrderRefreshDelay = 6 * 1000;
 
+const StableCoins = ['USDT', 'USDC', 'DAI', 'BUSD'];
+
 export {
   PaginatorIntl,
   DATE_FORMATS,
@@ -57,5 +59,6 @@ export {
   // DEBUG,
   StaticResource,
   LocalStorageKeys,
-  PlaceOrderRefreshDelay
+  PlaceOrderRefreshDelay,
+  StableCoins
 };

@@ -11,7 +11,7 @@ import { SessionSupportComponent } from '../../common/session-support.component'
 import { SessionService } from '../../services/sys/session.service';
 import { User } from '../../models/sys/user';
 import { CcyService } from '../../services/mar/ccy.service';
-import { StaticResource } from '../../config';
+import { StableCoins, StaticResource } from '../../config';
 import { Quote } from '../../models/quote';
 import { QuoteService } from '../../services/mar/quote.service';
 
@@ -43,6 +43,8 @@ export class CcyQuotesComponent extends SessionSupportComponent implements After
   processes: { [name: string]: boolean } = {};
 
   quotesMap: { [symbol: string]: Quote };
+  avg1H = 0;
+  avg24H = 0;
 
   constructor(protected sessionService: SessionService,
               private ccyService: CcyService,
@@ -62,10 +64,7 @@ export class CcyQuotesComponent extends SessionSupportComponent implements After
         map(ccys => ccys as QuoteCcy[]),
         tap(qcs => {
           if (this.quotesMap) {
-            for (let qc of qcs) {
-              const quote = this.quotesMap[qc.code];
-              Object.assign(qc, quote);
-            }
+            this.setPrices(qcs);
           }
         }));
     this.dataSource.setObservable(qcObs);
@@ -88,10 +87,7 @@ export class CcyQuotesComponent extends SessionSupportComponent implements After
           }
           const tableData: QuoteCcy[] = this.dataSource.data;
           if (tableData) {
-            for (let qc of tableData) {
-              const quote = this.quotesMap[qc.code];
-              Object.assign(qc, quote);
-            }
+            this.setPrices(tableData);
           }
 
           if (!first) {
@@ -100,6 +96,32 @@ export class CcyQuotesComponent extends SessionSupportComponent implements After
         },
         error => this.processes.fetchQuotes = false,
         () => this.processes.fetchQuotes = false);
+  }
+
+  private setPrices(tableData: QuoteCcy[]) {
+    this.avg1H = 0;
+    this.avg24H = 0;
+    let count = 0;
+    for (let qc of tableData) {
+      const symbol = qc.code;
+      const quote = this.quotesMap[symbol];
+      Object.assign(qc, quote);
+
+      if (StableCoins.includes(symbol)) {
+        continue;
+      }
+      const c1h = quote['percent_change_1h'];
+      const c24h = quote['percent_change_24h'];
+      if (typeof c1h !== 'undefined' && typeof c24h !== 'undefined') {
+        this.avg1H += c1h;
+        this.avg24H += c24h;
+        count++;
+      }
+    }
+    if (count > 0) {
+      this.avg1H /= count;
+      this.avg24H /= count;
+    }
   }
 
   ngAfterViewInit() {

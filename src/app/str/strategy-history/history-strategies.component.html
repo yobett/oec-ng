@@ -131,7 +131,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>已达峰值</th>
       <td mat-cell *matCellDef="let row">
         {{row.peak | effectdigits}}<br>
-        {{row.peakTime | date:'MM-dd HH:mm'}}
+        <span class="subordinated">{{row.peakTime | date:'MM-dd HH:mm'}}</span>
       </td>
     </ng-container>
 
@@ -139,7 +139,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>已达谷值</th>
       <td mat-cell *matCellDef="let row">
         {{row.valley | effectdigits}}<br>
-        {{row.valleyTime | date:'MM-dd HH:mm'}}
+        <span class="subordinated">{{row.valleyTime | date:'MM-dd HH:mm'}}</span>
       </td>
     </ng-container>
 

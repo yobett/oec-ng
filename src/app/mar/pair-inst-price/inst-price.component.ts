@@ -207,11 +207,11 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     }
     if (!ex) {
       if (exp.baSymbol) {
-        ex = 'ba';
+        ex = Exch.CODE_BA;
       } else if (exp.oeSymbol) {
-        ex = 'oe';
+        ex = Exch.CODE_OE;
       } else if (exp.hbSymbol) {
-        ex = 'hb';
+        ex = Exch.CODE_HB;
       }
     }
     KlineChartDialogComponent.showKlineChart(
@@ -221,6 +221,5 @@ export class InstPriceComponent extends SessionSupportComponent implements After
         pair: exp
       });
   }
-
 
 }

@@ -472,14 +472,14 @@ export class KlineChartComponent implements OnInit, AfterViewInit, OnDestroy {
       dataZoom: [
         {
           type: 'inside',
-          start: 60,
+          start: 40,
           end: 100
         },
         {
           show: true,
           type: 'slider',
           top: '90%',
-          start: 60,
+          start: 40,
           end: 100
         }
       ],

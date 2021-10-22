@@ -68,9 +68,6 @@ export class Strategy extends Model {
   drawbackPercent?: number;
   tradingPoint?: number;
 
-  intenseWatchPercent?: number;
-  mediumWatchPercent?: number;
-
   peak?: number;
   peakTime?: Date;
 

@@ -130,23 +130,6 @@ export class StrategyEditComponent implements OnInit {
     }
     const basePoint = +strategy.basePoint;
     strategy.expectingPoint = basePoint * (100 + ep * (strategy.watchDirection === 'up' ? 1 : -1)) / 100.0;
-
-    const iwp = strategy.intenseWatchPercent;
-    if (!iwp || +iwp > ep) {
-      strategy.intenseWatchPercent = ep > 1 ? ep - 1 : ep;
-      this.intenseWatchPercentChanged();
-    }
-  }
-
-  intenseWatchPercentChanged() {
-    const iwp = +this.strategy.intenseWatchPercent;
-    if (!iwp) {
-      return;
-    }
-    const mwp = this.strategy.mediumWatchPercent;
-    if (!mwp || +mwp >= iwp) {
-      this.strategy.mediumWatchPercent = iwp > 1 ? iwp - 1 : iwp;
-    }
   }
 
   save() {
@@ -163,22 +146,6 @@ export class StrategyEditComponent implements OnInit {
       this.strategyService.showErrorMessage('drawbackPercent not set.');
       return;
     }
-    if (!strategy.intenseWatchPercent) {
-      this.strategyService.showErrorMessage('intenseWatchPercent not set.');
-      return;
-    }
-    if (!strategy.mediumWatchPercent) {
-      this.strategyService.showErrorMessage('mediumWatchPercent not set.');
-      return;
-    }
-    if (+strategy.intenseWatchPercent > (+strategy.expectingPercent)) {
-      this.strategyService.showErrorMessage('intenseWatchPercent not less than expectingPercent.');
-      return;
-    }
-    if (+strategy.mediumWatchPercent > (+strategy.intenseWatchPercent)) {
-      this.strategyService.showErrorMessage('mediumWatchPercent greater than intenseWatchPercent.');
-      return;
-    }
     if (strategy.tradeVolByValue) {
       strategy.tradeVolPercent = null;
     } else {
@@ -190,14 +157,13 @@ export class StrategyEditComponent implements OnInit {
 
     const {
       id, status, basePoint, expectingPercent, expectingPoint,
-      drawbackPercent, intenseWatchPercent, mediumWatchPercent,
+      drawbackPercent, /*intenseWatchPercent, mediumWatchPercent,*/
       tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
       autoStartNext, updateBasePoint
     } = strategy;
 
     const toSave = {
-      id, status, basePoint, expectingPercent, expectingPoint,
-      drawbackPercent, intenseWatchPercent, mediumWatchPercent,
+      id, status, basePoint, expectingPercent, expectingPoint, drawbackPercent,
       tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
       autoStartNext, updateBasePoint
     } as Strategy;

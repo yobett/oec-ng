@@ -96,12 +96,13 @@
 
     <ng-container matColumnDef="footer">
       <th mat-header-cell *matFooterCellDef colspan="8" class="sum-row">
-        （除稳定币）1H 平均：<span class="avg-percent"
+        1H 平均：<span class="avg-percent"
                           [class.price-up]="avg1H>0"
                           [class.price-down]="avg1H<0">{{avg1H | rawpercent}}</span> &nbsp;&nbsp;
         24H 平均：<span class="avg-percent"
                      [class.price-up]="avg24H>0"
                      [class.price-down]="avg24H<0">{{avg24H | rawpercent}}</span>
+        &nbsp;（除稳定币）
       </th>
     </ng-container>
 

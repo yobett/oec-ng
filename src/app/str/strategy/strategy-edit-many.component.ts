@@ -79,23 +79,6 @@ export class StrategyEditManyComponent implements OnInit {
     }
     const basePoint = +strategy.basePoint;
     strategy.expectingPoint = basePoint * (100 + ep * (strategy.watchDirection === 'up' ? 1 : -1)) / 100.0;
-
-    const iwp = strategy.intenseWatchPercent;
-    if (!iwp || +iwp > ep) {
-      strategy.intenseWatchPercent = ep > 1 ? ep - 1 : ep;
-      this.intenseWatchPercentChanged();
-    }
-  }
-
-  intenseWatchPercentChanged() {
-    const iwp = +this.strategy.intenseWatchPercent;
-    if (!iwp) {
-      return;
-    }
-    const mwp = this.strategy.mediumWatchPercent;
-    if (!mwp || +mwp >= iwp) {
-      this.strategy.mediumWatchPercent = iwp > 1 ? iwp - 1 : iwp;
-    }
   }
 
   private checkTemplate(): boolean {
@@ -106,22 +89,6 @@ export class StrategyEditManyComponent implements OnInit {
     }
     if (this.drawbackField && !strategy.drawbackPercent) {
       this.strategyService.showErrorMessage('未设置最大允许回落');
-      return false;
-    }
-    if (!strategy.intenseWatchPercent) {
-      this.strategyService.showErrorMessage('未设置密切关注价格');
-      return false;
-    }
-    if (!strategy.mediumWatchPercent) {
-      this.strategyService.showErrorMessage('未设置中度关注价格');
-      return false;
-    }
-    if (+strategy.intenseWatchPercent > (+strategy.expectingPercent)) {
-      this.strategyService.showErrorMessage('密切关注大于期望');
-      return false;
-    }
-    if (+strategy.mediumWatchPercent > (+strategy.intenseWatchPercent)) {
-      this.strategyService.showErrorMessage('中度关注大于密切关注');
       return false;
     }
     return true;

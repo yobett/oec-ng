@@ -105,8 +105,6 @@ export class StrategyEditCandidatesComponent implements OnInit, AfterViewInit {
           template.tradeVolByValue = strategy.tradeVolByValue;
           template.tradeVolPercent = strategy.tradeVolPercent;
           template.tradeVol = strategy.tradeVol;
-          template.intenseWatchPercent = strategy.intenseWatchPercent;
-          template.mediumWatchPercent = strategy.mediumWatchPercent;
         }
         const key = this.pairKey(strategy.baseCcy, strategy.quoteCcy);
         const sep: StrategyExPair = this.strategyExPairsMap.get(key);

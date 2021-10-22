@@ -119,7 +119,7 @@
 
     <div class="info-bar">
       <div class="props">
-        <div>
+        <!--<div>
           <span class="prop-name subordinated">状态</span>
           <span class="prop-value" [class.accent-color]="strategy.status==='started'">{{strategy.status }}</span>
         </div>
@@ -130,7 +130,7 @@
                 [class.accent-color]="strategy.watchLevel==='intense'">
             {{strategy.watchLevel }}
           </span>
-        </div>
+        </div>-->
         <div *ngIf="strategy.lastCheckAt">
           <span class="prop-name subordinated">上次检查</span>
           <span class="prop-value">
@@ -179,27 +179,6 @@
             LP × {{(+strategy.basePoint) / lastTransaction.avgPrice | percent}}
           </mat-hint>
         </mat-form-field>
-
-        <mat-form-field floatLabel="always" class="short-field">
-          <input matInput placeholder="交易量" [(ngModel)]="strategy.tradeVolPercent"
-                 *ngIf="!strategy.tradeVolByValue">
-          <input matInput placeholder="交易量" [(ngModel)]="strategy.tradeVol" *ngIf="strategy.tradeVolByValue">
-          <span matSuffix [hidden]="strategy.tradeVolByValue">%</span>
-          <mat-hint>
-            <ng-template [ngIf]="strategy.side === 'buy'">
-              报价币种
-              <span *ngIf="strategy.quoteCcy">&nbsp;({{strategy.quoteCcy}})</span>
-            </ng-template>
-            <ng-template [ngIf]="strategy.side === 'sell'">
-              基础币种
-              <span *ngIf="strategy.baseCcy">&nbsp;({{strategy.baseCcy}})</span>
-            </ng-template>
-          </mat-hint>
-        </mat-form-field>
-
-        <div class="slide-field">
-          <mat-slide-toggle [(ngModel)]="strategy.tradeVolByValue">交易量：数值</mat-slide-toggle>
-        </div>
       </div>
 
       <div class="field-box">
@@ -226,38 +205,30 @@
           </mat-hint>
         </mat-form-field>
 
+      </div>
+
+      <div class="field-box">
+
         <mat-form-field floatLabel="always" class="short-field">
-          <input matInput placeholder="密切关注（价格）" [(ngModel)]="strategy.intenseWatchPercent"
-                 (blur)="intenseWatchPercentChanged()">
-          <span matSuffix>%</span>
-          <mat-hint align="start">
-            =
-            <ng-template [ngIf]="strategy.basePoint&&strategy.intenseWatchPercent">
-              {{(+strategy.basePoint) *
-            (100 + (+strategy.intenseWatchPercent) * (strategy.watchDirection === 'up' ? 1 : -1))
-            / 100.0 | effectdigits}}
+          <input matInput placeholder="交易量" [(ngModel)]="strategy.tradeVolPercent"
+                 *ngIf="!strategy.tradeVolByValue">
+          <input matInput placeholder="交易量" [(ngModel)]="strategy.tradeVol" *ngIf="strategy.tradeVolByValue">
+          <span matSuffix [hidden]="strategy.tradeVolByValue">%</span>
+          <mat-hint>
+            <ng-template [ngIf]="strategy.side === 'buy'">
+              报价币种
+              <span *ngIf="strategy.quoteCcy">&nbsp;({{strategy.quoteCcy}})</span>
             </ng-template>
-          </mat-hint>
-          <mat-hint align="end">
-            &lt; 期望
+            <ng-template [ngIf]="strategy.side === 'sell'">
+              基础币种
+              <span *ngIf="strategy.baseCcy">&nbsp;({{strategy.baseCcy}})</span>
+            </ng-template>
           </mat-hint>
         </mat-form-field>
 
-        <mat-form-field floatLabel="always" class="short-field">
-          <input matInput placeholder="中度关注（价格）" [(ngModel)]="strategy.mediumWatchPercent">
-          <span matSuffix>%</span>
-          <mat-hint align="start">
-            =
-            <ng-template [ngIf]="strategy.basePoint&&strategy.mediumWatchPercent">
-              {{(+strategy.basePoint) *
-            (100 + (+strategy.mediumWatchPercent) * (strategy.watchDirection === 'up' ? 1 : -1))
-            / 100.0 | effectdigits}}
-            </ng-template>
-          </mat-hint>
-          <mat-hint align="end">
-            &lt;= 密切关注
-          </mat-hint>
-        </mat-form-field>
+        <div class="slide-field">
+          <mat-slide-toggle [(ngModel)]="strategy.tradeVolByValue">交易量：数值</mat-slide-toggle>
+        </div>
 
       </div>
 

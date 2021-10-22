@@ -91,23 +91,6 @@
           <span matSuffix>%</span>
         </mat-form-field>
 
-        <mat-form-field floatLabel="always" class="short-field">
-          <input matInput placeholder="密切关注（价格）" [(ngModel)]="strategy.intenseWatchPercent"
-                 (blur)="intenseWatchPercentChanged()">
-          <span matSuffix>%</span>
-          <mat-hint align="end">
-            &lt; 期望
-          </mat-hint>
-        </mat-form-field>
-
-        <mat-form-field floatLabel="always" class="short-field">
-          <input matInput placeholder="中度关注（价格）" [(ngModel)]="strategy.mediumWatchPercent">
-          <span matSuffix>%</span>
-          <mat-hint align="end">
-            &lt;= 密切关注
-          </mat-hint>
-        </mat-form-field>
-
       </div>
 
       <div class="field-box">

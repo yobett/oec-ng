@@ -1,0 +1,14 @@
+.prop-name {
+  display: inline-block;
+  margin-right: 1em;
+  min-width: 10em;
+  line-height: 32px;
+}
+
+.prop-value {
+  display: inline-block;
+}
+
+.prop-value .ccy-logo {
+  vertical-align: text-bottom;
+}

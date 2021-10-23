@@ -1,0 +1,80 @@
+<h3 mat-dialog-title>
+  币价
+</h3>
+
+<mat-dialog-content>
+  <div class="props">
+    <div class="prop">
+      <span class="prop-name subordinated">代号</span>
+      <span class="prop-value">
+        <img class="ccy-logo" [src]="CoinLogoPath(quote.symbol)" alt="">
+        {{quote.symbol}}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">24H 交易量（美元）</span>
+      <span class="prop-value">{{quote.volume_24h | moneysum}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">市值（美元）</span>
+      <span class="prop-value">{{quote.market_cap | moneysum}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">当前价格（美元）</span>
+      <span class="prop-value">{{quote.price | money}}</span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">Change 1H</span>
+      <span class="prop-value"
+            [class.price-up]="quote.percent_change_1h>0"
+            [class.price-down]="quote.percent_change_1h<0">
+        {{quote.percent_change_1h | rawpercent }}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">Change 24H</span>
+      <span class="prop-value"
+            [class.price-up]="quote.percent_change_24h>0"
+            [class.price-down]="quote.percent_change_24h<0">
+        {{quote.percent_change_24h | rawpercent }}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">Change 7D</span>
+      <span class="prop-value"
+            [class.price-up]="quote.percent_change_7d>0"
+            [class.price-down]="quote.percent_change_7d<0">
+        {{quote.percent_change_7d | rawpercent }}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">Change 30D</span>
+      <span class="prop-value"
+            [class.price-up]="quote.percent_change_30d>0"
+            [class.price-down]="quote.percent_change_30d<0">
+        {{quote.percent_change_30d | rawpercent }}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">Change 60D</span>
+      <span class="prop-value"
+            [class.price-up]="quote.percent_change_60d>0"
+            [class.price-down]="quote.percent_change_60d<0">
+        {{quote.percent_change_60d | rawpercent }}
+      </span>
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">Change 90D</span>
+      <span class="prop-value"
+            [class.price-up]="quote.percent_change_90d>0"
+            [class.price-down]="quote.percent_change_90d<0">
+        {{quote.percent_change_90d | rawpercent }}
+      </span>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>关闭</button>
+</div>

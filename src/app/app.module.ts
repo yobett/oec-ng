@@ -60,6 +60,7 @@ import { OrdersChartComponent } from './per/order-chart/orders-chart.component';
 import { RoundDownPipe } from './common/pipe/round-down-pipe';
 import { StrategyDetailDialogComponent } from './str/strategy/strategy-detail-dialog.component';
 import { SnapshotsComponent } from './per/asset-snapshot/snapshots.component';
+import { CcyQuoteDialogComponent } from './mar/ccy-quote/ccy-quote-dialog.component';
 
 
 @NgModule({
@@ -125,7 +126,8 @@ import { SnapshotsComponent } from './per/asset-snapshot/snapshots.component';
     AssetsStructureComponent,
     OrdersChartComponent,
     StrategyDetailDialogComponent,
-    SnapshotsComponent
+    SnapshotsComponent,
+    CcyQuoteDialogComponent
   ],
   entryComponents: [],
   providers: [],

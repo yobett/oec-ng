@@ -16,6 +16,11 @@ export class QuoteService extends BaseService<Quote> {
     this.baseUrl = this.apiBase + `/mar/quotes`;
   }
 
+  getCcyQuote(ccy: string, convert: string = 'USD'): Observable<Quote> {
+    let url = `${this.baseUrl}/ccy/${ccy}?convert=` + convert;
+    return this.getOne2(url);
+  }
+
   getConcernCcyQuotes(convert: string = 'USD'): Observable<Quote[]> {
     let url = `${this.baseUrl}/latest?convert=` + convert;
     return this.list2(url);

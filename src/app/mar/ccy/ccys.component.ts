@@ -20,6 +20,9 @@ import { DataSyncService } from '../../services/sys/data-sync.service';
 import { CcyMetaComponent } from './ccy-meta.component';
 import { CcyMeta } from '../../models/mar/ccy-meta';
 import { SyncResultDialogComponent } from '../../common/sync-result/sync-result-dialog.component';
+import { QuoteService } from '../../services/mar/quote.service';
+import { Quote } from '../../models/quote';
+import { CcyQuoteDialogComponent } from '../ccy-quote/ccy-quote-dialog.component';
 
 @Component({
   selector: 'app-ccys',
@@ -44,6 +47,7 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
 
   constructor(protected sessionService: SessionService,
               private ccyService: CcyService,
+              private quoteService: QuoteService,
               private dataSyncService: DataSyncService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog) {
@@ -124,19 +128,28 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
   }
 
   showMeta(ccy: Ccy) {
-    this.processes.getMetadata = true;
     this.ccyService.getMetadata(ccy.code)
       .subscribe((meta: CcyMeta) => {
-          this.processes.getMetadata = false;
           this.dialog.open(
             CcyMetaComponent, {
               // disableClose: true,
               width: '640px',
               data: {ccy, meta}
             });
-        },
-        error => this.processes.getMetadata = false,
-        () => this.processes.getMetadata = false
+        }
+      );
+  }
+
+  showQuote(ccy: Ccy) {
+    this.quoteService.getCcyQuote(ccy.code)
+      .subscribe((quote: Quote) => {
+          this.dialog.open(
+            CcyQuoteDialogComponent, {
+              // disableClose: true,
+              width: '350px',
+              data: {quote}
+            });
+        }
       );
   }
 

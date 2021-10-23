@@ -37,6 +37,9 @@ export class RoundDownPipe implements PipeTransform {
     if (di === -1) {
       return str;
     }
+    if (di >= digits) {
+      return str.substr(0, di);
+    }
     if (str.length - 1 <= digits) {
       return str;
     }

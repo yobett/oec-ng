@@ -100,6 +100,11 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" align="end">
 
+        <button mat-button (click)="showQuote(row)">
+          <mat-icon>attach_money</mat-icon>
+          币价
+        </button>
+
         <button mat-button (click)="showMeta(row)">
           <mat-icon>list</mat-icon>
           元数据

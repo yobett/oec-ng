@@ -68,7 +68,8 @@
 
   <div class="field-box" *ngIf="orderForm.side==='sell'">
     <mat-form-field class="form-field">
-      <input matInput placeholder="基础币种数量" [(ngModel)]="orderForm.quantity">
+      <input matInput placeholder="基础币种数量" [(ngModel)]="orderForm.quantity"
+             (ngModelChange)="baseQuantityInputChanged(baseSlider)">
       <span matSuffix class="subordinated">最大：{{availableBaseAsset | rounddown}}</span>
       <mat-hint *ngIf="tickerPrice">
         {{exchangePair.quoteCcy}} ≈ {{(orderForm.quantity * tickerPrice) | rounddown}}
@@ -84,14 +85,16 @@
         [thumbLabel]="true"
         [displayWith]="sliderLabel"
         color="primary"
-        (change)="quantitySliderChanged($event)">
+        (change)="quantitySliderChanged($event)"
+        #baseSlider>
       </mat-slider>
     </div>
   </div>
 
   <div class="field-box" *ngIf="orderForm.side==='buy'">
     <mat-form-field class="form-field">
-      <input matInput placeholder="报价币种数量" [(ngModel)]="orderForm.quoteQuantity">
+      <input matInput placeholder="报价币种数量" [(ngModel)]="orderForm.quoteQuantity"
+             (ngModelChange)="quoteQuantityInputChanged(quoteSlider)">
       <span matSuffix class="subordinated">最大：{{availableQuoteAsset || 0 | rounddown}}</span>
       <mat-hint *ngIf="tickerPrice">
         {{exchangePair.baseCcy}} ≈ {{(orderForm.quoteQuantity / tickerPrice) | rounddown}}
@@ -107,13 +110,15 @@
         [thumbLabel]="true"
         [displayWith]="sliderLabel"
         color="accent"
-        (change)="quoteQuantitySliderChanged($event)">
+        (change)="quoteQuantitySliderChanged($event)"
+        #quoteSlider>
       </mat-slider>
     </div>
   </div>
 
   <div class="field-box price-limit-field">
-    <mat-checkbox [(ngModel)]="priceLimit" [color]="orderForm.side === 'buy' ? 'accent' : 'primary'">
+    <mat-checkbox [(ngModel)]="priceLimit" [color]="orderForm.side === 'buy' ? 'accent' : 'primary'"
+                  (change)="priceLimitChanged($event)">
       限价
     </mat-checkbox>
     <mat-form-field class="form-field" *ngIf="!priceLimit">
@@ -122,7 +127,10 @@
     </mat-form-field>
     <mat-form-field class="form-field" *ngIf="priceLimit">
       <input matInput placeholder="价格" [(ngModel)]="orderForm.price">
-      <mat-hint>当前：{{tickerPriceAdjusted}}</mat-hint>
+      <mat-hint>当前 × {{+orderForm.price / tickerPrice | percent: '1.0-2'}}</mat-hint>
+      <mat-hint align="end" *ngIf="lastTrans&&lastTrans.avgPrice">
+        上次{{lastTrans.side === 'buy' ? '买入' : '卖出'}} × {{+orderForm.price / lastTrans.avgPrice | percent:'1.0-2'}}
+      </mat-hint>
     </mat-form-field>
   </div>
 </mat-dialog-content>

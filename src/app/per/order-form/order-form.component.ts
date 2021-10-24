@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatSliderChange } from '@angular/material/slider';
+import { MatSlider, MatSliderChange } from '@angular/material/slider';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { OrderForm } from '../../models/per/order-form';
@@ -12,10 +13,11 @@ import { PairService } from '../../services/mar/pair.service';
 import { EffectDigitsPipe } from '../../common/pipe/effect-digits-pipe';
 import { AssetService } from '../../services/per/asset.service';
 import { PlaceOrderRefreshDelay } from '../../config';
-import { Exch } from '../../models/sys/exch';
 import { ValueResult } from '../../models/result';
 import { MessageDialogComponent } from '../../common/message-dialog/message-dialog.component';
 import { RoundDownPipe } from '../../common/pipe/round-down-pipe';
+import { LastTransaction } from '../../models/per/last-transaction';
+import { LastTransService } from '../../services/per/last-trans.service';
 
 export interface OrderFormParams {
   exchangePair: ExchangePair;
@@ -23,6 +25,8 @@ export interface OrderFormParams {
   placedForm?: OrderForm;
   baseAsset?: Asset;
   quoteAsset?: Asset;
+  lastTrans?: LastTransaction;
+  lastTransLoaded?: boolean;
 }
 
 
@@ -38,6 +42,8 @@ export class OrderFormComponent implements OnInit {
   quoteAsset?: Asset;
   orderForm: OrderForm;
   exchangePair: ExchangePair;
+  lastTrans?: LastTransaction;
+  lastTransLoaded: boolean;
 
   availableBaseAsset: number;
   availableQuoteAsset: number;
@@ -75,9 +81,10 @@ export class OrderFormComponent implements OnInit {
   constructor(private orderService: SpotOrderService,
               private pairService: PairService,
               private assetService: AssetService,
-              private snackBar: MatSnackBar,
+              private lastTransService: LastTransService,
               private effectDigits: EffectDigitsPipe,
               private roundDown: RoundDownPipe,
+              private snackBar: MatSnackBar,
               public dialogRef: MatDialogRef<OrderFormComponent, number>,
               @Inject(MAT_DIALOG_DATA) public data: OrderFormParams,
               private dialog: MatDialog) {
@@ -91,6 +98,8 @@ export class OrderFormComponent implements OnInit {
     this.priceLimit = this.orderForm.type === 'limit';
     this.baseAsset = data.baseAsset;
     this.quoteAsset = data.quoteAsset;
+    this.lastTrans = data.lastTrans;
+    this.lastTransLoaded = data.lastTransLoaded;
     this.setAvailableAsset();
   }
 
@@ -219,6 +228,34 @@ export class OrderFormComponent implements OnInit {
     this.orderForm.quoteQuantity = +this.roundDown.transform(quant);
   }
 
+  baseQuantityInputChanged(slider: MatSlider) {
+    if (!this.availableBaseAsset) {
+      return;
+    }
+    const quantity = this.orderForm.quantity;
+    slider.value = quantity * this.sliderSteps / this.availableBaseAsset;
+  }
+
+  quoteQuantityInputChanged(slider: MatSlider) {
+    if (!this.availableQuoteAsset) {
+      return;
+    }
+    const quoteQuantity = this.orderForm.quoteQuantity;
+    slider.value = quoteQuantity * this.sliderSteps / this.availableQuoteAsset;
+  }
+
+  priceLimitChanged(change: MatCheckboxChange) {
+    if (change.checked) {
+      if (!this.lastTrans && !this.lastTransLoaded) {
+        const exp = this.exchangePair;
+        this.lastTransService.findLastTransaction(exp.baseCcy, exp.quoteCcy)
+          .subscribe(lt => {
+            this.lastTrans = lt;
+            this.lastTransLoaded = true;
+          });
+      }
+    }
+  }
 
   placeOrder() {
     const exchangePair = this.exchangePair;
@@ -240,12 +277,12 @@ export class OrderFormComponent implements OnInit {
       if (this.tickerPriceAdjusted) {
         if (form.side === 'buy') {
           if (form.price >= this.tickerPriceAdjusted) {
-            this.orderService.showMessage('（买入）限价未低于当前价格，是否为失误？');
+            this.orderService.showMessage('（买入）限价未低于当前价格');
             return;
           }
         } else {
           if (form.price <= this.tickerPriceAdjusted) {
-            this.orderService.showMessage('（卖出）限价未高于当前价格，是否为失误？');
+            this.orderService.showMessage('（卖出）限价未高于当前价格');
             return;
           }
         }

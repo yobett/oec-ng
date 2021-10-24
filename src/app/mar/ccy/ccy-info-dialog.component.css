@@ -8,6 +8,9 @@
 }
 
 .concern-icon {
+  height: 18px!important;
+  width: 18px!important;
+  font-size: 16px!important;
   vertical-align: text-bottom;
 }
 

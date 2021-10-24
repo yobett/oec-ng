@@ -22,8 +22,7 @@ export class CcyPairsDialogComponent implements AfterViewInit {
   dataSource: TableDatasource<ExPair>;
   baseCcy: string;
 
-  displayedColumns: string[] = ['index', 'concerned', 'baseCcy', 'quoteCcy',
-    'oeSymbol', 'baSymbol', 'hbSymbol'];
+  displayedColumns: string[] = ['index', 'concerned', 'baseCcy', 'quoteCcy', 'oeSymbol', 'baSymbol', 'hbSymbol'];
 
   CoinLogoPath = Ccy.LogoPath;
 

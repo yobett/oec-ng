@@ -23,10 +23,10 @@
         {{strategy.side}}
       </span>
     </div>
-    <div class="prop">
+    <!--<div class="prop">
       <span class="prop-name subordinated">关注价格</span>
       <span>{{strategy.watchDirection}}</span>
-    </div>
+    </div>-->
     <div class="prop">
       <span class="prop-name subordinated">交易所</span>
       <span>{{strategy.ex}}</span>
@@ -51,10 +51,10 @@
                   [class.order-side-buy]="strategy.side==='buy'"
                   [class.order-side-sell]="strategy.side==='sell'">{{lastTransaction.side}}</span>
           </div>
-          <div>
+          <!--<div>
             <span class="prop-name subordinated">执行数量</span>
             <span class="prop-value">{{lastTransaction.execQty | effectdigits }}</span>
-          </div>
+          </div>-->
           <div>
             <span class="prop-name subordinated">均价</span>
             <span class="prop-value accent-color">{{lastTransaction.avgPrice | effectdigits }}</span>

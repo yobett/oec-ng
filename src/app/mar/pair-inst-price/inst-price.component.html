@@ -30,8 +30,10 @@
     <ng-container matColumnDef="baseCcy">
       <th mat-header-cell *matHeaderCellDef mat-sort-header rowspan="2">基础币种</th>
       <td class="ccy-logo-code" mat-cell *matCellDef="let row">
-        <img class="ccy-logo" [src]="CoinLogoPath(row.baseCcy)" alt="">
-        <div class="ccy-code">{{row.baseCcy}}</div>
+        <button mat-button (click)="showBaseCcyInfo(row)">
+          <img class="ccy-logo" [src]="CoinLogoPath(row.baseCcy)" alt="">
+          <span class="ccy-code">{{row.baseCcy}}</span>
+        </button>
       </td>
     </ng-container>
 
@@ -64,6 +66,7 @@
 
     <ng-container matColumnDef="avgPrice">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>均价</th>
+      <!--
       <td mat-cell *matCellDef="let row"
           [matTooltip]="transAmountTooltip(row)"
           matTooltipShowDelay="200"
@@ -71,12 +74,9 @@
           matTooltipClass="multi-lines-tooltip">
         {{row.lastTrans?.avgPrice | money}}
       </td>
-    </ng-container>
-
-    <ng-container matColumnDef="priceSource">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>价格来源</th>
+      -->
       <td mat-cell *matCellDef="let row">
-        {{row.currentPrice?.source}}
+        {{row.lastTrans?.avgPrice | money}}
       </td>
     </ng-container>
 
@@ -96,6 +96,13 @@
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="priceSource">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>来源</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.currentPrice?.source}}
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef rowspan="2" class="op-head">操作</th>
       <td mat-cell *matCellDef="let row" align="end">
@@ -107,9 +114,13 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #actions="matMenu">
+          <button mat-menu-item (click)="showOrderDetail(row)" *ngIf="row.lastTrans">
+            <mat-icon>details</mat-icon>
+            交易详情
+          </button>
           <button mat-menu-item (click)="showOrders(row)">
             <mat-icon>list</mat-icon>
-            订单
+            最新订单
           </button>
           <ng-container *ngFor="let exch of $exchs | async">
             <button mat-menu-item [class.accent-color]="row.lastTrans?.ex===exch.code"

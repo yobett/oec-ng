@@ -24,6 +24,10 @@ import { OrdersPopupData, SpotOrdersDialogComponent } from '../../per/order/spot
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { Exch } from '../../models/sys/exch';
 import { ExchService } from '../../services/sys/exch.service';
+import { CcyInfoDialogComponent } from '../ccy/ccy-info-dialog.component';
+import { CcyService } from '../../services/mar/ccy.service';
+import { OrderDetailDialogComponent } from '../../per/order/order-detail-dialog.component';
+import { SpotOrder } from '../../models/per/spot-order';
 
 @Component({
   selector: 'app-inst-price',
@@ -63,6 +67,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   constructor(protected sessionService: SessionService,
               private pairService: PairService,
               private exchService: ExchService,
+              private ccyService: CcyService,
               private orderService: SpotOrderService,
               private effectDigits: EffectDigitsPipe,
               private snackBar: MatSnackBar,
@@ -161,6 +166,19 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     this.table.dataSource = this.dataSource;
   }
 
+  showBaseCcyInfo(exp: PairPrice) {
+    this.ccyService.getByCode(exp.baseCcy)
+      .subscribe((ccy: Ccy) => {
+          this.dialog.open(
+            CcyInfoDialogComponent, {
+              disableClose: true,
+              width: '350px',
+              data: {ccy}
+            });
+        }
+      );
+  }
+
   openOrderForm(exp: PairPrice, ex: string, symbol: string) {
     const orderForm = new OrderForm();
     if (exp.lastTrans) {
@@ -172,7 +190,12 @@ export class InstPriceComponent extends SessionSupportComponent implements After
       baseCcy: exp.baseCcy,
       quoteCcy: exp.quoteCcy
     };
-    const data: OrderFormParams = {exchangePair, orderForm};
+    const data: OrderFormParams = {
+      exchangePair,
+      orderForm,
+      lastTrans: exp.lastTrans,
+      lastTransLoaded: true
+    };
 
     const ref = OrderFormComponent.openOrderForm(this.dialog, data);
     OrderFormComponent.afterOrderPlacedDelay(ref, () => {
@@ -180,6 +203,22 @@ export class InstPriceComponent extends SessionSupportComponent implements After
         this.loadData();
       }
     });
+  }
+
+  showOrderDetail(exp: PairPrice) {
+    const lt: LastTransaction = exp.lastTrans;
+    if (!lt) {
+      return;
+    }
+    if (lt.order) {
+      OrderDetailDialogComponent.showOrderDetail(this.dialog, lt.order);
+    } else {
+      this.orderService.getById2(lt.oid)
+        .subscribe((order: SpotOrder) => {
+          lt.order = order;
+          OrderDetailDialogComponent.showOrderDetail(this.dialog, order);
+        });
+    }
   }
 
   showOrders(exp: PairPrice) {

@@ -89,7 +89,7 @@
       <td mat-cell *matCellDef="let row" align="end">
 
         <button mat-button (click)="showOrderDetail(row)" *ngIf="row.oid">
-          <mat-icon>list</mat-icon>
+          <mat-icon>details</mat-icon>
           订单
         </button>
         <button mat-button [matMenuTriggerFor]="actions">

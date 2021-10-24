@@ -56,5 +56,4 @@ export class SpotOrdersDialogComponent implements AfterViewInit {
       });
   }
 
-
 }

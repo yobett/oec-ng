@@ -9,7 +9,10 @@ export class RawPercentPipe implements PipeTransform {
   }
 
   transform(p: any): string {
-    if (!p) {
+    if (p == null) {
+      return '';
+    }
+    if (isNaN(p)) {
       return '';
     }
     const text = this.dp.transform(+p, '1.0-2');

@@ -13,7 +13,6 @@
       结构
     </button>
 
-
     <button mat-button [matMenuTriggerFor]="syncActions">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -113,6 +112,10 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" align="end">
+        <button mat-button (click)="showPairsAsBase(row)">
+          <mat-icon>sync_alt</mat-icon>
+          交易对
+        </button>
         <button mat-button (click)="showOrders(row)">
           <mat-icon>list</mat-icon>
           订单

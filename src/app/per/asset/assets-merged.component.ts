@@ -25,6 +25,7 @@ import { CcyService } from '../../services/mar/ccy.service';
 import { Result } from '../../models/result';
 import { PairService } from '../../services/mar/pair.service';
 import { AssetsStructureComponent } from './assets-structure.component';
+import { CcyPairsDialogComponent } from '../../mar/pair/ccy-pairs-dialog.component';
 
 @Component({
   selector: 'app-assets-merged',
@@ -170,6 +171,15 @@ export class AssetsMergedComponent extends SessionSupportComponent implements Af
         if (opr.code === Result.CODE_SUCCESS) {
           this.snackBar.open('已把相关交易对加入关注');
         }
+      });
+  }
+
+  showPairsAsBase(asset: MergedAsset) {
+    const baseCcy = asset.ccy;
+    this.pairService.page2(null, {baseCcy, pageSize: 30})
+      .subscribe(countList => {
+        const pairs = countList.list;
+        CcyPairsDialogComponent.showPairs(this.dialog, {baseCcy, pairs});
       });
   }
 

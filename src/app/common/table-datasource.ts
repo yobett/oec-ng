@@ -107,6 +107,11 @@ function compare(a: any, b: any, isAsc: boolean) {
   if (a === b) {
     return 0;
   }
+  if (a == null) {
+    return isAsc ? -1 : 1;
+  } else if (b == null) {
+    return isAsc ? 1 : -1;
+  }
   if (typeof a === 'string' && typeof b === 'string') {
     const r = a.localeCompare(b);
     return isAsc ? r : -r;

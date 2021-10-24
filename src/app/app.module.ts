@@ -62,6 +62,7 @@ import { StrategyDetailDialogComponent } from './str/strategy/strategy-detail-di
 import { SnapshotsComponent } from './per/asset-snapshot/snapshots.component';
 import { CcyQuoteDialogComponent } from './mar/ccy-quote/ccy-quote-dialog.component';
 import { CcyInfoDialogComponent } from './mar/ccy/ccy-info-dialog.component';
+import { CcyPairsDialogComponent } from './mar/pair/ccy-pairs-dialog.component';
 
 
 @NgModule({
@@ -129,7 +130,8 @@ import { CcyInfoDialogComponent } from './mar/ccy/ccy-info-dialog.component';
     StrategyDetailDialogComponent,
     SnapshotsComponent,
     CcyQuoteDialogComponent,
-    CcyInfoDialogComponent
+    CcyInfoDialogComponent,
+    CcyPairsDialogComponent
   ],
   entryComponents: [],
   providers: [],

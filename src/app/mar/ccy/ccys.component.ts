@@ -23,6 +23,8 @@ import { SyncResultDialogComponent } from '../../common/sync-result/sync-result-
 import { QuoteService } from '../../services/mar/quote.service';
 import { Quote } from '../../models/quote';
 import { CcyQuoteDialogComponent } from '../ccy-quote/ccy-quote-dialog.component';
+import { CcyPairsDialogComponent } from '../pair/ccy-pairs-dialog.component';
+import { PairService } from '../../services/mar/pair.service';
 
 @Component({
   selector: 'app-ccys',
@@ -37,7 +39,7 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
 
   dataSource: PageableDatasource<Ccy>;
 
-  displayedColumns: string[] = ['index', 'concerned', 'no', 'code', 'name', 'createdAt', 'actions'];
+  displayedColumns: string[] = ['index', 'concerned', 'no', 'code', 'name', /*'createdAt',*/ 'actions'];
 
   staticBase = StaticResource.BASE;
 
@@ -48,6 +50,7 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
   constructor(protected sessionService: SessionService,
               private ccyService: CcyService,
               private quoteService: QuoteService,
+              private pairService: PairService,
               private dataSyncService: DataSyncService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog) {
@@ -187,6 +190,15 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
           ccy.concerned = !ori;
           this.snackBar.open(ori ? '已取消关注' : '已加入关注');
         }
+      });
+  }
+
+  showPairsAsBase(ccy: Ccy) {
+    const baseCcy = ccy.code;
+    this.pairService.page2(null, {baseCcy, pageSize: 30})
+      .subscribe(countList => {
+        const pairs = countList.list;
+        CcyPairsDialogComponent.showPairs(this.dialog, {baseCcy, pairs});
       });
   }
 

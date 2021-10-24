@@ -51,6 +51,8 @@ const PlaceOrderRefreshDelay = 6 * 1000;
 
 const StableCoins = ['USDT', 'USDC', 'DAI', 'BUSD'];
 
+const QuoteCcyOptions = [...StableCoins, 'BTC', 'ETH'];
+
 export {
   PaginatorIntl,
   DATE_FORMATS,
@@ -60,5 +62,6 @@ export {
   StaticResource,
   LocalStorageKeys,
   PlaceOrderRefreshDelay,
-  StableCoins
+  StableCoins,
+  QuoteCcyOptions
 };

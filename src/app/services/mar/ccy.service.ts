@@ -19,6 +19,10 @@ export class CcyService extends ModelCurdService<Ccy> {
     this.baseUrl = this.apiBase + `/mar/ccys`;
   }
 
+  getByCode(code: string): Observable<Ccy> {
+    return this.getOne2(this.baseUrl + '/code/' + code);
+  }
+
   listConcerned(): Observable<Ccy[]> {
     return this.list2(this.baseUrl + '/concerned');
   }

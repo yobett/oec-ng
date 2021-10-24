@@ -1,0 +1,25 @@
+.mat-dialog-title {
+  display: flex;
+}
+
+.concern-op {
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.concern-icon {
+  vertical-align: text-bottom;
+}
+
+img.ccy-logo {
+  /*width: 24px;*/
+  vertical-align: text-bottom;
+}
+
+dt {
+  margin-top: 1em;
+}
+
+dd {
+  margin-top: .5em;
+}

@@ -1,0 +1,60 @@
+<div mat-dialog-title>
+  <span class="dialog-title">{{ccy.name}}</span>
+  <span class="spacer"></span>
+  <span class="concern-op" (click)="toggleConcern(ccy)">
+    <mat-icon class="concern-icon" [class.favorite]="ccy.concerned">
+      {{ccy.concerned ? 'star' : 'star_outline'}}
+    </mat-icon>
+    关注
+  </span>
+</div>
+
+<mat-dialog-content>
+  <dl>
+    <dt>代号</dt>
+    <dd class="ccy-logo-code">
+      <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt="">
+      <span class="ccy-code">{{ccy.code}}</span>
+    </dd>
+    <dt>查看</dt>
+    <dd>
+      <button mat-button (click)="showQuote(ccy)">
+        <mat-icon>attach_money</mat-icon>
+        币价
+      </button>
+      <button mat-button (click)="showMeta(ccy)">
+        <mat-icon>list</mat-icon>
+        元数据
+      </button>
+    </dd>
+    <dt>信息页</dt>
+    <dd>
+      <a mat-button class="mat-icon-20"
+         href="https://coinmarketcap.com/currencies/{{ccy.slug}}" target="_blank">
+        <mat-icon>link</mat-icon>
+        CMC
+      </a>
+      <br>
+      <a mat-button class="mat-icon-20"
+         href="https://www.okex.com/markets/prices/{{ccy.slug}}-{{ccy.code | lowercase}}" target="_blank">
+        <mat-icon>link</mat-icon>
+        OE
+      </a>
+      <a mat-button class="mat-icon-20"
+         href="https://research.binance.com/cn/projects/{{ccy.slug}}" target="_blank">
+        <!-- -or- (ccy.code | lowercase) eg. bnb,dai -->
+        <mat-icon>link</mat-icon>
+        BA
+      </a>
+      <a mat-button class="mat-icon-20"
+         href="https://www.huobi.com/zh-cn/assetintro/#{{ccy.code | lowercase}}" target="_blank">
+        <mat-icon>link</mat-icon>
+        HB
+      </a>
+    </dd>
+  </dl>
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close="">关闭</button>
+</div>

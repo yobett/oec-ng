@@ -4,7 +4,8 @@
     <mat-button-toggle-group [value]="filterForm['concerned']? 'concerned':'all'"
                              (change)="concernedGroupChanged($event)">
       <mat-button-toggle value="concerned">
-        <mat-icon class="favorite">star</mat-icon>关注
+        <mat-icon class="favorite">star</mat-icon>
+        关注
       </mat-button-toggle>
       <mat-button-toggle value="all">全部</mat-button-toggle>
     </mat-button-toggle-group>
@@ -49,7 +50,15 @@
 
     <mat-form-field>
       <input matInput placeholder="报价币种" name="quoteCcy" [(ngModel)]="filterForm['quoteCcy']"
-             (keyup.enter)="filter()">
+             [matAutocomplete]="quoteCcyAuto" (keyup.enter)="filter()">
+      <mat-autocomplete #quoteCcyAuto="matAutocomplete">
+        <mat-option *ngFor="let option of quoteCcyOptions" [value]="option">
+          <span class="ccy-logo-code">
+            <img class="ccy-logo" [src]="CoinLogoPath(option)" alt="">
+            <span class="ccy-code">{{option}}</span>
+          </span>
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
 
     <button mat-button (click)="filter()">
@@ -84,8 +93,10 @@
     <ng-container matColumnDef="baseCcy">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>基础币种</th>
       <td class="ccy-logo-code" mat-cell *matCellDef="let row">
-        <img class="ccy-logo" [src]="CoinLogoPath(row.baseCcy)" alt="">
-        <div class="ccy-code">{{row.baseCcy}}</div>
+        <button mat-button (click)="showBaseCcyInfo(row)">
+          <img class="ccy-logo" [src]="CoinLogoPath(row.baseCcy)" alt="">
+          <span class="ccy-code">{{row.baseCcy}}</span>
+        </button>
       </td>
     </ng-container>
 

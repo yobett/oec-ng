@@ -28,6 +28,8 @@ import { SyncResultGroupDialogComponent } from '../../common/sync-result/sync-re
 import { OrderFormComponent, OrderFormParams } from '../../per/order-form/order-form.component';
 import { KlineChartDialogComponent } from '../kline-chart/kline-chart-dialog.component';
 import { MessageDialogComponent } from '../../common/message-dialog/message-dialog.component';
+import { CcyInfoDialogComponent } from '../ccy/ccy-info-dialog.component';
+import { QuoteCcyOptions } from '../../config';
 
 @Component({
   selector: 'app-pairs',
@@ -40,10 +42,12 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<ExPair>;
 
+  quoteCcyOptions = QuoteCcyOptions;
+
   dataSource: PageableDatasource<ExPair>;
 
   displayedColumns: string[] = ['index', 'concerned', 'baseCcy', 'quoteCcy',
-    'oeSymbol', 'baSymbol', 'hbSymbol', 'createdAt', 'actions'];
+    'oeSymbol', 'baSymbol', 'hbSymbol', /*'createdAt',*/ 'actions'];
 
   $ccys: Observable<Ccy[]>;
   $exchs: Observable<Exch[]>;
@@ -227,6 +231,19 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
         }
         this.dataSource.refresh();
       });
+  }
+
+  showBaseCcyInfo(pair: ExPair) {
+    this.ccyService.getByCode(pair.baseCcy)
+      .subscribe((ccy: Ccy) => {
+          this.dialog.open(
+            CcyInfoDialogComponent, {
+              disableClose: true,
+              width: '350px',
+              data: {ccy}
+            });
+        }
+      );
   }
 
 }

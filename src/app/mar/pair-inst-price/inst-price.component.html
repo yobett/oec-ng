@@ -30,7 +30,7 @@
     <ng-container matColumnDef="baseCcy">
       <th mat-header-cell *matHeaderCellDef mat-sort-header rowspan="2">基础币种</th>
       <td mat-cell *matCellDef="let row">
-        <span class="ccy-logo-code base-ccy" (click)="showBaseCcyInfo(row)">
+        <span class="ccy-logo-code clickable" (click)="showBaseCcyInfo(row)">
           <img class="ccy-logo" [src]="CoinLogoPath(row.baseCcy)" alt="">
           <span class="ccy-code">{{row.baseCcy}}</span>
         </span>

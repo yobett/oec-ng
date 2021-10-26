@@ -53,7 +53,7 @@ body {
   padding: 1em;
 }
 
-.mat-icon.clickable {
+.clickable {
   cursor: pointer;
 }
 

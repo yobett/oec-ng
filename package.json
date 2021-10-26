@@ -7,6 +7,7 @@
     "start-stage-api": "ng serve --proxy-config proxy-stage.conf.json",
     "watch": "ng build --watch --configuration development",
     "build": "ng build --base-href /oec/",
+    "build-zip": "npm run build & cd dist & zip -r oec.zip oec",
     "build-stats": "ng build --base-href /oec/ --stats-json",
     "bundle-report": "webpack-bundle-analyzer dist/oec/stats.json",
     "test": "ng test"

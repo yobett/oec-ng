@@ -101,3 +101,18 @@ export function moneySumValue(mon): number {
   }
   return +money.toFixed(2);
 }
+
+export function upDownPercent(from: number, to: number, posSign = false, abs = false): string {
+  if (!from || !to) {
+    return '';
+  }
+  let percent = (to - from) * 100 / from;
+  if (abs) {
+    percent = Math.abs(percent);
+  }
+  const ns = percent.toFixed(2);
+  if (percent > 0 && posSign) {
+    return '+' + ns + '%';
+  }
+  return ns + '%';
+}

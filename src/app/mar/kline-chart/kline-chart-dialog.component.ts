@@ -18,6 +18,7 @@ import { ExPair } from '../../models/mar/ex-pair';
 import { PairService } from '../../services/mar/pair.service';
 import { KlineService } from '../../services/mar/kline.service';
 import { Ccy } from '../../models/mar/ccy';
+import { upDownPercent } from '../../common/utils';
 
 export interface KlineChartData {
   ex: string;
@@ -209,12 +210,15 @@ export class KlineChartDialogComponent implements OnInit, AfterViewInit {
 
   transformData() {
     const timeLabels: string[] = [];
-    const oclhvs: number[][] = [];
+    const oclhvs: any[][] = [];
     for (const kline of this.currentData) {
       timeLabels.push(kline.dts);
+
       oclhvs.push([
         kline.open, kline.close,
         kline.low, kline.high,
+        upDownPercent(kline.open, kline.close, true),
+        upDownPercent(kline.low, kline.high, false, true),
         // kline.vol, kline.volQuote
       ]);
     }
@@ -300,12 +304,14 @@ export class KlineChartDialogComponent implements OnInit, AfterViewInit {
           {name: 'open', displayName: '开盘'},
           {name: 'close', displayName: '收盘'},
           {name: 'lowest', displayName: '最低'},
-          {name: 'highest', displayName: '最高'}
+          {name: 'highest', displayName: '最高'},
+          {name: 'open-close', displayName: '开盘-收盘'},
+          {name: 'lowest-highest', displayName: '最低-最高'}
         ],
         encode: {
           x: 'date',
           y: ['open', 'close', 'lowest', 'highest'],
-          tooltip: ['open', 'close', 'lowest', 'highest']
+          tooltip: ['open', 'close', 'open-close', 'lowest', 'highest', 'lowest-highest']
         },
         itemStyle: {
           color: '#00ca3c',

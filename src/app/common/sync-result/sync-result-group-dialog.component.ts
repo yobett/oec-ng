@@ -34,6 +34,7 @@ export class SyncResultGroupDialogComponent {
       SyncResultGroupDialogComponent, {
         disableClose: true,
         width: '380px',
+        maxWidth: '90vw',
         data
       });
   }

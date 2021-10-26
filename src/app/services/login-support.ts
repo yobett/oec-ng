@@ -16,6 +16,7 @@ export class LoginSupport {
     const dialogRef: MatDialogRef<LoginDialogComponent> = this.dialog.open(
       LoginDialogComponent, {
         width: '350px',
+        maxWidth: '90vw',
         data: {}
       });
 

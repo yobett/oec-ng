@@ -231,6 +231,7 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
       StrategyNewComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: {
           strategy,
           $ccys: this.$ccys,

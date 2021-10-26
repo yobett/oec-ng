@@ -167,16 +167,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   }
 
   showBaseCcyInfo(exp: PairPrice) {
-    this.ccyService.getByCode(exp.baseCcy)
-      .subscribe((ccy: Ccy) => {
-          this.dialog.open(
-            CcyInfoDialogComponent, {
-              disableClose: true,
-              width: '350px',
-              data: {ccy}
-            });
-        }
-      );
+    CcyInfoDialogComponent.showCcyInfo(exp.baseCcy, this.ccyService, this.dialog);
   }
 
   openOrderForm(exp: PairPrice, ex: string, symbol: string) {

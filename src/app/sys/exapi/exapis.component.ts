@@ -65,6 +65,7 @@ export class ExapisComponent extends SessionSupportComponent implements AfterVie
       ExapiEditComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: {exapi, $exchs: this.$exchs}
       });
 

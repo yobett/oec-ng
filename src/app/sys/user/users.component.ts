@@ -55,6 +55,7 @@ export class UsersComponent extends SessionSupportComponent implements AfterView
       UserEditComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: user
       });
 
@@ -96,6 +97,7 @@ export class UsersComponent extends SessionSupportComponent implements AfterView
       UserPwdResetComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: {user}
       });
   }

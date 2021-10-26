@@ -26,6 +26,7 @@ export class CcyQuoteDialogComponent {
             CcyQuoteDialogComponent, {
               // disableClose: true,
               width: '350px',
+              maxWidth: '90vw',
               data: {quote}
             });
         }

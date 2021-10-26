@@ -133,6 +133,7 @@ export class AssetsStructureComponent implements OnInit, AfterViewInit {
       AssetsStructureComponent, {
         disableClose: true,
         width: '700px',
+        maxWidth: '90vw',
         data
       });
   }

@@ -25,6 +25,7 @@ export class StrategyDetailDialogComponent {
       StrategyDetailDialogComponent, {
         disableClose: true,
         width: '380px',
+        maxWidth: '90vw',
         data
       });
   }

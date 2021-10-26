@@ -24,6 +24,7 @@ export class UserDetailComponent {
       UserDetailComponent, {
         disableClose: true,
         width: '380px',
+        maxWidth: '90vw',
         data: cu
       });
   }
@@ -37,6 +38,7 @@ export class UserDetailComponent {
       ChangePwdComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: {user: this.user}
       });
   }

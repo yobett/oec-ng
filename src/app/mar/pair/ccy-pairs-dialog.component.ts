@@ -55,6 +55,7 @@ export class CcyPairsDialogComponent implements AfterViewInit {
       CcyPairsDialogComponent, {
         disableClose: true,
         width: '640px',
+        maxWidth: '90vw',
         data
       });
   }

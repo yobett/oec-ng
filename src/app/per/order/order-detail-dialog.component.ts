@@ -24,6 +24,7 @@ export class OrderDetailDialogComponent {
       OrderDetailDialogComponent, {
         disableClose: true,
         width: '380px',
+        maxWidth: '90vw',
         data
       });
   }

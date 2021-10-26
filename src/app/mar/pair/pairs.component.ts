@@ -198,6 +198,7 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
       PairEditComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: {pair, $ccys: this.$ccys}
       });
 

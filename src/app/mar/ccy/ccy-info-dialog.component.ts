@@ -53,6 +53,7 @@ export class CcyInfoDialogComponent {
             CcyInfoDialogComponent, {
               disableClose: true,
               width: '350px',
+              maxWidth: '90vw',
               data: {ccy}
             });
         }

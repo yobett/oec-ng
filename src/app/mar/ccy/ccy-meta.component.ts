@@ -48,6 +48,7 @@ export class CcyMetaComponent {
             CcyMetaComponent, {
               // disableClose: true,
               width: '640px',
+              maxWidth: '90vw',
               data: {ccy, meta}
             });
         }

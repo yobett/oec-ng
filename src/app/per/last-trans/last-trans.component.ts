@@ -83,6 +83,7 @@ export class LastTransComponent extends SessionSupportComponent implements After
       LastTransEditComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: lastTrans
       });
 

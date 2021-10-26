@@ -179,6 +179,7 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
     this.dialog.open(
       LoginDialogComponent, {
         width: '350px',
+        maxWidth: '90vw',
         data: {}
       });
   }

@@ -141,6 +141,7 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
       CcyEditComponent, {
         disableClose: true,
         width: '480px',
+        maxWidth: '90vw',
         data: ccy
       });
 

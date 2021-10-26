@@ -3,6 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
 import { SpotOrder } from '../../models/per/spot-order';
@@ -14,8 +15,10 @@ import { TableDatasource } from '../../common/table-datasource';
 import { Exch } from '../../models/sys/exch';
 import { ExchService } from '../../services/sys/exch.service';
 import { Ccy } from '../../models/mar/ccy';
-import { OrderDetailDialogComponent } from './order-detail-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { OrderDetailDialogComponent } from '../order/order-detail-dialog.component';
+import { ExchangePair } from '../../models/mar/ex-pair';
+import { OrderForm } from '../../models/per/order-form';
+import { OrderFormComponent, OrderFormParams } from '../order-form/order-form.component';
 
 @Component({
   selector: 'app-pending-orders',
@@ -101,11 +104,52 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
     this.spotOrderService.cancelOrder(order)
       .subscribe((res: any) => {
           this.processes['cancelOrder-' + order.orderId] = false;
-          this.snackBar.open('取消订单请求已提交');
+          this.snackBar.open('订单已取消');
+          this.dataSource.remove(order);
+          // this.fetchPendingOrdersFor(order.ex);
         },
         error => this.processes['cancelOrder-' + order.orderId] = false,
         () => this.processes['cancelOrder-' + order.orderId] = false
       );
+  }
+
+
+  cancelAndOpenForm(order: SpotOrder) {
+    if (!confirm('要取消订单吗？')) {
+      return;
+    }
+    this.processes['cancelOrder-' + order.orderId] = true;
+    this.spotOrderService.cancelOrder(order)
+      .subscribe((res: any) => {
+          this.processes['cancelOrder-' + order.orderId] = false;
+          this.snackBar.open('订单已取消');
+
+          this.openOrderForm(order);
+        },
+        error => this.processes['cancelOrder-' + order.orderId] = false,
+        () => this.processes['cancelOrder-' + order.orderId] = false
+      );
+  }
+
+  openOrderForm(order: SpotOrder) {
+
+    const exchangePair: ExchangePair = {
+      ex: order.ex,
+      symbol: order.pairSymbol,
+      baseCcy: order.baseCcy,
+      quoteCcy: order.quoteCcy
+    };
+    const orderForm = new OrderForm();
+    orderForm.side = order.side as 'buy' | 'sell';
+    orderForm.type = 'limit';
+    orderForm.price = order.askPrice;
+    orderForm.quantity = order.askQty;
+    const data: OrderFormParams = {orderForm, exchangePair};
+
+    const ref = OrderFormComponent.openOrderForm(this.dialog, data);
+    OrderFormComponent.afterOrderPlacedDelay(ref, () => {
+      this.fetchPendingOrdersFor(order.ex);
+    });
   }
 
   showOrderDetail(order: SpotOrder) {

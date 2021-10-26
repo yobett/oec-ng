@@ -1,8 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CcyMeta, CcyMetaUrls } from '../../models/mar/ccy-meta';
 import { Ccy } from '../../models/mar/ccy';
 import { StaticResource } from '../../config';
+import { CcyService } from '../../services/mar/ccy.service';
 
 @Component({
   selector: 'app-ccy-meta',
@@ -38,6 +39,19 @@ export class CcyMetaComponent {
         this.linkItems.push({name, links});
       }
     }
+  }
+
+  static showMetadata(ccy: string, ccyService: CcyService, dialog: MatDialog) {
+    ccyService.getMetadata(ccy)
+      .subscribe((meta: CcyMeta) => {
+          dialog.open(
+            CcyMetaComponent, {
+              // disableClose: true,
+              width: '640px',
+              data: {ccy, meta}
+            });
+        }
+      );
   }
 
 }

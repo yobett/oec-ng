@@ -26,6 +26,7 @@ import { Result } from '../../models/result';
 import { PairService } from '../../services/mar/pair.service';
 import { AssetsStructureComponent } from './assets-structure.component';
 import { CcyPairsDialogComponent } from '../../mar/pair/ccy-pairs-dialog.component';
+import { CcyInfoDialogComponent } from '../../mar/ccy/ccy-info-dialog.component';
 
 @Component({
   selector: 'app-assets-merged',
@@ -253,6 +254,10 @@ export class AssetsMergedComponent extends SessionSupportComponent implements Af
     AssetsStructureComponent.showAssetsStructureChart(
       this.dialog,
       {items});
+  }
+
+  showCcyInfo(asset: MergedAsset) {
+    CcyInfoDialogComponent.showCcyInfo(asset.ccy, this.ccyService, this.dialog);
   }
 
 }

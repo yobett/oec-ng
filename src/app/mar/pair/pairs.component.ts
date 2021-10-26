@@ -234,16 +234,7 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
   }
 
   showBaseCcyInfo(pair: ExPair) {
-    this.ccyService.getByCode(pair.baseCcy)
-      .subscribe((ccy: Ccy) => {
-          this.dialog.open(
-            CcyInfoDialogComponent, {
-              disableClose: true,
-              width: '350px',
-              data: {ccy}
-            });
-        }
-      );
+    CcyInfoDialogComponent.showCcyInfo(pair.baseCcy, this.ccyService, this.dialog);
   }
 
 }

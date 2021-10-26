@@ -25,7 +25,7 @@ import { PairsComponent } from './mar/pair/pairs.component';
 import { PairEditComponent } from './mar/pair/pair-edit.component';
 import { AssetsComponent } from './per/asset/assets.component';
 import { SpotOrdersComponent } from './per/order/spot-orders.component';
-import { PendingOrdersComponent } from './per/order/pending-orders.component';
+import { PendingOrdersComponent } from './per/order-pending/pending-orders.component';
 import { AssetsMergedComponent } from './per/asset/assets-merged.component';
 import { CcyQuotesComponent } from './mar/ccy-quote/ccy-quotes.component';
 import { MoneyPipe } from './common/pipe/money.pipe';

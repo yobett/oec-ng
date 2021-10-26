@@ -4,9 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Ccy } from '../../models/mar/ccy';
 import { CcyService } from '../../services/mar/ccy.service';
 import { QuoteService } from '../../services/mar/quote.service';
-import { CcyMeta } from '../../models/mar/ccy-meta';
 import { CcyMetaComponent } from './ccy-meta.component';
-import { Quote } from '../../models/quote';
 import { CcyQuoteDialogComponent } from '../ccy-quote/ccy-quote-dialog.component';
 import { Result } from '../../models/result';
 
@@ -30,29 +28,11 @@ export class CcyInfoDialogComponent {
   }
 
   showMeta(ccy: Ccy) {
-    this.ccyService.getMetadata(ccy.code)
-      .subscribe((meta: CcyMeta) => {
-          this.dialog.open(
-            CcyMetaComponent, {
-              // disableClose: true,
-              width: '640px',
-              data: {ccy, meta}
-            });
-        }
-      );
+    CcyMetaComponent.showMetadata(ccy.code, this.ccyService, this.dialog);
   }
 
   showQuote(ccy: Ccy) {
-    this.quoteService.getCcyQuote(ccy.code)
-      .subscribe((quote: Quote) => {
-          this.dialog.open(
-            CcyQuoteDialogComponent, {
-              // disableClose: true,
-              width: '350px',
-              data: {quote}
-            });
-        }
-      );
+    CcyQuoteDialogComponent.showQuote(ccy.code, this.quoteService, this.dialog);
   }
 
   toggleConcern(ccy: Ccy) {
@@ -64,6 +44,19 @@ export class CcyInfoDialogComponent {
           this.snackBar.open(ori ? '已取消关注' : '已加入关注');
         }
       });
+  }
+
+  static showCcyInfo(ccy: string, ccyService: CcyService, dialog: MatDialog) {
+    ccyService.getByCode(ccy)
+      .subscribe((ccy: Ccy) => {
+          dialog.open(
+            CcyInfoDialogComponent, {
+              disableClose: true,
+              width: '350px',
+              data: {ccy}
+            });
+        }
+      );
   }
 
 }

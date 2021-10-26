@@ -116,6 +116,10 @@
             <mat-icon>block</mat-icon>
             取消订单
           </button>
+          <button mat-menu-item (click)="cancelAndOpenForm(row)" [disabled]="processes['cancelOrder-'+row.orderId]">
+            <mat-icon>block</mat-icon>
+            取消并重新下单
+          </button>
         </mat-menu>
       </td>
     </ng-container>

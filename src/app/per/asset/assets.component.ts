@@ -27,6 +27,8 @@ import { OrderFormComponent, OrderFormParams } from '../order-form/order-form.co
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { OrdersPopupData, SpotOrdersDialogComponent } from '../order/spot-orders-dialog.component';
 import { AssetsStructureComponent } from './assets-structure.component';
+import { CcyInfoDialogComponent } from '../../mar/ccy/ccy-info-dialog.component';
+import { CcyService } from '../../services/mar/ccy.service';
 
 @Component({
   selector: 'app-assets',
@@ -61,6 +63,7 @@ export class AssetsComponent extends SessionSupportComponent implements AfterVie
   constructor(protected sessionService: SessionService,
               private exchService: ExchService,
               private assetService: AssetService,
+              private ccyService: CcyService,
               private orderService: SpotOrderService,
               private pairService: PairService,
               private dataSyncService: DataSyncService,
@@ -238,6 +241,10 @@ export class AssetsComponent extends SessionSupportComponent implements AfterVie
         items,
         ex
       });
+  }
+
+  showCcyInfo(asset: Asset) {
+    CcyInfoDialogComponent.showCcyInfo(asset.ccy, this.ccyService, this.dialog);
   }
 
 

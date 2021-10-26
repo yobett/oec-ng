@@ -93,7 +93,6 @@ export class OrderFormComponent implements OnInit {
     this.orderForm = data.orderForm;
     if (!this.orderForm) {
       this.orderForm = new OrderForm();
-      this.orderForm.symbol = this.exchangePair.symbol;
     }
     this.priceLimit = this.orderForm.type === 'limit';
     this.baseAsset = data.baseAsset;
@@ -323,23 +322,11 @@ export class OrderFormComponent implements OnInit {
     this.orderService.placeOrder(ex, form)
       .subscribe(res => {
           this.placingOrder = false;
-          if (form.side === 'buy') {
-            const quoteAsset = this.quoteAsset;
-            if (quoteAsset) {
-              quoteAsset.frozen += orderForm.quoteQuantity;
-              if (quoteAsset.frozen > quoteAsset.holding) {
-                quoteAsset.frozen = quoteAsset.holding;
-              }
-            }
+          if (form.type === 'market') {
+            this.snackBar.open('已下单（市价单），稍后将自动刷新');
           } else {
-            const baseAsset = this.baseAsset;
-            baseAsset.frozen += orderForm.quantity;
-            if (baseAsset.frozen > baseAsset.holding) {
-              baseAsset.frozen = baseAsset.holding;
-            }
+            this.snackBar.open('已下单（限价单），请到“未完成订单”页查看');
           }
-          this.setAvailableAsset();
-          this.snackBar.open('已下单');
 
           this.data.placedForm = form;
           this.orderPlacedAt = Date.now();

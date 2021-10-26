@@ -8,7 +8,7 @@ import { CcysComponent } from './mar/ccy/ccys.component';
 import { PairsComponent } from './mar/pair/pairs.component';
 import { AssetsComponent } from './per/asset/assets.component';
 import { SpotOrdersComponent } from './per/order/spot-orders.component';
-import { PendingOrdersComponent } from './per/order/pending-orders.component';
+import { PendingOrdersComponent } from './per/order-pending/pending-orders.component';
 import { AssetsMergedComponent } from './per/asset/assets-merged.component';
 import { CcyQuotesComponent } from './mar/ccy-quote/ccy-quotes.component';
 import { LastTransComponent } from './per/last-trans/last-trans.component';

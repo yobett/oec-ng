@@ -303,13 +303,13 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
       form.price = +orderForm.price;
       if (this.tickerPriceAdjusted) {
         if (form.side === 'buy') {
-          if (form.price >= this.tickerPriceAdjusted) {
-            this.orderService.showMessage('（买入）限价未低于当前价格');
+          if (form.price > this.tickerPriceAdjusted) {
+            this.orderService.showMessage('（买入）限价高于当前价格');
             return;
           }
         } else {
-          if (form.price <= this.tickerPriceAdjusted) {
-            this.orderService.showMessage('（卖出）限价未高于当前价格');
+          if (form.price < this.tickerPriceAdjusted) {
+            this.orderService.showMessage('（卖出）限价低于当前价格');
             return;
           }
         }

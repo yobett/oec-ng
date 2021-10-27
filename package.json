@@ -7,7 +7,7 @@
     "start-stage-api": "ng serve --proxy-config proxy-stage.conf.json",
     "watch": "ng build --watch --configuration development",
     "build": "ng build --base-href /oec/",
-    "build-zip": "npm run build & cd dist & zip -r oec.zip oec",
+    "build-zip": "npm run build & cd dist & rimraf oec.zip & zip -r oec.zip oec",
     "build-stats": "ng build --base-href /oec/ --stats-json",
     "bundle-report": "webpack-bundle-analyzer dist/oec/stats.json",
     "test": "ng test"
@@ -63,6 +63,7 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "rimraf": "^3.0.2",
     "typescript": "~4.2.3",
     "webpack-bundle-analyzer": "^4.4.2"
   }

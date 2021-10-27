@@ -188,11 +188,11 @@ export class AssetsComponent extends SessionSupportComponent implements AfterVie
       });
   }
 
-  openOrderForm(exchangePair: ExchangePair) {
+  openOrderForm(exchangePair: ExchangePair, side: 'buy' | 'sell' = 'sell') {
     const {ex, symbol, baseCcy, quoteCcy} = exchangePair;
     const orderForm = new OrderForm();
     orderForm.symbol = symbol;
-    orderForm.side = 'sell';
+    orderForm.side = side;
     const baseAsset = this.allAssets.find(a => a.ex === ex && a.ccy === baseCcy);
     const quoteAsset = this.allAssets.find(a => a.ex === ex && a.ccy === quoteCcy);
 

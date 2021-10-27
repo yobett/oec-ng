@@ -131,7 +131,7 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #tradeAsQuote="matMenu">
-              <button mat-menu-item *ngFor="let pair of row.pairsResult.asQuote" (click)="openOrderForm(pair)">
+              <button mat-menu-item *ngFor="let pair of row.pairsResult.asQuote" (click)="openOrderForm(pair,'buy')">
                 <img class="ccy-logo" [src]="CoinLogoPath(pair.baseCcy)" alt="">
                 {{pair.baseCcy}}
                 &nbsp;-&nbsp;

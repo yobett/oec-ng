@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -35,7 +35,9 @@ export interface OrderFormParams {
   templateUrl: './order-form.component.html',
   styleUrls: ['./order-form.component.css']
 })
-export class OrderFormComponent implements OnInit {
+export class OrderFormComponent implements OnInit, AfterViewInit {
+  @ViewChild('baseSlider') baseSlider: MatSlider;
+  @ViewChild('quoteSlider') quoteSlider: MatSlider;
 
   CoinLogoPath = Ccy.LogoPath;
   baseAsset: Asset;
@@ -155,7 +157,25 @@ export class OrderFormComponent implements OnInit {
           this.baseAsset = assets.find(a => a.ccy === pair.baseCcy);
           this.quoteAsset = assets.find(a => a.ccy === pair.quoteCcy);
           this.setAvailableAsset();
+          this.tryInitSlider();
         });
+    }
+  }
+
+  ngAfterViewInit() {
+    this.tryInitSlider();
+  }
+
+  tryInitSlider() {
+    const orderForm = this.orderForm;
+    if (orderForm.side === 'sell') {
+      if (orderForm.quantity > 0 && this.baseSlider) {
+        this.baseQuantityInputChanged(this.baseSlider);
+      }
+    } else {
+      if (orderForm.quoteQuantity > 0 && this.quoteSlider) {
+        this.quoteQuantityInputChanged(this.quoteSlider);
+      }
     }
   }
 
@@ -232,7 +252,11 @@ export class OrderFormComponent implements OnInit {
       return;
     }
     const quantity = this.orderForm.quantity;
-    slider.value = quantity * this.sliderSteps / this.availableBaseAsset;
+    if (quantity >= this.availableBaseAsset) {
+      slider.value = this.sliderSteps;
+    } else {
+      slider.value = quantity * this.sliderSteps / this.availableBaseAsset;
+    }
   }
 
   quoteQuantityInputChanged(slider: MatSlider) {
@@ -240,7 +264,11 @@ export class OrderFormComponent implements OnInit {
       return;
     }
     const quoteQuantity = this.orderForm.quoteQuantity;
-    slider.value = quoteQuantity * this.sliderSteps / this.availableQuoteAsset;
+    if (quoteQuantity >= this.availableQuoteAsset) {
+      slider.value = this.sliderSteps;
+    } else {
+      slider.value = quoteQuantity * this.sliderSteps / this.availableQuoteAsset;
+    }
   }
 
   priceLimitChanged(change: MatCheckboxChange) {

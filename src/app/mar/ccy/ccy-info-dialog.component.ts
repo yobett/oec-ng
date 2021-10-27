@@ -16,6 +16,7 @@ import { Result } from '../../models/result';
 export class CcyInfoDialogComponent {
 
   ccy: Ccy;
+  concernChanged: (concerned: boolean) => void;
 
   CoinLogoPath = Ccy.LogoPath;
 
@@ -25,6 +26,7 @@ export class CcyInfoDialogComponent {
               private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public data: any) {
     this.ccy = data.ccy;
+    this.concernChanged = data.concernChanged;
   }
 
   showMeta(ccy: Ccy) {
@@ -42,11 +44,17 @@ export class CcyInfoDialogComponent {
         if (opr.code === Result.CODE_SUCCESS) {
           ccy.concerned = !ori;
           this.snackBar.open(ori ? '已取消关注' : '已加入关注');
+          if (this.concernChanged) {
+            this.concernChanged(ccy.concerned);
+          }
         }
       });
   }
 
-  static showCcyInfo(ccy: string, ccyService: CcyService, dialog: MatDialog) {
+  static showCcyInfo(ccy: string,
+                     ccyService: CcyService,
+                     dialog: MatDialog,
+                     concernChanged?: (concerned: boolean) => void) {
     ccyService.getByCode(ccy)
       .subscribe((ccy: Ccy) => {
           dialog.open(
@@ -54,7 +62,7 @@ export class CcyInfoDialogComponent {
               disableClose: true,
               width: '350px',
               maxWidth: '90vw',
-              data: {ccy}
+              data: {ccy, concernChanged}
             });
         }
       );

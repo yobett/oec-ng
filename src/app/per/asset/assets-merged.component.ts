@@ -257,7 +257,12 @@ export class AssetsMergedComponent extends SessionSupportComponent implements Af
   }
 
   showCcyInfo(asset: MergedAsset) {
-    CcyInfoDialogComponent.showCcyInfo(asset.ccy, this.ccyService, this.dialog);
+    CcyInfoDialogComponent.showCcyInfo(
+      asset.ccy,
+      this.ccyService,
+      this.dialog,
+      (concerned: boolean) => asset.ccyConcerned = concerned
+    );
   }
 
 }

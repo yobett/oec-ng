@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { ModelCurdService } from '../model-curd.service';
 import { ExchangePair, ExchangePairsResult, ExPair } from '../../models/mar/ex-pair';
 import { ListResult, Result, ValueResult } from '../../models/result';
-import { CurrentPrices, PairPrice } from '../../models/mar/pair-price';
+import { CurrentPrices, PairPrice, PriceRequest, PriceResponse } from '../../models/mar/pair-price';
 
 
 @Injectable()
@@ -39,10 +39,16 @@ export class PairService extends ModelCurdService<ExPair> {
   inquirePrices(preferDS: string = null): Observable<CurrentPrices> {
     let url = `${this.baseUrl}/concern/inquirePrices`;
     if (preferDS) {
-      url = url + '?preferDS=' + preferDS
+      url = url + '?preferDS=' + preferDS;
     }
     return this.pipeDefault(this.http.post<ValueResult<CurrentPrices>>(url, null))
       .pipe(map(result => result.value));
+  }
+
+  inquirePricesEx(priceRequests: PriceRequest[]): Observable<PriceResponse[]> {
+    const url = `${this.baseUrl}/inquirePrices`;
+    return this.pipeDefault(this.http.post<ListResult<PriceResponse>>(url, priceRequests))
+      .pipe(map(result => result.list));
   }
 
   inquirePrice(ex: string, symbol: string): Observable<number | string> {

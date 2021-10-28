@@ -1,9 +1,12 @@
 import { Model } from '../model';
 
-export interface ExchangePair {
-  ex: string;
+export interface PairBQ {
   baseCcy: string;
   quoteCcy: string;
+}
+
+export interface ExchangePair extends PairBQ {
+  ex: string;
   symbol: string;
 }
 
@@ -13,7 +16,7 @@ export interface ExchangePairsResult {
   asQuote: ExchangePair[];
 }
 
-export class ExPair extends Model {
+export class ExPair extends Model implements PairBQ {
   baseCcy: string;
   quoteCcy: string;
   concerned: boolean;
@@ -23,7 +26,7 @@ export class ExPair extends Model {
   hbSymbol: string;
 }
 
-export class ExPairFilter {
+export class ExPairFilter implements PairBQ {
   ex: string;
   baseCcy: string;
   quoteCcy: string;

@@ -6,11 +6,6 @@ h3 .head-field {
   vertical-align: text-bottom;
 }
 
-.head-field .ccy-code {
-  display: inline-block;
-  margin-left: .5em;
-}
-
 h3 .head-field:not(:last-child) {
   margin-right: 1em;
 }

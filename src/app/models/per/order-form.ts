@@ -1,4 +1,5 @@
 export class OrderForm {
+  ex: string;
   symbol: string;
   side: 'buy' | 'sell' = 'buy';
   type: 'market' | 'limit' = 'market';
@@ -11,6 +12,16 @@ export class OrderForm {
 }
 
 export class CancelOrderForm {
+  ex: string;
   orderId: string;
   symbol?: string;
 }
+
+
+export interface PlaceOrderResult {
+  ex: string;
+  symbol: string;
+  success: boolean;
+  message?: string;
+}
+

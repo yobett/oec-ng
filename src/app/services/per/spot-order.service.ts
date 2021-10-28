@@ -57,18 +57,19 @@ export class SpotOrderService extends ModelCurdService<SpotOrder> {
     return super.list2(url, params);
   }
 
-  placeOrder(ex: string, form: OrderForm): Observable<any> {
-    const url = this.baseUrl + '/placeOrder/' + ex;
+  placeOrder(form: OrderForm): Observable<any> {
+    const url = this.baseUrl + '/placeOrder';
     return this.pipeDefault(this.http.post<ValueResult<any>>(url, form))
       .pipe(map(result => result.value));
   }
 
   cancelOrder(order: SpotOrder): Observable<any> {
     const form: CancelOrderForm = {
+      ex: order.ex,
       orderId: order.orderId,
       symbol: order.pairSymbol
     };
-    const url = this.baseUrl + '/cancelOrder/' + order.ex;
+    const url = this.baseUrl + '/cancelOrder';
     return this.pipeDefault(this.http.post<ValueResult<any>>(url, form))
       .pipe(map(result => result.value));
   }

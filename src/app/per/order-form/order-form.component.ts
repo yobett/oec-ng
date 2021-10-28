@@ -104,34 +104,6 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
     this.setAvailableAsset();
   }
 
-  static openOrderForm(dialog: MatDialog, data: OrderFormParams): MatDialogRef<OrderFormComponent, number> {
-    return dialog.open(
-      OrderFormComponent, {
-        disableClose: true,
-        width: '420px',
-        maxWidth: '96vw',
-        data
-      });
-  }
-
-  static afterOrderPlacedDelay(ref: MatDialogRef<OrderFormComponent, number>, action: () => void) {
-    ref.afterClosed().subscribe(orderPlacedAt => {
-      if (!orderPlacedAt) {
-        return;
-      }
-      const delay = PlaceOrderRefreshDelay;
-      const elapse = Date.now() - orderPlacedAt;
-      const remain = delay - elapse;
-      if (remain <= 0) {
-        action();
-      } else {
-        setTimeout(() => {
-          action();
-        }, remain);
-      }
-    });
-  }
-
   private setAvailableAsset() {
     if (!this.baseAsset && !this.quoteAsset) {
       return;
@@ -286,9 +258,9 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
 
   placeOrder() {
     const exchangePair = this.exchangePair;
-    const ex = exchangePair.ex;
     const orderForm = this.orderForm;
     const form: OrderForm = {
+      ex: exchangePair.ex,
       side: orderForm.side,
       baseCcy: exchangePair.baseCcy,
       quoteCcy: exchangePair.quoteCcy,
@@ -347,7 +319,7 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
     }
 
     this.placingOrder = true;
-    this.orderService.placeOrder(ex, form)
+    this.orderService.placeOrder(form)
       .subscribe(res => {
           this.placingOrder = false;
           if (form.type === 'market') {
@@ -366,4 +338,33 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
   closeDialog() {
     this.dialogRef.close(this.orderPlacedAt);
   }
+
+  static openOrderForm(dialog: MatDialog, data: OrderFormParams): MatDialogRef<OrderFormComponent, number> {
+    return dialog.open(
+      OrderFormComponent, {
+        disableClose: true,
+        width: '420px',
+        maxWidth: '96vw',
+        data
+      });
+  }
+
+  static afterOrderPlacedDelay(ref: MatDialogRef<OrderFormComponent, number>, action: () => void) {
+    ref.afterClosed().subscribe(orderPlacedAt => {
+      if (!orderPlacedAt) {
+        return;
+      }
+      const delay = PlaceOrderRefreshDelay;
+      const elapse = Date.now() - orderPlacedAt;
+      const remain = delay - elapse;
+      if (remain <= 0) {
+        action();
+      } else {
+        setTimeout(() => {
+          action();
+        }, remain);
+      }
+    });
+  }
+
 }

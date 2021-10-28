@@ -228,27 +228,12 @@ export class InstPriceComponent extends SessionSupportComponent implements After
       });
   }
 
-  openKlineChart(exp: PairPrice) {
-    let ex: string;
-    if (exp.lastTrans) {
-      ex = exp.lastTrans.ex;
-    } else if (exp.currentPrice) {
-      ex = exp.currentPrice.source;
-    }
-    if (!ex) {
-      if (exp.baSymbol) {
-        ex = Exch.CODE_BA;
-      } else if (exp.oeSymbol) {
-        ex = Exch.CODE_OE;
-      } else if (exp.hbSymbol) {
-        ex = Exch.CODE_HB;
-      }
-    }
+  openKlineChart(pair: PairPrice, ex: string) {
     KlineChartDialogComponent.showKlineChart(
       this.dialog,
       {
         ex,
-        pair: exp
+        pair
       });
   }
 

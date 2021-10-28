@@ -349,7 +349,8 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
       });
   }
 
-  static afterOrderPlacedDelay(ref: MatDialogRef<OrderFormComponent, number>, action: () => void) {
+  static afterOrderPlacedDelay(ref: MatDialogRef<OrderFormComponent, number>,
+                               action: () => void) {
     ref.afterClosed().subscribe(orderPlacedAt => {
       if (!orderPlacedAt) {
         return;

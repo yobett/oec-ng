@@ -1,0 +1,125 @@
+<h3 mat-dialog-title>
+  全部卖出
+  （To &nbsp;
+  <span class="head-field ccy-logo-code">
+      <img class="ccy-logo" [src]="CoinLogoPath('USDT')" alt="">
+      <span class="ccy-code">USDT</span>
+  </span>
+  ）
+</h3>
+
+<mat-dialog-content>
+
+  <div class="info-bar">
+
+    <div class="field-box">
+      <label class="field-label">交易所</label>
+      <mat-button-toggle-group [value]="filterEx"
+                               (change)="exGroupChanged($event)">
+        <mat-button-toggle value="all">全部</mat-button-toggle>
+        <mat-button-toggle [value]="ex.code" *ngFor="let ex of $exchs | async">
+          {{ex.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    <div class="field-box">
+      <mat-checkbox [(ngModel)]="priceLimit" class="field-label">
+        限价
+      </mat-checkbox>
+
+      <mat-radio-group [(ngModel)]="priceIncreasePercent" [disabled]="!priceLimit">
+        <mat-radio-button name="price-inc" [value]="0.1" class="order-type-option">+0.1%</mat-radio-button>
+        <mat-radio-button name="price-inc" [value]="0.5" class="order-type-option">+0.5%</mat-radio-button>
+        <mat-radio-button name="price-inc" [value]="1" class="order-type-option">+1.0%</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
+  </div>
+
+  <table mat-table dense class="full-width" matSort matSortActive="availableValue" matSortDirection="desc">
+
+    <ng-container matColumnDef="selected">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        <mat-icon>check-box</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox [(ngModel)]="row.selected"></mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#&nbsp;&nbsp;</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ex">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>交易所</th>
+      <td mat-cell *matCellDef="let row">{{row.ex}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ccy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.ccy)" alt="">
+        <span class="ccy-code">{{row.ccy}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="available">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>可用</th>
+      <td mat-cell *matCellDef="let row">{{row.available | moneysum}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="availableValue">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>折美元</th>
+      <td mat-cell *matCellDef="let row">{{row.availableValue | moneysum}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="usdtPrice">
+      <th mat-header-cell *matHeaderCellDef>价格（-USDT）</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.price | effectdigits}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="execResult">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header start="desc">结果</th>
+      <td mat-cell class="exec-result" *matCellDef="let row">
+        <ng-template [ngIf]="row.placeOrderResult">
+          <mat-icon class="check" *ngIf="row.placeOrderResult.success">check_circle_outline</mat-icon>
+          <mat-icon class="warn-color clickable" *ngIf="!row.placeOrderResult.success"
+                    (click)="showErrMessage(row)">
+            error_outline
+          </mat-icon>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end" class="actions">
+  <span>
+    <ng-template [ngIf]="!orderPlacedAt">
+      选择：{{selectedCount}}
+    </ng-template>
+    <ng-template [ngIf]="orderPlacedAt">
+      共 {{totalOrdersCount}} 单，失败
+      <span [class.warn-color]="failedOrdersCount>0">{{failedOrdersCount}}</span>
+      单
+    </ng-template>
+    &nbsp;
+  </span>
+  <span>
+    <button mat-button (click)="closeDialog()">关闭</button>
+    <button mat-button color="accent" (click)="placeOrders()" [disabled]="placingOrder||!!orderPlacedAt">
+      下单
+    </button>
+  </span>
+</div>

@@ -16,6 +16,20 @@
       <mat-icon>refresh</mat-icon>
       刷新价格
     </button>
+
+    <button mat-button [matMenuTriggerFor]="menuActions">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menuActions="matMenu">
+      <button mat-menu-item>
+        <mat-icon>pending_actions</mat-icon>
+        当前挂单
+      </button>
+      <button mat-menu-item (click)="sellAll()">
+        <mat-icon>done_all</mat-icon>
+        全部卖出（ &gt; $10）
+      </button>
+    </mat-menu>
   </mat-toolbar>
 
   <table mat-table class="full-width" matSort matSortActive="updateTs" matSortDirection="desc">

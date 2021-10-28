@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonToggleChange } from '@angular/material/button-toggle/button-toggle';
 
 import { Observable } from 'rxjs';
@@ -29,6 +29,7 @@ import { OrdersPopupData, SpotOrdersDialogComponent } from '../order/spot-orders
 import { AssetsStructureComponent } from './assets-structure.component';
 import { CcyInfoDialogComponent } from '../../mar/ccy/ccy-info-dialog.component';
 import { CcyService } from '../../services/mar/ccy.service';
+import { AssetsClearoutDialogComponent } from './assets-clearout-dialog.component';
 
 @Component({
   selector: 'app-assets',
@@ -200,9 +201,7 @@ export class AssetsComponent extends SessionSupportComponent implements AfterVie
 
     const ref = OrderFormComponent.openOrderForm(this.dialog, data);
     OrderFormComponent.afterOrderPlacedDelay(ref, () => {
-      if (data.placedForm && data.placedForm.type === 'market') {
-        this.refresh();
-      }
+      this.refresh();
     });
   }
 
@@ -241,6 +240,20 @@ export class AssetsComponent extends SessionSupportComponent implements AfterVie
         items,
         ex
       });
+  }
+
+
+  sellAll() {
+    if (!this.allAssets || this.allAssets.length === 0) {
+      return;
+    }
+    const dialogRef = AssetsClearoutDialogComponent.clearoutAssets(this.dialog,
+      {assets: this.allAssets, availableValueThreshold: 10}
+    );
+
+    AssetsClearoutDialogComponent.afterOrdersPlacedDelay(dialogRef, () => {
+      this.refresh();
+    });
   }
 
   showCcyInfo(asset: Asset) {

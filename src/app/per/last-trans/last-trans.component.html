@@ -88,14 +88,14 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" align="end">
 
-        <button mat-button (click)="showOrderDetail(row)" *ngIf="row.oid">
-          <mat-icon>details</mat-icon>
-          订单
-        </button>
         <button mat-button [matMenuTriggerFor]="actions">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #actions="matMenu">
+          <button mat-menu-item (click)="showOrderDetail(row)" *ngIf="row.oid">
+            <mat-icon>details</mat-icon>
+            详情
+          </button>
           <!--<button mat-menu-item (click)="edit(row)">
             <mat-icon>edit</mat-icon>
             修改

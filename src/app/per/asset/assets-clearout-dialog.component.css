@@ -1,0 +1,23 @@
+h3 .head-field {
+  display: inline-block;
+}
+
+.head-field .ccy-logo {
+  vertical-align: text-bottom;
+}
+
+h3 .head-field:not(:last-child) {
+  margin-right: 1em;
+}
+
+.field-label {
+  margin-right: 2em;
+}
+
+.actions {
+  justify-content: space-between;
+}
+
+td.exec-result .mat-icon {
+  vertical-align: middle;
+}

@@ -6,8 +6,8 @@ import { map } from 'rxjs/operators';
 
 import { ModelCurdService } from '../model-curd.service';
 import { OrderTimeLineQueryForm, SpotOrder, SpotOrderFilter } from '../../models/per/spot-order';
-import { CancelOrderForm, OrderForm } from '../../models/per/order-form';
-import { ValueResult } from '../../models/result';
+import { CancelOrderForm, OrderForm, PlaceOrderResult } from '../../models/per/order-form';
+import { ListResult, ValueResult } from '../../models/result';
 
 
 @Injectable()
@@ -61,6 +61,12 @@ export class SpotOrderService extends ModelCurdService<SpotOrder> {
     const url = this.baseUrl + '/placeOrder';
     return this.pipeDefault(this.http.post<ValueResult<any>>(url, form))
       .pipe(map(result => result.value));
+  }
+
+  placeMultiOrders(forms: OrderForm[]): Observable<PlaceOrderResult[]> {
+    const url = this.baseUrl + '/placeMultiOrders';
+    return this.pipeDefault(this.http.post<ListResult<PlaceOrderResult>>(url, forms))
+      .pipe(map(result => result.list));
   }
 
   cancelOrder(order: SpotOrder): Observable<any> {

@@ -84,6 +84,9 @@ export class MergedAsset {
     if (ma._frozenTooltip) {
       return ma._frozenTooltip;
     }
+    if (ma.frozen === 0) {
+      return null;
+    }
 
     let tooltip = ma.frozenDetail
       .map(([ex, frozen]) => `${ex}: ${frozen}`)
@@ -102,6 +105,9 @@ export class MergedAsset {
     }
     if (ma._frozenValueTooltip) {
       return ma._frozenValueTooltip;
+    }
+    if (ma.frozenValue === 0) {
+      return null;
     }
 
     let tooltip = ma.frozenValueDetail

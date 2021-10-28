@@ -28,6 +28,8 @@ import { CcyInfoDialogComponent } from '../ccy/ccy-info-dialog.component';
 import { CcyService } from '../../services/mar/ccy.service';
 import { OrderDetailDialogComponent } from '../../per/order/order-detail-dialog.component';
 import { SpotOrder } from '../../models/per/spot-order';
+import { AssetsClearoutDialogComponent } from '../../per/asset/assets-clearout-dialog.component';
+import { AssetService } from '../../services/per/asset.service';
 
 @Component({
   selector: 'app-inst-price',
@@ -68,6 +70,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
               private pairService: PairService,
               private exchService: ExchService,
               private ccyService: CcyService,
+              private assetService: AssetService,
               private orderService: SpotOrderService,
               private effectDigits: EffectDigitsPipe,
               private snackBar: MatSnackBar,
@@ -234,6 +237,23 @@ export class InstPriceComponent extends SessionSupportComponent implements After
       {
         ex,
         pair
+      });
+  }
+
+  sellAll() {
+
+    this.assetService.list2(null, {filterValue: 10})
+      .subscribe(assets => {
+        if (!assets || assets.length == 0) {
+          return;
+        }
+
+        const dialogRef = AssetsClearoutDialogComponent.clearoutAssets(this.dialog,
+          {assets, availableValueThreshold: 10}
+        );
+        AssetsClearoutDialogComponent.afterOrdersPlacedDelay(dialogRef, () => {
+          this.loadData();
+        });
       });
   }
 

@@ -25,6 +25,10 @@
         <mat-icon>pending_actions</mat-icon>
         当前挂单
       </button>
+      <button mat-menu-item (click)="showCurrentAssets()">
+        <mat-icon>local_atm</mat-icon>
+        当前资产（ &gt; $10）
+      </button>
       <button mat-menu-item (click)="sellAll()" [disabled]="processes.loadingAssets">
         <mat-icon>done_all</mat-icon>
         全部卖出（ &gt; $10）

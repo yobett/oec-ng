@@ -65,6 +65,7 @@ import { CcyInfoDialogComponent } from './mar/ccy/ccy-info-dialog.component';
 import { CcyPairsDialogComponent } from './mar/pair/ccy-pairs-dialog.component';
 import { AssetsClearoutDialogComponent } from './per/asset/assets-clearout-dialog.component';
 import { PendingOrdersDialogComponent } from './per/order-pending/pending-orders-dialog.component';
+import { AssetsDialogComponent } from './per/asset/assets-dialog.component';
 
 
 @NgModule({
@@ -134,6 +135,7 @@ import { PendingOrdersDialogComponent } from './per/order-pending/pending-orders
     CcyQuoteDialogComponent,
     CcyInfoDialogComponent,
     CcyPairsDialogComponent,
+    AssetsDialogComponent,
     AssetsClearoutDialogComponent,
     PendingOrdersDialogComponent
   ],

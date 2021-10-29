@@ -1,0 +1,52 @@
+<h3 mat-dialog-title>
+  当前资产（ &gt; ${{availableValueThreshold}}）
+</h3>
+
+<mat-dialog-content>
+
+  <table mat-table dense class="full-width" matSort matSortActive="availableValue" matSortDirection="desc">
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#&nbsp;&nbsp;</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ex">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>交易所</th>
+      <td mat-cell *matCellDef="let row">{{row.ex}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ccy">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.ccy)" alt="">
+        <span class="ccy-code">{{row.ccy}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>现价（美元）</th>
+      <td mat-cell *matCellDef="let row">{{row.price | money}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="available">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>可用</th>
+      <td mat-cell *matCellDef="let row">{{row.available | moneysum}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="availableValue">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>折美元</th>
+      <td mat-cell *matCellDef="let row">{{row.availableValue | moneysum}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close="">关闭</button>
+</div>

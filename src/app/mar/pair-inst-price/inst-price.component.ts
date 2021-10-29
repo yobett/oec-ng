@@ -31,6 +31,7 @@ import { SpotOrder } from '../../models/per/spot-order';
 import { AssetsClearoutDialogComponent } from '../../per/asset/assets-clearout-dialog.component';
 import { AssetService } from '../../services/per/asset.service';
 import { PendingOrdersDialogComponent } from '../../per/order-pending/pending-orders-dialog.component';
+import { AssetsDialogComponent } from '../../per/asset/assets-dialog.component';
 
 @Component({
   selector: 'app-inst-price',
@@ -276,6 +277,10 @@ export class InstPriceComponent extends SessionSupportComponent implements After
         },
         error => this.processes.loadingAssets = false,
         () => this.processes.loadingAssets = false);
+  }
+
+  showCurrentAssets() {
+    AssetsDialogComponent.showCurrentAssets(this.assetService, this.dialog);
   }
 
 }

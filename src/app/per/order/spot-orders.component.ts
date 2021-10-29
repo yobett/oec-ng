@@ -26,6 +26,8 @@ import { ExchangePair } from '../../models/mar/ex-pair';
 import { OrderForm } from '../../models/per/order-form';
 import { OrderDetailDialogComponent } from './order-detail-dialog.component';
 import { fullLowerCaseToFullUpperCase } from '../../common/utils';
+import { CcyService } from '../../services/mar/ccy.service';
+import { QuoteCcyOptions } from '../../config';
 
 @Component({
   selector: 'app-spot-orders',
@@ -43,8 +45,11 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
   displayedColumns: string[] = ['index', 'ex', 'baseCcy', 'quoteCcy', /*'pairSymbol',*/ /*'orderId',*/ 'side',
     'type', 'status', 'avgPrice', 'execQty', 'quoteAmount', 'createTs', /*'createdAt'/!*First Sync*!/,*/ 'actions'];
 
+  quoteCcyOptions = QuoteCcyOptions;
   CoinLogoPath = Ccy.LogoPath;
+
   $exchs: Observable<Exch[]>;
+  $ccys: Observable<Ccy[]>;
 
   filterEx: string = 'all';
   filterForm: any & SpotOrderFilter = {};
@@ -54,7 +59,8 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
 
   constructor(protected sessionService: SessionService,
               private exchService: ExchService,
-              private spotOrderService: SpotOrderService,
+              private ccyService: CcyService,
+              private orderService: SpotOrderService,
               private dataSyncService: DataSyncService,
               private dialog: MatDialog) {
     super(sessionService);
@@ -62,7 +68,7 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
 
   protected onInit() {
     super.onInit();
-    this.dataSource = new PageableDatasource<SpotOrder>(this.spotOrderService);
+    this.dataSource = new PageableDatasource<SpotOrder>(this.orderService);
     this.dataSource.paramsTransformer = (form) => {
       form = {...form};
       let mom = form.createTsTo;
@@ -80,6 +86,7 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
 
   protected withSession(user: User) {
     this.$exchs = this.exchService.list2();
+    this.$ccys = this.ccyService.listConcerned();
   }
 
   ngAfterViewInit() {
@@ -107,6 +114,11 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
     } else {
       this.filterForm.ex = this.filterEx;
     }
+    this.filter();
+  }
+
+  baseCcySelected(baseCcy: string) {
+    this.filterForm.baseCcy = baseCcy;
     this.filter();
   }
 
@@ -181,10 +193,10 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
     if (!confirm('确定要删除吗？')) {
       return;
     }
-    this.spotOrderService.remove(spotOrder)
+    this.orderService.remove(spotOrder)
       .subscribe((opr: Result) => {
         if (opr.code !== Result.CODE_SUCCESS) {
-          this.spotOrderService.showError(opr);
+          this.orderService.showError(opr);
           return;
         }
         this.dataSource.refresh();

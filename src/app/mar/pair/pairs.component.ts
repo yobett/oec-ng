@@ -43,20 +43,19 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<ExPair>;
 
-  quoteCcyOptions = QuoteCcyOptions;
-
   dataSource: PageableDatasource<ExPair>;
 
   displayedColumns: string[] = ['index', 'concerned', 'baseCcy', 'quoteCcy',
     'oeSymbol', 'baSymbol', 'hbSymbol', /*'createdAt',*/ 'actions'];
+
+  CoinLogoPath = Ccy.LogoPath;
+  quoteCcyOptions = QuoteCcyOptions;
 
   $ccys: Observable<Ccy[]>;
   $exchs: Observable<Exch[]>;
   filterForm: any & ExPairFilter = this.defaultFilter();
 
   processes: { [name: string]: boolean } = {};
-
-  CoinLogoPath = Ccy.LogoPath;
 
   constructor(protected sessionService: SessionService,
               private ccyService: CcyService,

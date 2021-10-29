@@ -29,36 +29,57 @@
 
   <div class="table-filter-form">
 
-    <!--<mat-form-field>
-      <input matInput placeholder="交易对 %" name="pairSymbol" [(ngModel)]="filterForm['pairSymbolLike']"
-             (keyup.enter)="filter()">
-    </mat-form-field>-->
+    <div>
+      <span class="field-label subordinated">基础币种</span>
+      <button mat-button [color]="filterForm['baseCcy']===ccy.code? 'accent':null"
+              *ngFor="let ccy of $ccys | async"
+              (click)="baseCcySelected(ccy.code)">
+        <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt="">
+        {{ccy.code}}
+      </button>
+    </div>
 
-    <mat-form-field>
-      <input matInput placeholder="基础币种" name="baseCcy" [(ngModel)]="filterForm['baseCcy']"
-             (keyup.enter)="filter()">
-    </mat-form-field>
+    <div class="operation-bar">
 
-    <mat-form-field>
-      <input matInput placeholder="报价币种" name="quoteCcy" [(ngModel)]="filterForm['quoteCcy']"
-             (keyup.enter)="filter()">
-    </mat-form-field>
+      <!--<mat-form-field>
+        <input matInput placeholder="交易对 %" name="pairSymbol" [(ngModel)]="filterForm['pairSymbolLike']"
+               (keyup.enter)="filter()">
+      </mat-form-field>-->
 
-    <mat-form-field>
-      <input matInput [matDatepicker]="dateToPicker" placeholder="截止日期" [max]="today"
-             [(ngModel)]="filterForm['createTsTo']" (dblclick)="filterForm['createTsTo']=undefined">
-      <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
-      <mat-datepicker #dateToPicker></mat-datepicker>
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="基础币种" name="baseCcy" [(ngModel)]="filterForm['baseCcy']"
+               (keyup.enter)="filter()">
+      </mat-form-field>
 
-    <button mat-button (click)="filter()">
-      <mat-icon>search</mat-icon>
-      筛选
-    </button>
-    <button mat-button (click)="resetFilter()">
-      <mat-icon>block</mat-icon>
-      全部
-    </button>
+      <mat-form-field>
+        <input matInput placeholder="报价币种" name="quoteCcy" [(ngModel)]="filterForm['quoteCcy']"
+               [matAutocomplete]="quoteCcyAuto" (keyup.enter)="filter()">
+        <mat-autocomplete #quoteCcyAuto="matAutocomplete">
+          <mat-option *ngFor="let option of quoteCcyOptions" [value]="option">
+          <span class="ccy-logo-code">
+            <img class="ccy-logo" [src]="CoinLogoPath(option)" alt="">
+            <span class="ccy-code">{{option}}</span>
+          </span>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [matDatepicker]="dateToPicker" placeholder="截止日期" [max]="today"
+               [(ngModel)]="filterForm['createTsTo']" (dblclick)="filterForm['createTsTo']=undefined">
+        <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+        <mat-datepicker #dateToPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-button (click)="filter()">
+        <mat-icon>search</mat-icon>
+        筛选
+      </button>
+      <button mat-button (click)="resetFilter()">
+        <mat-icon>block</mat-icon>
+        全部
+      </button>
+    </div>
   </div>
 
   <table mat-table class="full-width" matSort matSortActive="createTs" matSortDirection="desc">

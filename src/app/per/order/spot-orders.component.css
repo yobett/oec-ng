@@ -1,0 +1,10 @@
+.field-label {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.operation-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}

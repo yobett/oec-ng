@@ -323,9 +323,9 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
       .subscribe(res => {
           this.placingOrder = false;
           if (form.type === 'market') {
-            this.snackBar.open('已下单（市价单），稍后将自动刷新');
+            this.snackBar.open('已下单');
           } else {
-            this.snackBar.open('已下单（限价单），请到“未完成订单”页查看');
+            this.snackBar.open('已下单（限价单），可在 “当前挂单” 页查看');
           }
 
           this.data.placedForm = form;

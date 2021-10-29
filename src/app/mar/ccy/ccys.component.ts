@@ -23,6 +23,7 @@ import { QuoteService } from '../../services/mar/quote.service';
 import { CcyQuoteDialogComponent } from '../ccy-quote/ccy-quote-dialog.component';
 import { CcyPairsDialogComponent } from '../pair/ccy-pairs-dialog.component';
 import { PairService } from '../../services/mar/pair.service';
+import { fullLowerCaseToFullUpperCase } from '../../common/utils';
 
 @Component({
   selector: 'app-ccys',
@@ -78,6 +79,7 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
 
   filter() {
     delete this.filterForm.concerned;
+    fullLowerCaseToFullUpperCase(this.filterForm, 'code');
     this.dataSource.refresh(this.filterForm);
   }
 

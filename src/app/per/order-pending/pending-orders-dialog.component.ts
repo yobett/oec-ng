@@ -1,18 +1,12 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 
 import { SpotOrder } from '../../models/per/spot-order';
-import { SessionSupportComponent } from '../../common/session-support.component';
-import { SessionService } from '../../services/sys/session.service';
-import { User } from '../../models/sys/user';
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { TableDatasource } from '../../common/table-datasource';
-import { Exch } from '../../models/sys/exch';
-import { ExchService } from '../../services/sys/exch.service';
 import { Ccy } from '../../models/mar/ccy';
 import { OrderDetailDialogComponent } from '../order/order-detail-dialog.component';
 import { ExchangePair } from '../../models/mar/ex-pair';
@@ -20,63 +14,42 @@ import { OrderForm } from '../../models/per/order-form';
 import { OrderFormComponent, OrderFormParams } from '../order-form/order-form.component';
 
 @Component({
-  selector: 'app-pending-orders',
-  templateUrl: './pending-orders.component.html',
-  styleUrls: ['./pending-orders.component.css']
+  selector: 'app-pending-orders-dialog',
+  templateUrl: './pending-orders-dialog.component.html',
+  styleUrls: ['./pending-orders-dialog.component.css']
 })
-export class PendingOrdersComponent extends SessionSupportComponent implements AfterViewInit, OnInit {
+export class PendingOrdersDialogComponent implements AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<SpotOrder>;
 
   dataSource: TableDatasource<SpotOrder>;
-  $exchs: Observable<Exch[]>;
   CoinLogoPath = Ccy.LogoPath;
+  orders: SpotOrder[];
 
-  displayedColumns: string[] = ['index', 'ex', 'baseCcy', 'quoteCcy', /*'pairSymbol', 'orderId',*/ 'side',
-    'type', 'status', 'askPrice', 'askQty', 'createTs', 'actions'];
+  displayedColumns: string[] = ['index', 'ex', 'baseCcy', 'quoteCcy', 'side',
+    /*'type', 'status',*/ 'askPrice', 'askQty', 'createTs', 'actions'];
 
   processes: { [name: string]: boolean } = {};
 
-  constructor(protected sessionService: SessionService,
-              private spotService: SpotOrderService,
-              private exchService: ExchService,
+  constructor(private orderService: SpotOrderService,
               private snackBar: MatSnackBar,
-              private dialog: MatDialog) {
-    super(sessionService);
-  }
-
-  protected onInit() {
-    super.onInit();
+              private dialog: MatDialog,
+              @Inject(MAT_DIALOG_DATA) public data: { orders: SpotOrder[] }) {
+    this.orders = data.orders;
     this.dataSource = new TableDatasource<SpotOrder>();
   }
 
-  protected withSession(user: User) {
-    this.$exchs = this.exchService.list2();
-    this.fetchPendingOrders();
-  }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
     this.table.dataSource = this.dataSource;
-  }
-
-  fetchPendingOrders() {
-    this.processes.fetchPendingOrders = true;
-    this.spotService.fetchPendingOrders()
-      .subscribe((orders: SpotOrder[]) => {
-          this.processes.fetchPendingOrders = false;
-          this.dataSource.setData(orders);
-          this.snackBar.open('当前挂单查询成功');
-        },
-        error => this.processes.fetchPendingOrders = false,
-        () => this.processes.fetchPendingOrders = false
-      );
+    this.dataSource.setData(this.orders);
   }
 
   fetchPendingOrdersFor(ex: string) {
     this.processes['pending-' + ex] = true;
-    this.spotService.fetchPendingOrdersFor(ex)
+    this.orderService.fetchPendingOrdersFor(ex)
       .subscribe((orders: SpotOrder[]) => {
           this.processes['pending-' + ex] = false;
           this.snackBar.open('已刷新（' + ex + '）');
@@ -98,12 +71,11 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
       return;
     }
     this.processes['cancel-' + order.orderId] = true;
-    this.spotService.cancelOrder(order)
+    this.orderService.cancelOrder(order)
       .subscribe((res: any) => {
           this.processes['cancel-' + order.orderId] = false;
           this.snackBar.open('订单已取消');
           this.dataSource.remove(order);
-          // this.fetchPendingOrdersFor(order.ex);
         },
         error => this.processes['cancel-' + order.orderId] = false,
         () => this.processes['cancel-' + order.orderId] = false
@@ -115,11 +87,10 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
       return;
     }
     this.processes['cancel-' + order.orderId] = true;
-    this.spotService.cancelOrder(order)
+    this.orderService.cancelOrder(order)
       .subscribe((res: any) => {
           this.processes['cancel-' + order.orderId] = false;
           this.snackBar.open('订单已取消');
-
           this.openOrderForm(order);
         },
         error => this.processes['cancel-' + order.orderId] = false,
@@ -128,7 +99,6 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
   }
 
   openOrderForm(order: SpotOrder) {
-
     const exchangePair: ExchangePair = {
       ex: order.ex,
       symbol: order.pairSymbol,
@@ -154,6 +124,16 @@ export class PendingOrdersComponent extends SessionSupportComponent implements A
 
   trackBy(index: number, order: SpotOrder) {
     return order.orderId;
+  }
+
+  static showPendingOrders(dialog: MatDialog, orders: SpotOrder[]) {
+    return dialog.open(
+      PendingOrdersDialogComponent, {
+        disableClose: true,
+        width: '640px',
+        maxWidth: '90vw',
+        data: {orders}
+      });
   }
 
 }

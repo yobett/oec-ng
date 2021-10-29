@@ -7,6 +7,8 @@ import { QuoteService } from '../../services/mar/quote.service';
 import { CcyMetaComponent } from './ccy-meta.component';
 import { CcyQuoteDialogComponent } from '../ccy-quote/ccy-quote-dialog.component';
 import { Result } from '../../models/result';
+import { CcyPairsDialogComponent } from '../pair/ccy-pairs-dialog.component';
+import { PairService } from '../../services/mar/pair.service';
 
 @Component({
   selector: 'app-ccy-info-dialog',
@@ -22,6 +24,7 @@ export class CcyInfoDialogComponent {
 
   constructor(private ccyService: CcyService,
               private quoteService: QuoteService,
+              private pairService: PairService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -35,6 +38,15 @@ export class CcyInfoDialogComponent {
 
   showQuote(ccy: Ccy) {
     CcyQuoteDialogComponent.showQuote(ccy.code, this.quoteService, this.dialog);
+  }
+
+  showPairsAsBase(ccy: Ccy) {
+    const baseCcy = ccy.code;
+    this.pairService.page2(null, {baseCcy, pageSize: 30})
+      .subscribe(countList => {
+        const pairs = countList.list;
+        CcyPairsDialogComponent.showPairs(this.dialog, {baseCcy, pairs});
+      });
   }
 
   toggleConcern(ccy: Ccy) {

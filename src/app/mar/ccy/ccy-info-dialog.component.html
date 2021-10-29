@@ -18,13 +18,18 @@
     </dd>
     <dt>查看</dt>
     <dd>
+      <button mat-button (click)="showMeta(ccy)">
+        <mat-icon>list</mat-icon>
+        元数据
+      </button>
+      <br><br>
       <button mat-button (click)="showQuote(ccy)">
         <mat-icon>attach_money</mat-icon>
         币价
       </button>
-      <button mat-button (click)="showMeta(ccy)">
-        <mat-icon>list</mat-icon>
-        元数据
+      <button mat-button (click)="showPairsAsBase(ccy)">
+        <mat-icon>sync_alt</mat-icon>
+        交易对
       </button>
     </dd>
     <dt>信息页</dt>

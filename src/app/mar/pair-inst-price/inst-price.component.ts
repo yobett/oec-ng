@@ -30,6 +30,7 @@ import { OrderDetailDialogComponent } from '../../per/order/order-detail-dialog.
 import { SpotOrder } from '../../models/per/spot-order';
 import { AssetsClearoutDialogComponent } from '../../per/asset/assets-clearout-dialog.component';
 import { AssetService } from '../../services/per/asset.service';
+import { PendingOrdersDialogComponent } from '../../per/order-pending/pending-orders-dialog.component';
 
 @Component({
   selector: 'app-inst-price',
@@ -106,7 +107,8 @@ export class InstPriceComponent extends SessionSupportComponent implements After
               }
             }
             return pps;
-          }));
+          })
+      );
     this.dataSource.setObservable(obs);
 
     this.fetchPrices(first);
@@ -240,21 +242,40 @@ export class InstPriceComponent extends SessionSupportComponent implements After
       });
   }
 
-  sellAll() {
+  showPendingOrders() {
+    this.processes.loadingPendingOrders = true;
+    this.orderService.fetchPendingOrders()
+      .subscribe((orders: SpotOrder[]) => {
+          this.processes.loadingPendingOrders = false;
+          if (orders.length === 0) {
+            this.snackBar.open('当前无挂单');
+            return;
+          }
+          PendingOrdersDialogComponent.showPendingOrders(this.dialog, orders);
+        },
+        error => this.processes.loadingPendingOrders = false,
+        () => this.processes.loadingPendingOrders = false
+      );
+  }
 
+  sellAll() {
+    this.processes.loadingAssets = true;
     this.assetService.list2(null, {filterValue: 10})
       .subscribe(assets => {
-        if (!assets || assets.length == 0) {
-          return;
-        }
+          this.processes.loadingAssets = false;
+          if (!assets || assets.length == 0) {
+            return;
+          }
 
-        const dialogRef = AssetsClearoutDialogComponent.clearoutAssets(this.dialog,
-          {assets, availableValueThreshold: 10}
-        );
-        AssetsClearoutDialogComponent.afterOrdersPlacedDelay(dialogRef, () => {
-          this.loadData();
-        });
-      });
+          const dialogRef = AssetsClearoutDialogComponent.clearoutAssets(this.dialog,
+            {assets, availableValueThreshold: 10}
+          );
+          AssetsClearoutDialogComponent.afterOrdersPlacedDelay(dialogRef, () => {
+            this.loadData();
+          });
+        },
+        error => this.processes.loadingAssets = false,
+        () => this.processes.loadingAssets = false);
   }
 
 }

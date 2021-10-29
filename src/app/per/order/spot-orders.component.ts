@@ -25,6 +25,7 @@ import { OrderFormComponent, OrderFormParams } from '../order-form/order-form.co
 import { ExchangePair } from '../../models/mar/ex-pair';
 import { OrderForm } from '../../models/per/order-form';
 import { OrderDetailDialogComponent } from './order-detail-dialog.component';
+import { fullLowerCaseToFullUpperCase } from '../../common/utils';
 
 @Component({
   selector: 'app-spot-orders',
@@ -89,6 +90,8 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
   }
 
   filter() {
+    fullLowerCaseToFullUpperCase(this.filterForm, 'baseCcy');
+    fullLowerCaseToFullUpperCase(this.filterForm, 'quoteCcy');
     this.dataSource.refresh(this.filterForm);
   }
 

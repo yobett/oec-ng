@@ -116,3 +116,10 @@ export function upDownPercent(from: number, to: number, posSign = false, abs = f
   }
   return ns + '%';
 }
+
+export function fullLowerCaseToFullUpperCase(obj, propName) {
+  const str: string = obj[propName];
+  if (str && str === str.toLowerCase()) {
+    obj[propName] = str.toUpperCase();
+  }
+}

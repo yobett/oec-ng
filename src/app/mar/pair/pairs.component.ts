@@ -30,6 +30,7 @@ import { KlineChartDialogComponent } from '../kline-chart/kline-chart-dialog.com
 import { MessageDialogComponent } from '../../common/message-dialog/message-dialog.component';
 import { CcyInfoDialogComponent } from '../ccy/ccy-info-dialog.component';
 import { QuoteCcyOptions } from '../../config';
+import { fullLowerCaseToFullUpperCase } from '../../common/utils';
 
 @Component({
   selector: 'app-pairs',
@@ -92,6 +93,8 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
 
   filter() {
     delete this.filterForm.concerned;
+    fullLowerCaseToFullUpperCase(this.filterForm, 'baseCcy');
+    fullLowerCaseToFullUpperCase(this.filterForm, 'quoteCcy');
     this.dataSource.refresh(this.filterForm);
   }
 

@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { CcyMeta, CcyMetaUrls } from '../../models/mar/ccy-meta';
 import { Ccy } from '../../models/mar/ccy';
-import { StaticResource } from '../../config';
 import { CcyService } from '../../services/mar/ccy.service';
 
 @Component({
@@ -12,16 +11,14 @@ import { CcyService } from '../../services/mar/ccy.service';
 })
 export class CcyMetaComponent {
 
-  ccy: Ccy;
   meta: CcyMeta;
   linkItems: { name: string, links: string[] }[];
 
-  staticBase = StaticResource.BASE;
+  CoinLogoPath = Ccy.LogoPath;
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
-    this.ccy = data.ccy;
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { meta: CcyMeta }) {
     this.meta = data.meta;
-    const urls = this.meta.urls;
+    const urls: CcyMetaUrls = this.meta.urls;
     this.linkItems = [];
     for (const [name, linksName] of [
       ['Website', 'website'],
@@ -49,7 +46,7 @@ export class CcyMetaComponent {
               // disableClose: true,
               width: '640px',
               maxWidth: '90vw',
-              data: {ccy, meta}
+              data: {meta}
             });
         }
       );

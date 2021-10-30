@@ -74,7 +74,7 @@
 
       <mat-expansion-panel class="mat-elevation-z1" [expanded]="true">
         <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
-          <mat-panel-title>资产 &amp; 订单</mat-panel-title>
+          <mat-panel-title>资产</mat-panel-title>
         </mat-expansion-panel-header>
         <mat-nav-list>
           <a mat-list-item routerLink="/assets" class="menu-item"
@@ -93,6 +93,14 @@
              routerLinkActive="active-link">
             <span>资产趋势</span>
           </a>
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z1" [expanded]="true">
+        <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
+          <mat-panel-title>订单</mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
           <a mat-list-item routerLink="/orders" class="menu-item"
              routerLinkActive="active-link">
             <span>订单</span>
@@ -112,7 +120,7 @@
         </mat-nav-list>
       </mat-expansion-panel>
 
-      <mat-expansion-panel class="mat-elevation-z1" [expanded]="true">
+      <mat-expansion-panel class="mat-elevation-z1" [expanded]="false">
         <mat-expansion-panel-header expandedHeight="48px" collapsedHeight="48px">
           <mat-panel-title>策略</mat-panel-title>
         </mat-expansion-panel-header>

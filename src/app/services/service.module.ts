@@ -17,7 +17,7 @@ import { AssetService } from './per/asset.service';
 import { SpotOrderService } from './per/spot-order.service';
 import { DataSyncService } from './sys/data-sync.service';
 import { QuoteService } from './mar/quote.service';
-import { EffectDigitsPipe } from '../common/pipe/effect-digits-pipe';
+import { EffectDigitsPipe } from '../10-common/pipe/effect-digits-pipe';
 import { LastTransService } from './per/last-trans.service';
 import { ThemeService } from './style/theme.service';
 import { StyleManagerService } from './style/style-manager.service';
@@ -28,7 +28,7 @@ import { StrategyHistoryService } from './str/strategy-history.service';
 import { LocalStorageKeys, DATE_FORMATS, PaginatorIntl } from '../config';
 import { AssetSnapshotService } from './per/asset-snapshot.service';
 import { NotificationService } from './sys/notification.service';
-import { RoundDownPipe } from '../common/pipe/round-down-pipe';
+import { RoundDownPipe } from '../10-common/pipe/round-down-pipe';
 
 
 @NgModule({

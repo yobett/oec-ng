@@ -6,7 +6,7 @@ import { catchError, filter, map } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 
 import { environment } from '../../environments/environment';
-import { MessageDialogComponent } from '../common/message-dialog/message-dialog.component';
+import { MessageDialogComponent } from '../10-common/message-dialog/message-dialog.component';
 import { CountList, CountListResult, ListResult, Result, ValueResult } from '../models/result';
 import { LoginSupport } from './login-support';
 

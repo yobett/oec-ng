@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { ExPair } from './ex-pair';
-import { mergeTsData } from '../../common/utils';
+import { mergeTsData } from '../../10-common/utils';
 import { Exch } from '../sys/exch';
 
 export interface Kline {

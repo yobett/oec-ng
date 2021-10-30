@@ -1,5 +1,5 @@
 import { Model } from '../model';
-import { mergeTsData } from '../../common/utils';
+import { mergeTsData } from '../../10-common/utils';
 
 export class SpotOrder extends Model {
   ex: string;

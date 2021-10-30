@@ -1,5 +1,5 @@
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {LoginDialogComponent} from '../sys/account/login-dialog.component';
+import {LoginDialogComponent} from '../90-sys/account/login-dialog.component';
 
 export class LoginSupport {
 

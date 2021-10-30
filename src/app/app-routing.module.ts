@@ -1,27 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
-import { UsersComponent } from './sys/user/users.component';
-import { ExchsComponent } from './sys/exch/exchs.component';
-import { CcysComponent } from './mar/ccy/ccys.component';
-import { PairsComponent } from './mar/pair/pairs.component';
-import { AssetsComponent } from './per/asset/assets.component';
-import { SpotOrdersComponent } from './per/order/spot-orders.component';
-import { PendingOrdersComponent } from './per/order-pending/pending-orders.component';
-import { AssetsMergedComponent } from './per/asset/assets-merged.component';
-import { CcyQuotesComponent } from './mar/ccy-quote/ccy-quotes.component';
-import { LastTransComponent } from './per/last-trans/last-trans.component';
-import { InstPriceComponent } from './mar/pair-inst-price/inst-price.component';
-import { ExapisComponent } from './sys/exapi/exapis.component';
-import { StrategiesComponent } from './str/strategy/strategies.component';
-import { StrategyEditComponent } from './str/strategy/strategy-edit.component';
-import { HistoryStrategiesComponent } from './str/strategy-history/history-strategies.component';
-import { KlineChartComponent } from './mar/kline-chart/kline-chart.component';
-import { StrategyEditManyComponent } from './str/strategy/strategy-edit-many.component';
-import { SnapshotsChartComponent } from './per/asset-snapshot/snapshots-chart.component';
-import { OrdersChartComponent } from './per/order-chart/orders-chart.component';
-import { SnapshotsComponent } from './per/asset-snapshot/snapshots.component';
+import { UsersComponent } from './90-sys/user/users.component';
+import { ExchsComponent } from './90-sys/exch/exchs.component';
+import { CcysComponent } from './30-market/ccy/ccys.component';
+import { PairsComponent } from './30-market/pair/pairs.component';
+import { AssetsComponent } from './40-asset/asset/assets.component';
+import { SpotOrdersComponent } from './50-order/order/spot-orders.component';
+import { PendingOrdersComponent } from './50-order/order-pending/pending-orders.component';
+import { AssetsMergedComponent } from './40-asset/asset/assets-merged.component';
+import { CcyQuotesComponent } from './30-market/ccy-quote/ccy-quotes.component';
+import { LastTransComponent } from './50-order/last-trans/last-trans.component';
+import { InstPriceComponent } from './30-market/pair-inst-price/inst-price.component';
+import { ExapisComponent } from './90-sys/exapi/exapis.component';
+import { StrategiesComponent } from './60-strategy/strategy/strategies.component';
+import { StrategyEditComponent } from './60-strategy/strategy-edit/strategy-edit.component';
+import { HistoryStrategiesComponent } from './60-strategy/strategy-history/history-strategies.component';
+import { KlineChartComponent } from './30-market/kline-chart/kline-chart.component';
+import { StrategyEditManyComponent } from './60-strategy/strategy-edit/strategy-edit-many.component';
+import { SnapshotsChartComponent } from './40-asset/asset-snapshot/snapshots-chart.component';
+import { OrdersChartComponent } from './50-order/order-chart/orders-chart.component';
+import { SnapshotsComponent } from './40-asset/asset-snapshot/snapshots.component';
 
 const routes: Routes = [
   // {path: '', component: HomeComponent},

@@ -55,7 +55,8 @@ export class AssetsClearoutDialogComponent implements AfterViewInit {
   stableCoin = 'USDT';
 
   priceLimit = false;
-  priceIncreasePercent = 0;
+  priceIncreasePercentOptions = [0.1, 0.5, 1.0];
+  priceIncreasePercent = this.priceIncreasePercentOptions[0];
 
   placingOrder = false;
   orderPlacedAt: number;
@@ -183,6 +184,8 @@ export class AssetsClearoutDialogComponent implements AfterViewInit {
       const orderType = this.priceLimit ? 'limit' : 'market';
       const form: OrderForm = {
         ex,
+        baseCcy: ccy,
+        quoteCcy: this.stableCoin,
         symbol,
         side: 'sell',
         type: orderType,

@@ -126,7 +126,7 @@
       <td mat-cell *matCellDef="let row" align="end">
         <button mat-button [matMenuTriggerFor]="klines">
           <mat-icon>more_vert</mat-icon>
-          K线
+          K 线
         </button>
         <mat-menu #klines="matMenu">
           <ng-container *ngFor="let exch of $exchs | async">
@@ -144,11 +144,11 @@
         <mat-menu #actions="matMenu">
           <button mat-menu-item (click)="showOrderDetail(row)" *ngIf="row.lastTrans">
             <mat-icon>details</mat-icon>
-            交易详情
+            上次交易
           </button>
           <button mat-menu-item (click)="showOrders(row)">
             <mat-icon>list</mat-icon>
-            最新订单
+            历史交易
           </button>
           <ng-container *ngFor="let exch of $exchs | async">
             <button mat-menu-item [class.accent-color]="row.lastTrans?.ex===exch.code"

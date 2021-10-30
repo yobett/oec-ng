@@ -209,7 +209,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     }
     if (lt.order) {
       OrderDetailDialogComponent.showOrderDetail(this.dialog, lt.order);
-    } else {
+    } else if (lt.oid) {
       this.orderService.getById2(lt.oid)
         .subscribe((order: SpotOrder) => {
           lt.order = order;

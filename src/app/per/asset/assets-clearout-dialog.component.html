@@ -29,9 +29,9 @@
       </mat-checkbox>
 
       <mat-radio-group [(ngModel)]="priceIncreasePercent" [disabled]="!priceLimit">
-        <mat-radio-button name="price-inc" [value]="0.1" class="order-type-option">+0.1%</mat-radio-button>
-        <mat-radio-button name="price-inc" [value]="0.5" class="order-type-option">+0.5%</mat-radio-button>
-        <mat-radio-button name="price-inc" [value]="1" class="order-type-option">+1.0%</mat-radio-button>
+        <mat-radio-button name="price-inc" [value]="percent" class="order-type-option"
+                          *ngFor="let percent of priceIncreasePercentOptions">+{{percent.toFixed(1)}}%
+        </mat-radio-button>
       </mat-radio-group>
     </div>
 

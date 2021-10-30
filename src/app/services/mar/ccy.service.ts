@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { ModelCurdService } from '../model-curd.service';
 import { Ccy } from '../../models/mar/ccy';
-import { Result, ValueResult } from '../../models/result';
+import { ListResult, Result, ValueResult } from '../../models/result';
 import { CcyMeta } from '../../models/mar/ccy-meta';
 
 
@@ -25,6 +25,12 @@ export class CcyService extends ModelCurdService<Ccy> {
 
   listConcerned(): Observable<Ccy[]> {
     return this.list2(this.baseUrl + '/concerned');
+  }
+
+  listConcernedCodes(): Observable<string[]> {
+    const url = this.baseUrl + '/concerned/codes';
+    return this.pipeDefault(this.http.get<ListResult<string>>(url))
+      .pipe(map(result => result.list));
   }
 
   updateConcerned(id: number, concerned: boolean): Observable<Result> {

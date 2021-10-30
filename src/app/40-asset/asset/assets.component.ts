@@ -29,7 +29,7 @@ import { OrdersPopupData, SpotOrdersDialogComponent } from '../../50-order/order
 import { AssetsStructureComponent } from '../asset-structure/assets-structure.component';
 import { CcyInfoDialogComponent } from '../../30-market/ccy/ccy-info-dialog.component';
 import { CcyService } from '../../services/mar/ccy.service';
-import { AssetsClearoutDialogComponent } from './assets-clearout-dialog.component';
+import { AssetsClearoutDialogComponent } from '../asset-trading/assets-clearout-dialog.component';
 
 @Component({
   selector: 'app-assets',

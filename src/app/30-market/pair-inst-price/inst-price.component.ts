@@ -28,7 +28,7 @@ import { CcyInfoDialogComponent } from '../ccy/ccy-info-dialog.component';
 import { CcyService } from '../../services/mar/ccy.service';
 import { OrderDetailDialogComponent } from '../../50-order/order/order-detail-dialog.component';
 import { SpotOrder } from '../../models/per/spot-order';
-import { AssetsClearoutDialogComponent } from '../../40-asset/asset/assets-clearout-dialog.component';
+import { AssetsClearoutDialogComponent } from '../../40-asset/asset-trading/assets-clearout-dialog.component';
 import { AssetService } from '../../services/per/asset.service';
 import { PendingOrdersDialogComponent } from '../../50-order/order-pending/pending-orders-dialog.component';
 import { AssetsDialogComponent } from '../../40-asset/asset/assets-dialog.component';

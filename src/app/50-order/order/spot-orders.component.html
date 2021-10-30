@@ -31,11 +31,11 @@
 
     <div>
       <span class="field-label subordinated">基础币种</span>
-      <button mat-button [color]="filterForm['baseCcy']===ccy.code? 'accent':null"
-              *ngFor="let ccy of $ccys | async"
-              (click)="baseCcySelected(ccy.code)">
-        <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt="">
-        {{ccy.code}}
+      <button mat-button [color]="filterForm['baseCcy']===ccy? 'accent':null"
+              *ngFor="let ccy of $ccyCodes | async"
+              (click)="baseCcySelected(ccy)">
+        <img class="ccy-logo" [src]="CoinLogoPath(ccy)" alt="">
+        {{ccy}}
       </button>
     </div>
 

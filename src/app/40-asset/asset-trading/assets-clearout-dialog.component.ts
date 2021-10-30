@@ -222,11 +222,13 @@ export class AssetsClearoutDialogComponent implements AfterViewInit {
             }
           }
           this.failedOrdersCount = failedCount;
+          if (successCount === 0) {
+            this.orderService.showErrorMessage('下单失败');
+            return;
+          }
           this.orderPlacedAt = Date.now();
           if (failedCount === 0) {
             this.snackBar.open('下单成功');
-          } else if (successCount === 0) {
-            this.snackBar.open('下单失败');
           } else {
             this.snackBar.open('下单完成（部分成功）');
           }

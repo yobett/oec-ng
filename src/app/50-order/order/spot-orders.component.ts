@@ -49,7 +49,8 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
   CoinLogoPath = Ccy.LogoPath;
 
   $exchs: Observable<Exch[]>;
-  $ccys: Observable<Ccy[]>;
+  // $ccys: Observable<Ccy[]>;
+  $ccyCodes: Observable<string[]>;
 
   filterEx: string = 'all';
   filterForm: any & SpotOrderFilter = {};
@@ -86,7 +87,7 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
 
   protected withSession(user: User) {
     this.$exchs = this.exchService.list2();
-    this.$ccys = this.ccyService.listConcerned();
+    this.$ccyCodes = this.ccyService.listConcernedCodes();
   }
 
   ngAfterViewInit() {

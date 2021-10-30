@@ -63,7 +63,7 @@ import { SnapshotsComponent } from './40-asset/asset-snapshot/snapshots.componen
 import { CcyQuoteDialogComponent } from './30-market/ccy-quote/ccy-quote-dialog.component';
 import { CcyInfoDialogComponent } from './30-market/ccy/ccy-info-dialog.component';
 import { CcyPairsDialogComponent } from './30-market/pair/ccy-pairs-dialog.component';
-import { AssetsClearoutDialogComponent } from './40-asset/asset/assets-clearout-dialog.component';
+import { AssetsClearoutDialogComponent } from './40-asset/asset-trading/assets-clearout-dialog.component';
 import { PendingOrdersDialogComponent } from './50-order/order-pending/pending-orders-dialog.component';
 import { AssetsDialogComponent } from './40-asset/asset/assets-dialog.component';
 

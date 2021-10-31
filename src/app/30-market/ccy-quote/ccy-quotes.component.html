@@ -22,9 +22,11 @@
 
     <ng-container matColumnDef="code">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>代号</th>
-      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
-        <img class="ccy-logo" [src]="staticBase+row.logoPath" [alt]="row.logoPath">
-        <div class="ccy-code">{{row.code}}</div>
+      <td mat-cell *matCellDef="let row">
+        <span class="ccy-logo-code clickable" (click)="showCcyInfo(row)">
+          <img class="ccy-logo" [src]="staticBase+row.logoPath" alt="">
+          <span class="ccy-code">{{row.code}}</span>
+        </span>
       </td>
     </ng-container>
 
@@ -97,8 +99,8 @@
     <ng-container matColumnDef="footer">
       <th mat-header-cell *matFooterCellDef colspan="8" class="sum-row">
         1H 平均：<span class="avg-percent"
-                          [class.price-up]="avg1H>0"
-                          [class.price-down]="avg1H<0">{{avg1H | rawpercent}}</span> &nbsp;&nbsp;
+                    [class.price-up]="avg1H>0"
+                    [class.price-down]="avg1H<0">{{avg1H | rawpercent}}</span> &nbsp;&nbsp;
         24H 平均：<span class="avg-percent"
                      [class.price-up]="avg24H>0"
                      [class.price-down]="avg24H<0">{{avg24H | rawpercent}}</span>

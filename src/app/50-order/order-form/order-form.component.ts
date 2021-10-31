@@ -122,14 +122,21 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.refreshPrice();
+    const {ex, baseCcy, quoteCcy} = this.exchangePair;
     if (!this.baseAsset || !this.quoteAsset) {
-      const pair = this.exchangePair;
-      this.assetService.findByCcys(pair.ex, pair.baseCcy, pair.quoteCcy)
+      this.assetService.findByCcys(ex, baseCcy, quoteCcy)
         .subscribe(assets => {
-          this.baseAsset = assets.find(a => a.ccy === pair.baseCcy);
-          this.quoteAsset = assets.find(a => a.ccy === pair.quoteCcy);
+          this.baseAsset = assets.find(a => a.ccy === baseCcy);
+          this.quoteAsset = assets.find(a => a.ccy === quoteCcy);
           this.setAvailableAsset();
           this.tryInitSlider();
+        });
+    }
+    if (!this.lastTrans) {
+      this.lastTransService.findLastTransaction(baseCcy, quoteCcy)
+        .subscribe(lt => {
+          this.lastTrans = lt;
+          this.lastTransLoaded = true;
         });
     }
   }
@@ -139,16 +146,55 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
   }
 
   tryInitSlider() {
-    const orderForm = this.orderForm;
-    if (orderForm.side === 'sell') {
-      if (orderForm.quantity > 0 && this.baseSlider) {
-        this.baseQuantityInputChanged(this.baseSlider);
-      }
+    if (this.orderForm.side === 'sell') {
+      this.tryInitSellSlider();
     } else {
-      if (orderForm.quoteQuantity > 0 && this.quoteSlider) {
-        this.quoteQuantityInputChanged(this.quoteSlider);
-      }
+      this.tryInitBuySlider();
     }
+  }
+
+  tryInitSellSlider() {
+    const orderForm = this.orderForm;
+    if (!this.baseSlider || !this.availableBaseAsset) {
+      return;
+    }
+    let quantity = orderForm.quantity;
+    if (quantity && quantity > 0) {
+      this.baseQuantityInputChanged(this.baseSlider);
+      return;
+    }
+    const sliderValue = this.baseSlider.value;
+    if (sliderValue === null || sliderValue === 0) {
+      return;
+    }
+    if (sliderValue === this.sliderSteps) {
+      quantity = this.availableBaseAsset;
+    } else {
+      quantity = this.availableBaseAsset * sliderValue / this.sliderSteps;
+    }
+    orderForm.quantity = quantity;
+  }
+
+  tryInitBuySlider() {
+    const orderForm = this.orderForm;
+    if (!this.quoteSlider || !this.availableQuoteAsset) {
+      return;
+    }
+    let quoteQuantity = orderForm.quoteQuantity;
+    if (quoteQuantity && quoteQuantity > 0) {
+      this.quoteQuantityInputChanged(this.quoteSlider);
+      return;
+    }
+    const sliderValue = this.quoteSlider.value;
+    if (sliderValue === null || sliderValue === 0) {
+      return;
+    }
+    if (sliderValue === this.sliderSteps) {
+      quoteQuantity = this.availableQuoteAsset;
+    } else {
+      quoteQuantity = this.availableQuoteAsset * sliderValue / this.sliderSteps;
+    }
+    orderForm.quoteQuantity = quoteQuantity;
   }
 
   refreshPrice() {
@@ -159,8 +205,19 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
           this.refreshingPrice = false;
           this.tickerPrice = +price;
           this.tickerPriceAdjusted = +this.effectDigits.transform(this.tickerPrice, 5);
-          if (this.orderForm.price === undefined) {
+          const formPrice = this.orderForm.price;
+          if (formPrice === undefined) {
             this.orderForm.price = this.tickerPriceAdjusted;
+          } else {
+            if (this.orderForm.side === 'buy') {
+              if (formPrice > this.tickerPriceAdjusted) {
+                this.orderForm.price = this.tickerPriceAdjusted;
+              }
+            } else {
+              if (formPrice < this.tickerPriceAdjusted) {
+                this.orderForm.price = this.tickerPriceAdjusted;
+              }
+            }
           }
         },
         error => this.refreshingPrice = false,
@@ -244,16 +301,6 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
   }
 
   priceLimitChanged(change: MatCheckboxChange) {
-    if (change.checked) {
-      if (!this.lastTrans && !this.lastTransLoaded) {
-        const exp = this.exchangePair;
-        this.lastTransService.findLastTransaction(exp.baseCcy, exp.quoteCcy)
-          .subscribe(lt => {
-            this.lastTrans = lt;
-            this.lastTransLoaded = true;
-          });
-      }
-    }
   }
 
   placeOrder() {

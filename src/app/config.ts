@@ -47,7 +47,7 @@ const StaticResource = {
   coinsLogoDir: '/coins'
 };
 
-const PlaceOrderRefreshDelay = 6 * 1000;
+const PlaceOrderRefreshDelay = 5 * 1000;
 
 const StableCoins = ['USDT', 'USDC', 'DAI', 'BUSD'];
 

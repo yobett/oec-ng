@@ -129,6 +129,9 @@ button .mat-icon, .mat-icon.mat-icon-20 {
   font-size: 14px !important;
 }
 
+table.mat-table td {
+  padding-right: 6px;
+}
 
 .sidenav .mat-expansion-panel-body {
   padding-left: 0;

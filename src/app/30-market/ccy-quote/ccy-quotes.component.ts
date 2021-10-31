@@ -14,6 +14,8 @@ import { CcyService } from '../../services/mar/ccy.service';
 import { StableCoins, StaticResource } from '../../config';
 import { Quote } from '../../models/quote';
 import { QuoteService } from '../../services/mar/quote.service';
+import { CcyInfoDialogComponent } from '../ccy/ccy-info-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 declare type QuoteCcy = (Ccy & Quote);
 
@@ -49,7 +51,8 @@ export class CcyQuotesComponent extends SessionSupportComponent implements After
   constructor(protected sessionService: SessionService,
               private ccyService: CcyService,
               private quoteService: QuoteService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              private dialog: MatDialog) {
     super(sessionService);
   }
 
@@ -122,6 +125,10 @@ export class CcyQuotesComponent extends SessionSupportComponent implements After
       this.avg1H /= count;
       this.avg24H /= count;
     }
+  }
+
+  showCcyInfo(row: QuoteCcy) {
+    CcyInfoDialogComponent.showCcyInfo(row.code, this.ccyService, this.dialog);
   }
 
   ngAfterViewInit() {

@@ -121,12 +121,15 @@
                   (change)="priceLimitChanged($event)">
       限价
     </mat-checkbox>
-    <mat-form-field class="form-field" *ngIf="!priceLimit">
+    <!--<mat-form-field class="form-field" *ngIf="!priceLimit">
       <input matInput placeholder="价格" [value]="''+(tickerPriceAdjusted||'')" [disabled]="true">
       <span matPrefix>≈&nbsp;</span>
-    </mat-form-field>
-    <mat-form-field class="form-field" *ngIf="priceLimit">
-      <input matInput placeholder="价格" [(ngModel)]="orderForm.price">
+    </mat-form-field>-->
+    <mat-form-field class="form-field">
+      <input matInput placeholder="价格" [(ngModel)]="orderForm.price" [disabled]="!priceLimit">
+      <button mat-icon-button matSuffix (click)="orderForm.price=tickerPriceAdjusted">
+        <mat-icon class="subordinated">refresh</mat-icon>
+      </button>
       <mat-hint>当前 × {{+orderForm.price / tickerPrice | percent: '1.0-2'}}</mat-hint>
       <mat-hint align="end" *ngIf="lastTrans&&lastTrans.avgPrice">
         上次{{lastTrans.side === 'buy' ? '买入' : '卖出'}} × {{+orderForm.price / lastTrans.avgPrice | percent:'1.0-2'}}

@@ -137,7 +137,11 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
       }
       // console.log(document.hidden);
       if (document.visibilityState === 'visible') {
-        this.snackBar.open(message, 'OK', {duration: 10 * 1000})
+        this.snackBar.open(message, 'OK', {
+          duration: 10 * 1000,
+          horizontalPosition: 'right',
+          verticalPosition: 'bottom'
+        })
           .onAction()
           .subscribe(() => {
             this.snackBar.dismiss();

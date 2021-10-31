@@ -14,7 +14,7 @@ import { User } from '../../models/sys/user';
 import { PairService } from '../../services/mar/pair.service';
 import { Ccy } from '../../models/mar/ccy';
 import { TableDatasource } from '../../10-common/table-datasource';
-import { CurrentPrices, PairPrice } from '../../models/mar/pair-price';
+import { CurrentPrice, CurrentPrices, PairPrice } from '../../models/mar/pair-price';
 import { OrderFormComponent, OrderFormParams } from '../../50-order/order-form/order-form.component';
 import { LastTransaction } from '../../models/per/last-transaction';
 import { OrderForm } from '../../models/per/order-form';
@@ -133,14 +133,21 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   private setPrice(pp: PairPrice) {
     const key = PairPrice.priceKey(pp);
     pp.currentPrice = this.prices[key];
-    if (pp.currentPrice && pp.lastTrans) {
-      const price = pp.currentPrice.price;
-      const lastPrice = pp.lastTrans.avgPrice;
-      if (lastPrice) {
-        const change = price - lastPrice;
-        pp.priceChangePercent = (change / lastPrice) * 100.0;
-      }
+    this.setPriceChangePercent(pp);
+  }
+
+  private setPriceChangePercent(pp: PairPrice) {
+    const {currentPrice, lastTrans} = pp;
+    if (!currentPrice || !lastTrans) {
+      return;
     }
+    const lastPrice = lastTrans.avgPrice;
+    if (!lastPrice) {
+      return;
+    }
+    const price = currentPrice.price;
+    const change = price - lastPrice;
+    pp.priceChangePercent = (change / lastPrice) * 100.0;
   }
 
   fetchPrices(first?: boolean) {
@@ -164,6 +171,23 @@ export class InstPriceComponent extends SessionSupportComponent implements After
         },
         error => this.processes.fetchPrices = false,
         () => this.processes.fetchPrices = false);
+  }
+
+
+  refreshSinglePrice(pp: PairPrice) {
+    const key = PairPrice.priceKey(pp);
+    const currentPrice = this.prices[key];
+    if (!currentPrice) {
+      return;
+    }
+    let ex = currentPrice.source;
+    let symbol = pp[ex + 'Symbol'];
+    this.pairService.inquirePrice(ex, symbol)
+      .subscribe(price => {
+        currentPrice.price = +price;
+        pp.currentPrice = currentPrice;
+        this.setPriceChangePercent(pp);
+      });
   }
 
   ngAfterViewInit() {

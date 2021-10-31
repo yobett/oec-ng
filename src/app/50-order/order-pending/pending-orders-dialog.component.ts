@@ -27,7 +27,7 @@ export class PendingOrdersDialogComponent implements AfterViewInit {
   CoinLogoPath = Ccy.LogoPath;
   orders: SpotOrder[];
 
-  displayedColumns: string[] = ['index', 'ex', 'baseCcy', 'quoteCcy', 'side',
+  displayedColumns: string[] = [/*'index',*/ 'ex', 'baseCcy', 'quoteCcy', 'side',
     /*'type', 'status',*/ 'askPrice', 'askQty', 'createTs', 'actions'];
 
   processes: { [name: string]: boolean } = {};

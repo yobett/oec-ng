@@ -37,7 +37,7 @@ body {
   margin-right: 2rem;
 }
 
-.multi-lines-tooltip {
+.multi-lines-tooltip, .notification-panel {
   white-space: pre-line;
 }
 

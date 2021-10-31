@@ -5,6 +5,7 @@ import { MatDrawerMode } from '@angular/material/sidenav/drawer';
 
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarConfig } from '@angular/material/snack-bar/snack-bar-config';
 
 import { SessionService } from '../services/sys/session.service';
 import { LoginDialogComponent } from '../90-sys/account/login-dialog.component';
@@ -116,9 +117,8 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
   }
 
   async askNotificationPermission(): Promise<boolean> {
-
     if (!window.Notification) {
-      console.error('This browser does not support notifications.');
+      console.error('此浏览器不支持通知');
       return false;
     }
 
@@ -126,36 +126,42 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
     return permission === 'granted';
   }
 
+  showNotificationSnackBar(body: string, title?: string) {
+    let message = body;
+    if (title) {
+      message = `${title}\n\n${body}`;
+    }
+    const config: MatSnackBarConfig = {
+      duration: 10 * 1000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      panelClass: 'notification-panel'
+    };
+    this.snackBar.open(message, 'OK', config);
+  }
+
   setupEventSource() {
     this.eventSource = new EventSource(this.notificationService.sseUrl);
     this.eventSource.onmessage = (ev: MessageEvent) => {
       const notification: Notification = JSON.parse(ev.data);
-      const message = `${notification.title}\n ${notification.body}`
+      const message = `${notification.title}: ${notification.body}`
+      console.log(message);
       if (!this.notificationsOn) {
-        console.log(message);
         return;
       }
       // console.log(document.hidden);
       if (document.visibilityState === 'visible') {
-        this.snackBar.open(message, 'OK', {
-          duration: 10 * 1000,
-          horizontalPosition: 'right',
-          verticalPosition: 'bottom'
-        })
-          .onAction()
-          .subscribe(() => {
-            this.snackBar.dismiss();
-          });
-      } else {
-        this.askNotificationPermission().then(granted => {
-          if (!granted) {
-            return;
-          }
-          new window.Notification(notification.title, {
-            body: notification.body
-          });
-        });
+        this.showNotificationSnackBar(notification.body, notification.title);
+        return;
       }
+      this.askNotificationPermission().then(granted => {
+        if (!granted) {
+          return;
+        }
+        new window.Notification(notification.title, {
+          body: notification.body
+        });
+      });
     }
   }
 

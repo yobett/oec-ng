@@ -5,7 +5,7 @@ OEC 现货交易助手（前端）
 
 更多介绍见后端项目。
 
-界面截图见Wiki。
+界面截图见 [Wiki](https://github.com/yobett/oec-ng/wiki)。
 
 
 

@@ -41,6 +41,10 @@ export class CcyMetaComponent {
   static showMetadata(ccy: string, ccyService: CcyService, dialog: MatDialog) {
     ccyService.getMetadata(ccy)
       .subscribe((meta: CcyMeta) => {
+          if (!meta) {
+            ccyService.showErrorMessage('未能查到此币种的信息');
+            return;
+          }
           dialog.open(
             CcyMetaComponent, {
               // disableClose: true,

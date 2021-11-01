@@ -22,6 +22,10 @@ export class CcyQuoteDialogComponent {
   static showQuote(ccy: string, quoteService: QuoteService, dialog: MatDialog) {
     quoteService.getCcyQuote(ccy)
       .subscribe((quote: Quote) => {
+          if (!quote) {
+            quoteService.showErrorMessage('未能查到此币种的币价');
+            return;
+          }
           dialog.open(
             CcyQuoteDialogComponent, {
               // disableClose: true,

@@ -261,6 +261,7 @@ export class AssetsMergedComponent extends SessionSupportComponent implements Af
       asset.ccy,
       this.ccyService,
       this.dialog,
+      null,
       (concerned: boolean) => asset.ccyConcerned = concerned
     );
   }

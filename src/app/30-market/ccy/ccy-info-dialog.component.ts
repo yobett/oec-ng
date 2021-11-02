@@ -9,6 +9,13 @@ import { CcyQuoteDialogComponent } from '../ccy-quote/ccy-quote-dialog.component
 import { Result } from '../../models/result';
 import { CcyPairsDialogComponent } from '../pair/ccy-pairs-dialog.component';
 import { PairService } from '../../services/mar/pair.service';
+import { ExPair } from '../../models/mar/ex-pair';
+
+export type CcyInfoDialog = {
+  ccy: Ccy,
+  concernChanged?: (concerned: boolean) => void,
+  pairWithUSDT?: ExPair
+};
 
 @Component({
   selector: 'app-ccy-info-dialog',
@@ -19,6 +26,7 @@ export class CcyInfoDialogComponent {
 
   ccy: Ccy;
   concernChanged: (concerned: boolean) => void;
+  pairWithUSDT: ExPair;
 
   CoinLogoPath = Ccy.LogoPath;
 
@@ -27,9 +35,18 @@ export class CcyInfoDialogComponent {
               private pairService: PairService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: CcyInfoDialog) {
     this.ccy = data.ccy;
     this.concernChanged = data.concernChanged;
+    this.pairWithUSDT = data.pairWithUSDT;
+
+    const ccyCode = this.ccy.code;
+    if (!this.pairWithUSDT && ccyCode !== 'USDT') {
+      this.pairService.findExPair(ccyCode, 'USDT')
+        .subscribe(pair => {
+          this.pairWithUSDT = pair;
+        });
+    }
   }
 
   showMeta(ccy: Ccy) {
@@ -63,18 +80,19 @@ export class CcyInfoDialogComponent {
       });
   }
 
-  static showCcyInfo(ccy: string,
+  static showCcyInfo(ccyCode: string,
                      ccyService: CcyService,
                      dialog: MatDialog,
+                     pairWithUSDT?: ExPair,
                      concernChanged?: (concerned: boolean) => void) {
-    ccyService.getByCode(ccy)
+    ccyService.getByCode(ccyCode)
       .subscribe((ccy: Ccy) => {
           dialog.open(
             CcyInfoDialogComponent, {
               disableClose: true,
               width: '350px',
               maxWidth: '90vw',
-              data: {ccy, concernChanged}
+              data: {ccy, pairWithUSDT, concernChanged}
             });
         }
       );

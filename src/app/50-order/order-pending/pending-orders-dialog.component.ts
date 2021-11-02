@@ -130,7 +130,7 @@ export class PendingOrdersDialogComponent implements AfterViewInit {
     return dialog.open(
       PendingOrdersDialogComponent, {
         disableClose: true,
-        width: '640px',
+        width: '700px',
         maxWidth: '90vw',
         data: {orders}
       });

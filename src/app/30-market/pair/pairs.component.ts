@@ -237,7 +237,8 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
   }
 
   showBaseCcyInfo(pair: ExPair) {
-    CcyInfoDialogComponent.showCcyInfo(pair.baseCcy, this.ccyService, this.dialog);
+    const pairWithUSDT = pair.quoteCcy === 'USDT' ? pair : null;
+    CcyInfoDialogComponent.showCcyInfo(pair.baseCcy, this.ccyService, this.dialog, pairWithUSDT);
   }
 
 }

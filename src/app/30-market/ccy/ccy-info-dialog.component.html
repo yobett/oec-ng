@@ -39,23 +39,28 @@
         <mat-icon>link</mat-icon>
         CMC
       </a>
-      <br><br>
-      <a mat-button class="mat-icon-20"
-         href="https://www.okex.com/markets/prices/{{ccy.slug}}-{{ccy.code | lowercase}}" target="_blank">
-        <mat-icon>link</mat-icon>
-        OE
-      </a>
-      <a mat-button class="mat-icon-20"
-         href="https://research.binance.com/cn/projects/{{ccy.slug}}" target="_blank">
-        <!-- -or- (ccy.code | lowercase) eg. bnb,dai -->
-        <mat-icon>link</mat-icon>
-        BA
-      </a>
-      <a mat-button class="mat-icon-20"
-         href="https://www.huobi.com/zh-cn/assetintro/#{{ccy.code | lowercase}}" target="_blank">
-        <mat-icon>link</mat-icon>
-        HB
-      </a>
+      <ng-template [ngIf]="ccy.code==='USDT'||pairWithUSDT">
+        <br><br>
+        <a mat-button class="mat-icon-20"
+           href="https://www.okex.com/markets/prices/{{ccy.slug}}-{{ccy.code | lowercase}}" target="_blank"
+           *ngIf="ccy.code==='USDT'||pairWithUSDT.oeSymbol">
+          <mat-icon>link</mat-icon>
+          OE
+        </a>
+        <a mat-button class="mat-icon-20"
+           href="https://research.binance.com/cn/projects/{{ccy.slug}}" target="_blank"
+           *ngIf="ccy.code==='USDT'||pairWithUSDT.baSymbol">
+          <!-- -or- (ccy.code | lowercase) eg. bnb,dai -->
+          <mat-icon>link</mat-icon>
+          BA
+        </a>
+        <a mat-button class="mat-icon-20"
+           href="https://www.huobi.com/zh-cn/assetintro/#{{ccy.code | lowercase}}" target="_blank"
+           *ngIf="ccy.code==='USDT'||pairWithUSDT.hbSymbol">
+          <mat-icon>link</mat-icon>
+          HB
+        </a>
+      </ng-template>
     </dd>
   </dl>
 </mat-dialog-content>

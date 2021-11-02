@@ -197,7 +197,8 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   }
 
   showBaseCcyInfo(exp: PairPrice) {
-    CcyInfoDialogComponent.showCcyInfo(exp.baseCcy, this.ccyService, this.dialog);
+    const pairWithUSDT = exp.quoteCcy === 'USDT' ? exp : null;
+    CcyInfoDialogComponent.showCcyInfo(exp.baseCcy, this.ccyService, this.dialog, pairWithUSDT);
   }
 
   openOrderForm(exp: PairPrice, ex: string, symbol: string) {

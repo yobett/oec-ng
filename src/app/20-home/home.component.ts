@@ -129,7 +129,7 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
   showNotificationSnackBar(body: string, title?: string) {
     let message = body;
     if (title) {
-      message = `${title}\n\n${body}`;
+      message = `${title} → ${body}`;
     }
     const config: MatSnackBarConfig = {
       duration: 10 * 1000,
@@ -144,7 +144,7 @@ export class HomeComponent extends SessionSupportComponent implements OnDestroy 
     this.eventSource = new EventSource(this.notificationService.sseUrl);
     this.eventSource.onmessage = (ev: MessageEvent) => {
       const notification: Notification = JSON.parse(ev.data);
-      const message = `${notification.title}: ${notification.body}`
+      const message = `${notification.title} → ${notification.body}`
       console.log(message);
       if (!this.notificationsOn) {
         return;

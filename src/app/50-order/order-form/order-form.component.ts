@@ -4,7 +4,7 @@ import { MatSlider, MatSliderChange } from '@angular/material/slider';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { OrderForm } from '../../models/per/order-form';
+import { OrderForm, PlaceOrderResult } from '../../models/per/order-form';
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { Asset } from '../../models/per/asset';
 import { ExchangePair } from '../../models/mar/ex-pair';
@@ -367,7 +367,7 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
 
     this.placingOrder = true;
     this.orderService.placeOrder(form)
-      .subscribe(res => {
+      .subscribe((res: PlaceOrderResult) => {
           this.placingOrder = false;
           if (form.type === 'market') {
             this.snackBar.open('已下单');

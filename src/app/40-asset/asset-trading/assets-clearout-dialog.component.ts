@@ -11,7 +11,7 @@ import { TableDatasource } from '../../10-common/table-datasource';
 import { PairService } from '../../services/mar/pair.service';
 import { Asset } from '../../models/per/asset';
 import { PriceRequest, PriceResponse } from '../../models/mar/pair-price';
-import { OrderForm, PlaceOrderResult } from '../../models/per/order-form';
+import { OrderForm, BatchPlaceOrderResult } from '../../models/per/order-form';
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { PlaceOrderRefreshDelay } from '../../config';
 import { Exch } from '../../models/sys/exch';
@@ -34,7 +34,7 @@ interface AssetCandidate {
   symbol?: string;
   price?: number;
 
-  placeOrderResult?: PlaceOrderResult;
+  placeOrderResult?: BatchPlaceOrderResult;
 }
 
 @Component({
@@ -205,7 +205,7 @@ export class AssetsClearoutDialogComponent implements AfterViewInit {
 
     this.placingOrder = true;
     this.orderService.placeMultiOrders(orderForms)
-      .subscribe((prs: PlaceOrderResult[]) => {
+      .subscribe((prs: BatchPlaceOrderResult[]) => {
           this.placingOrder = false;
           this.totalOrdersCount = orderForms.length;
           let successCount = 0;

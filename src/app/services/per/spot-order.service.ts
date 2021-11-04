@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { ModelCurdService } from '../model-curd.service';
 import { OrderTimeLineQueryForm, SpotOrder, SpotOrderFilter } from '../../models/per/spot-order';
-import { CancelOrderForm, OrderForm, PlaceOrderResult } from '../../models/per/order-form';
+import { CancelOrderForm, OrderForm, BatchPlaceOrderResult, PlaceOrderResult } from '../../models/per/order-form';
 import { ListResult, ValueResult } from '../../models/result';
 
 
@@ -57,24 +57,19 @@ export class SpotOrderService extends ModelCurdService<SpotOrder> {
     return super.list2(url, params);
   }
 
-  placeOrder(form: OrderForm): Observable<any> {
+  placeOrder(form: OrderForm): Observable<PlaceOrderResult> {
     const url = this.baseUrl + '/placeOrder';
-    return this.pipeDefault(this.http.post<ValueResult<any>>(url, form))
+    return this.pipeDefault(this.http.post<ValueResult<PlaceOrderResult>>(url, form))
       .pipe(map(result => result.value));
   }
 
-  placeMultiOrders(forms: OrderForm[]): Observable<PlaceOrderResult[]> {
+  placeMultiOrders(forms: OrderForm[]): Observable<BatchPlaceOrderResult[]> {
     const url = this.baseUrl + '/placeMultiOrders';
-    return this.pipeDefault(this.http.post<ListResult<PlaceOrderResult>>(url, forms))
+    return this.pipeDefault(this.http.post<ListResult<BatchPlaceOrderResult>>(url, forms))
       .pipe(map(result => result.list));
   }
 
-  cancelOrder(order: SpotOrder): Observable<any> {
-    const form: CancelOrderForm = {
-      ex: order.ex,
-      orderId: order.orderId,
-      symbol: order.pairSymbol
-    };
+  cancelOrder(form: CancelOrderForm): Observable<any> {
     const url = this.baseUrl + '/cancelOrder';
     return this.pipeDefault(this.http.post<ValueResult<any>>(url, form))
       .pipe(map(result => result.value));

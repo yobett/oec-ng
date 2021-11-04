@@ -1,0 +1,167 @@
+<div class="mat-elevation-z1">
+  <mat-toolbar>
+    <span class="toolbar-title">24小时价格</span>
+    <mat-button-toggle-group [value]="filterForm.list"
+                             (change)="listChanged($event)">
+      <mat-button-toggle value="concerned">
+        <mat-icon class="favorite">star</mat-icon>
+        关注
+      </mat-button-toggle>
+      <mat-button-toggle value="rising">
+        <mat-icon class="price-up">north</mat-icon>
+        上涨
+      </mat-button-toggle>
+      <mat-button-toggle value="dropping">
+        <mat-icon class="price-down">south</mat-icon>
+        下跌
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <span class="spacer"></span>
+    数据来源：BA
+  </mat-toolbar>
+
+  <div class="table-filter-form">
+
+    <mat-form-field>
+      <input matInput placeholder="基础币种" name="baseCcy" [(ngModel)]="filterForm['baseCcy']"
+             (keyup.enter)="filter()">
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="报价币种" name="quoteCcy" [(ngModel)]="filterForm['quoteCcy']"
+             [matAutocomplete]="quoteCcyAuto" (keyup.enter)="filter()">
+      <mat-autocomplete #quoteCcyAuto="matAutocomplete">
+        <mat-option *ngFor="let option of quoteCcyOptions" [value]="option">
+          <span class="ccy-logo-code">
+            <img class="ccy-logo" [src]="CoinLogoPath(option)" alt="">
+            <span class="ccy-code">{{option}}</span>
+          </span>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+
+    <button mat-button (click)="filter()">
+      <mat-icon>search</mat-icon>
+      筛选
+    </button>
+    <button mat-button (click)="resetFilter()">
+      <mat-icon>block</mat-icon>
+      全部
+    </button>
+  </div>
+
+  <table mat-table class="full-width">
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1 + (paginator ? paginator.pageIndex * paginator.pageSize : 0)}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="concerned">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>star_outline</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-icon class="clickable" [class.favorite]="row.pair.concerned" (click)="toggleConcern(row.pair)">
+          {{row.pair.concerned ? 'star' : 'star_outline'}}</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="baseCcy">
+      <th mat-header-cell *matHeaderCellDef>基础币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <span class="ccy-logo-code clickable" (click)="showBaseCcyInfo(row.pair)">
+          <img class="ccy-logo" [src]="CoinLogoPath(row.pair.baseCcy)" alt="">
+          <span class="ccy-code">{{row.pair.baseCcy}}</span>
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="quoteCcy">
+      <th mat-header-cell *matHeaderCellDef>报价币种</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <img class="ccy-logo" [src]="CoinLogoPath(row.pair.quoteCcy)" alt="">
+        <div class="ccy-code">{{row.pair.quoteCcy}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="changePercent">
+      <th mat-header-cell *matHeaderCellDef>24H涨跌</th>
+      <td mat-cell *matCellDef="let row"
+          [class.price-up]="row.changePercent>0"
+          [class.price-down]="row.changePercent<0">
+        {{row.changePercent | rawpercent }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="open">
+      <th mat-header-cell *matHeaderCellDef>开盘</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.open | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="close">
+      <th mat-header-cell *matHeaderCellDef>收盘</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.close | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="low">
+      <th mat-header-cell *matHeaderCellDef>最低</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.low | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="high">
+      <th mat-header-cell *matHeaderCellDef>最高</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.high | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="avgPrice">
+      <th mat-header-cell *matHeaderCellDef>加权平均</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.avgPrice | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" align="end">
+
+        <button mat-button [matMenuTriggerFor]="klines">
+          <mat-icon>more_vert</mat-icon>
+          K 线
+        </button>
+        <mat-menu #klines="matMenu">
+          <ng-container *ngFor="let exch of $exchs | async">
+            <button mat-menu-item (click)="openKlineChart(row.pair,exch.code)" *ngIf="row.pair[exch.code+'Symbol']">
+              <mat-icon>show_chart</mat-icon>
+              {{exch.name}}
+            </button>
+          </ng-container>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource?.total"
+                 [pageIndex]="0"
+                 [pageSize]="20"
+                 [pageSizeOptions]="[10, 20, 50, 100]">
+  </mat-paginator>
+
+</div>
+
+<p>&nbsp;</p>
+

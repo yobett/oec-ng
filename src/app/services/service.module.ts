@@ -29,6 +29,7 @@ import { LocalStorageKeys, DATE_FORMATS, PaginatorIntl } from '../config';
 import { AssetSnapshotService } from './per/asset-snapshot.service';
 import { NotificationService } from './sys/notification.service';
 import { RoundDownPipe } from '../10-common/pipe/round-down-pipe';
+import { RollingPriceService } from './mar/rolling-price.service';
 
 
 @NgModule({
@@ -67,6 +68,7 @@ import { RoundDownPipe } from '../10-common/pipe/round-down-pipe';
     StrategyService,
     StrategyHistoryService,
     NotificationService,
+    RollingPriceService,
     {provide: MatPaginatorIntl, useValue: PaginatorIntl},
     {provide: MAT_DATE_LOCALE, useValue: 'zh-cn'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

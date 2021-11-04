@@ -15,6 +15,15 @@ export interface Kline {
   dts: string; // date time string
 }
 
+export interface PairKline extends Kline {
+  pair: ExPair;
+  symbol: string;
+  avgPrice: number;
+  changePercent: number;
+  lowHighPercent?: number;
+}
+
+
 export class KlineDataHolder {
 
   private dataCache: Map<string, Kline[]> = new Map<string, Kline[]>();

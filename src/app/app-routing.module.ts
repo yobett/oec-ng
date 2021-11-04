@@ -21,12 +21,16 @@ import { StrategyEditManyComponent } from './60-strategy/strategy-edit/strategy-
 import { SnapshotsChartComponent } from './40-asset/asset-snapshot/snapshots-chart.component';
 import { OrdersChartComponent } from './50-order/order-chart/orders-chart.component';
 import { SnapshotsComponent } from './40-asset/asset-snapshot/snapshots.component';
+import { Rolling24hPriceComponent } from './30-market/rolling24h-price/rolling24h-price.component';
 
 const routes: Routes = [
   // {path: '', component: HomeComponent},
+  {path: 'ccys', component: CcysComponent},
+  {path: 'pairs', component: PairsComponent},
   {path: 'quotes', component: CcyQuotesComponent},
   {path: 'prices', component: InstPriceComponent},
   {path: 'klines', component: KlineChartComponent},
+  {path: 'prices24h', component: Rolling24hPriceComponent},
 
   {path: 'strategies/:type', component: StrategiesComponent},
   {path: 'strategies/:type/edit-many/:ex', component: StrategyEditManyComponent},
@@ -46,8 +50,6 @@ const routes: Routes = [
   {path: 'users', component: UsersComponent},
   {path: 'exchs', component: ExchsComponent},
   {path: 'exapis', component: ExapisComponent},
-  {path: 'ccys', component: CcysComponent},
-  {path: 'pairs', component: PairsComponent},
 ];
 
 @NgModule({

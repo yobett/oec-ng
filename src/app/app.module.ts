@@ -66,6 +66,7 @@ import { CcyPairsDialogComponent } from './30-market/pair/ccy-pairs-dialog.compo
 import { AssetsClearoutDialogComponent } from './40-asset/asset-trading/assets-clearout-dialog.component';
 import { PendingOrdersDialogComponent } from './50-order/order-pending/pending-orders-dialog.component';
 import { AssetsDialogComponent } from './40-asset/asset/assets-dialog.component';
+import { Rolling24hPriceComponent } from './30-market/rolling24h-price/rolling24h-price.component';
 
 
 @NgModule({
@@ -137,7 +138,8 @@ import { AssetsDialogComponent } from './40-asset/asset/assets-dialog.component'
     CcyPairsDialogComponent,
     AssetsDialogComponent,
     AssetsClearoutDialogComponent,
-    PendingOrdersDialogComponent
+    PendingOrdersDialogComponent,
+    Rolling24hPriceComponent
   ],
   entryComponents: [],
   providers: [],

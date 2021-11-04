@@ -21,7 +21,7 @@ import { ExchService } from '../../services/sys/exch.service';
 import { Ccy } from '../../models/mar/ccy';
 import { SyncResultGroupDialogComponent } from '../../10-common/sync-result/sync-result-group-dialog.component';
 import { SyncResultDialogComponent } from '../../10-common/sync-result/sync-result-dialog.component';
-import { OrderFormComponent, OrderFormParams } from '../order-form/order-form.component';
+import { OrderFormComponent, OrderFormParams, PlacedOrder } from '../order-form/order-form.component';
 import { ExchangePair } from '../../models/mar/ex-pair';
 import { OrderForm } from '../../models/per/order-form';
 import { OrderDetailDialogComponent } from './order-detail-dialog.component';
@@ -183,8 +183,11 @@ export class SpotOrdersComponent extends SessionSupportComponent implements Afte
     const data: OrderFormParams = {orderForm, exchangePair};
 
     const ref = OrderFormComponent.openOrderForm(this.dialog, data);
-    OrderFormComponent.afterOrderPlacedDelay(ref, () => {
-      if (data.placedForm && data.placedForm.type === 'market') {
+    OrderFormComponent.afterOrderPlacedDelay(ref, (placedOrder: PlacedOrder) => {
+      if (!placedOrder) {
+        return;
+      }
+      if (placedOrder.orderForm.type === 'market') {
         this.dataSource.refresh();
       }
     });

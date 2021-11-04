@@ -19,10 +19,15 @@ import { RoundDownPipe } from '../../10-common/pipe/round-down-pipe';
 import { LastTransaction } from '../../models/per/last-transaction';
 import { LastTransService } from '../../services/per/last-trans.service';
 
+export interface PlacedOrder {
+  orderPlacedAt: number;
+  orderForm: OrderForm;
+  orderId: string;
+}
+
 export interface OrderFormParams {
   exchangePair: ExchangePair;
   orderForm?: OrderForm;
-  placedForm?: OrderForm;
   baseAsset?: Asset;
   quoteAsset?: Asset;
   lastTrans?: LastTransaction;
@@ -59,7 +64,7 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
   sliderSteps = 8;
   sliderTickInterval = 1;
 
-  orderPlacedAt: number;
+  placedOrder?: PlacedOrder;
 
   loadingExchangeInfo = false;
   exchangeInfo: any = null;
@@ -87,7 +92,7 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
               private effectDigits: EffectDigitsPipe,
               private roundDown: RoundDownPipe,
               private snackBar: MatSnackBar,
-              public dialogRef: MatDialogRef<OrderFormComponent, number>,
+              public dialogRef: MatDialogRef<OrderFormComponent, PlacedOrder>,
               @Inject(MAT_DIALOG_DATA) public data: OrderFormParams,
               private dialog: MatDialog) {
 
@@ -307,11 +312,8 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
     const exchangePair = this.exchangePair;
     const orderForm = this.orderForm;
     const form: OrderForm = {
-      ex: exchangePair.ex,
+      ...exchangePair,
       side: orderForm.side,
-      baseCcy: exchangePair.baseCcy,
-      quoteCcy: exchangePair.quoteCcy,
-      symbol: exchangePair.symbol,
       type: this.priceLimit ? 'limit' : 'market'
     };
     if (this.priceLimit) {
@@ -375,18 +377,22 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
             this.snackBar.open('已下单（限价单），可在 “当前挂单” 页查看');
           }
 
-          this.data.placedForm = form;
-          this.orderPlacedAt = Date.now();
+          const orderPlacedAt = Date.now();
+          this.placedOrder = {
+            orderForm: form,
+            orderId: res.orderId,
+            orderPlacedAt: orderPlacedAt
+          };
         },
         error => this.placingOrder = false,
         () => this.placingOrder = false)
   }
 
   closeDialog() {
-    this.dialogRef.close(this.orderPlacedAt);
+    this.dialogRef.close(this.placedOrder);
   }
 
-  static openOrderForm(dialog: MatDialog, data: OrderFormParams): MatDialogRef<OrderFormComponent, number> {
+  static openOrderForm(dialog: MatDialog, data: OrderFormParams): MatDialogRef<OrderFormComponent, PlacedOrder> {
     return dialog.open(
       OrderFormComponent, {
         disableClose: true,
@@ -396,20 +402,20 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
       });
   }
 
-  static afterOrderPlacedDelay(ref: MatDialogRef<OrderFormComponent, number>,
-                               action: () => void) {
-    ref.afterClosed().subscribe(orderPlacedAt => {
-      if (!orderPlacedAt) {
+  static afterOrderPlacedDelay(ref: MatDialogRef<OrderFormComponent, PlacedOrder>,
+                               action: (placedOrder?: PlacedOrder) => void) {
+    ref.afterClosed().subscribe((placedOrder: PlacedOrder) => {
+      if (!placedOrder) {
         return;
       }
-      const delay = PlaceOrderRefreshDelay;
+      const orderPlacedAt = placedOrder.orderPlacedAt;
       const elapse = Date.now() - orderPlacedAt;
-      const remain = delay - elapse;
+      const remain = PlaceOrderRefreshDelay - elapse;
       if (remain <= 0) {
-        action();
+        action(placedOrder);
       } else {
         setTimeout(() => {
-          action();
+          action(placedOrder);
         }, remain);
       }
     });

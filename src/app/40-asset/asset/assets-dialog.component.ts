@@ -29,7 +29,7 @@ export class AssetsDialogComponent implements AfterViewInit {
   assets: Asset2[];
   availableValueThreshold = 10; // $
 
-  displayedColumns: string[] = ['index', 'ex', 'ccy', 'price', 'available', 'availableValue'];
+  displayedColumns: string[] = ['index', 'ex', 'ccy', 'price', 'frozenValue', 'availableValue'];
 
   CoinLogoPath = Ccy.LogoPath;
 
@@ -44,11 +44,12 @@ export class AssetsDialogComponent implements AfterViewInit {
         return null;
       }
       let availableValue: number;
-      if (typeof asset.holdingValue !== 'undefined'
-        && typeof asset.frozenValue !== 'undefined') {
-        availableValue = asset.holdingValue - asset.frozenValue;
-        if (availableValue < this.availableValueThreshold) {
+      if (typeof asset.holdingValue !== 'undefined') {
+        if (asset.holdingValue < this.availableValueThreshold) {
           return null;
+        }
+        if (typeof asset.frozenValue !== 'undefined') {
+          availableValue = asset.holdingValue - asset.frozenValue;
         }
       }
       return {...asset, available, availableValue} as Asset2
@@ -71,7 +72,7 @@ export class AssetsDialogComponent implements AfterViewInit {
         dialog.open(
           AssetsDialogComponent, {
             disableClose: true,
-            width: '500px',
+            width: '600px',
             maxWidth: '96vw',
             data: {assets, threshold}
           });

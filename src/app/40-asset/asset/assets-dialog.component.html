@@ -1,5 +1,5 @@
 <h3 mat-dialog-title>
-  当前可用资产（ &gt; ${{availableValueThreshold}}）
+  当前资产（ &gt; ${{availableValueThreshold}}）
 </h3>
 
 <mat-dialog-content>
@@ -31,13 +31,13 @@
       <td mat-cell *matCellDef="let row">{{row.price | money}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="available">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>可用</th>
-      <td mat-cell *matCellDef="let row">{{row.available | moneysum}}</td>
+    <ng-container matColumnDef="frozenValue">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>冻结（美元）</th>
+      <td mat-cell *matCellDef="let row">{{row.frozenValue | moneysum}}</td>
     </ng-container>
 
     <ng-container matColumnDef="availableValue">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>折美元</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>可用（美元）</th>
       <td mat-cell *matCellDef="let row">{{row.availableValue | moneysum}}</td>
     </ng-container>
 

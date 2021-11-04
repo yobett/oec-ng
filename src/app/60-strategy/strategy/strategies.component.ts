@@ -23,7 +23,7 @@ import { ExchService } from '../../services/sys/exch.service';
 import { ExchangePair, ExPair } from '../../models/mar/ex-pair';
 import { KlineChartDialogComponent } from '../../30-market/kline-chart/kline-chart-dialog.component';
 import { OrderForm } from '../../models/per/order-form';
-import { OrderFormComponent, OrderFormParams } from '../../50-order/order-form/order-form.component';
+import { OrderFormComponent, OrderFormParams, PlacedOrder } from '../../50-order/order-form/order-form.component';
 import { LocalStorageKeys } from '../../config';
 import { StrategyDetailDialogComponent } from './strategy-detail-dialog.component';
 
@@ -360,8 +360,8 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
 
     const ref = OrderFormComponent.openOrderForm(this.dialog, data);
     if (strategy.status === 'started') {
-      ref.afterClosed().subscribe(orderPlacedAt => {
-        if (orderPlacedAt) {
+      ref.afterClosed().subscribe((placedOrder: PlacedOrder) => {
+        if (placedOrder) {
           this.pause(strategy);
         }
       });

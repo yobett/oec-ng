@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -15,7 +15,7 @@ import { PairService } from '../../services/mar/pair.service';
 import { Ccy } from '../../models/mar/ccy';
 import { TableDatasource } from '../../10-common/table-datasource';
 import { CurrentPrice, CurrentPrices, PairPrice } from '../../models/mar/pair-price';
-import { OrderFormComponent, OrderFormParams } from '../../50-order/order-form/order-form.component';
+import { OrderFormComponent, OrderFormParams, PlacedOrder } from '../../50-order/order-form/order-form.component';
 import { LastTransaction } from '../../models/per/last-transaction';
 import { OrderForm } from '../../models/per/order-form';
 import { KlineChartDialogComponent } from '../kline-chart/kline-chart-dialog.component';
@@ -32,6 +32,7 @@ import { AssetsClearoutDialogComponent } from '../../40-asset/asset-trading/asse
 import { AssetService } from '../../services/per/asset.service';
 import { PendingOrdersDialogComponent } from '../../50-order/order-pending/pending-orders-dialog.component';
 import { AssetsDialogComponent } from '../../40-asset/asset/assets-dialog.component';
+import { PlaceOrderRefreshDelay } from '../../config';
 
 @Component({
   selector: 'app-inst-price',
@@ -220,8 +221,11 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     };
 
     const ref = OrderFormComponent.openOrderForm(this.dialog, data);
-    OrderFormComponent.afterOrderPlacedDelay(ref, () => {
-      if (data.placedForm && data.placedForm.type === 'market') {
+    OrderFormComponent.afterOrderPlacedDelay(ref, (placedOrder: PlacedOrder) => {
+      if (!placedOrder) {
+        return;
+      }
+      if (placedOrder.orderForm.type === 'market') {
         this.loadData();
       }
     });
@@ -277,7 +281,26 @@ export class InstPriceComponent extends SessionSupportComponent implements After
             this.snackBar.open('当前无挂单');
             return;
           }
-          PendingOrdersDialogComponent.showPendingOrders(this.dialog, orders);
+          const ref = PendingOrdersDialogComponent.showPendingOrders(this.dialog, orders);
+          ref.afterClosed().subscribe((placedOrders: PlacedOrder[]) => {
+            if (!placedOrders) {
+              return;
+            }
+            const placedLimitOrders = placedOrders.filter(po => po.orderForm.type === 'limit');
+            if (placedLimitOrders.length === 0) {
+              return;
+            }
+            const lastOrder = placedLimitOrders[placedLimitOrders.length - 1];
+            const elapse = Date.now() - lastOrder.orderPlacedAt;
+            const remain = PlaceOrderRefreshDelay - elapse;
+            if (remain <= 0) {
+              this.loadData();
+            } else {
+              setTimeout(() => {
+                this.loadData();
+              }, remain);
+            }
+          });
         },
         error => this.processes.loadingPendingOrders = false,
         () => this.processes.loadingPendingOrders = false

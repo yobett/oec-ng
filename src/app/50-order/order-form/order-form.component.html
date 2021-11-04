@@ -145,7 +145,7 @@
   <span>
     <button mat-button (click)="closeDialog()">关闭</button>
     <button mat-button [color]="orderForm.side === 'buy' ? 'accent' : 'primary'" (click)="placeOrder()"
-            [disabled]="placingOrder||!!orderPlacedAt">
+            [disabled]="placingOrder||!!placedOrder">
       {{orderForm.side === 'buy' ? '买入' : '卖出'}}
     </button>
   </span>

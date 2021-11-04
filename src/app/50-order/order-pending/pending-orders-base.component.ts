@@ -13,7 +13,7 @@ import { Ccy } from '../../models/mar/ccy';
 import { OrderDetailDialogComponent } from '../order/order-detail-dialog.component';
 import { ExchangePair } from '../../models/mar/ex-pair';
 import { CancelOrderForm, OrderForm } from '../../models/per/order-form';
-import { OrderFormComponent, OrderFormParams } from '../order-form/order-form.component';
+import { OrderFormComponent, OrderFormParams, PlacedOrder } from '../order-form/order-form.component';
 
 @Component({
   template: ''
@@ -24,6 +24,8 @@ export abstract class PendingOrdersBaseComponent extends SessionSupportComponent
 
   dataSource: TableDatasource<SpotOrder>;
   CoinLogoPath = Ccy.LogoPath;
+
+  placedOrders: PlacedOrder[];
 
   processes: { [name: string]: boolean } = {};
 
@@ -117,7 +119,11 @@ export abstract class PendingOrdersBaseComponent extends SessionSupportComponent
     const data: OrderFormParams = {orderForm, exchangePair};
 
     const ref = OrderFormComponent.openOrderForm(this.dialog, data);
-    OrderFormComponent.afterOrderPlacedDelay(ref, () => {
+    OrderFormComponent.afterOrderPlacedDelay(ref, (placedOrder: PlacedOrder) => {
+      if (!this.placedOrders) {
+        this.placedOrders = [];
+      }
+      this.placedOrders.push(placedOrder);
       this.fetchPendingOrdersFor(order.ex);
     });
   }

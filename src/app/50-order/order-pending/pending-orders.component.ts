@@ -43,7 +43,7 @@ export class PendingOrdersComponent extends PendingOrdersBaseComponent {
       .subscribe((orders: SpotOrder[]) => {
           this.processes.fetchPendingOrders = false;
           this.dataSource.setData(orders);
-          // this.snackBar.open('当前挂单查询成功');
+          this.snackBar.open('当前挂单查询成功');
         },
         error => this.processes.fetchPendingOrders = false,
         () => this.processes.fetchPendingOrders = false

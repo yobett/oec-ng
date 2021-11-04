@@ -5,7 +5,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { SpotOrder } from '../../models/per/spot-order';
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { TableDatasource } from '../../10-common/table-datasource';
-import { OrderFormComponent } from '../order-form/order-form.component';
+import { PlacedOrder } from '../order-form/order-form.component';
 import { PendingOrdersBaseComponent } from './pending-orders-base.component';
 import { SessionService } from '../../services/sys/session.service';
 
@@ -24,9 +24,9 @@ export class PendingOrdersDialogComponent extends PendingOrdersBaseComponent {
               protected orderService: SpotOrderService,
               protected snackBar: MatSnackBar,
               protected dialog: MatDialog,
-              public dialogRef: MatDialogRef<OrderFormComponent, number>,
+              public dialogRef: MatDialogRef<PendingOrdersDialogComponent, PlacedOrder[]>,
               @Inject(MAT_DIALOG_DATA) public data: { orders: SpotOrder[] }) {
-    super(sessionService,orderService,snackBar,dialog);
+    super(sessionService, orderService, snackBar, dialog);
     this.orders = data.orders;
     this.dataSource = new TableDatasource<SpotOrder>();
   }
@@ -39,10 +39,11 @@ export class PendingOrdersDialogComponent extends PendingOrdersBaseComponent {
   }
 
   closeDialog() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.placedOrders);
   }
 
-  static showPendingOrders(dialog: MatDialog, orders: SpotOrder[]) {
+  static showPendingOrders(dialog: MatDialog, orders: SpotOrder[])
+    : MatDialogRef<PendingOrdersDialogComponent, PlacedOrder[]> {
     return dialog.open(
       PendingOrdersDialogComponent, {
         disableClose: true,

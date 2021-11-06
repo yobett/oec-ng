@@ -37,8 +37,8 @@ export abstract class KlineChartBaseComponent implements OnInit {
 
   processes: { [name: string]: boolean } = {};
 
-  constructor(protected themeService: ThemeService,
-              protected klineService: KlineService) {
+  protected constructor(protected themeService: ThemeService,
+                        protected klineService: KlineService) {
     this.chartDarkTheme = this.themeService.currentTheme.darkTheme;
   }
 

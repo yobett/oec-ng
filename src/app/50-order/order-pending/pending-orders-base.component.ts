@@ -29,10 +29,10 @@ export abstract class PendingOrdersBaseComponent extends SessionSupportComponent
 
   processes: { [name: string]: boolean } = {};
 
-  constructor(protected sessionService: SessionService,
-              protected orderService: SpotOrderService,
-              protected snackBar: MatSnackBar,
-              protected dialog: MatDialog) {
+  protected constructor(protected sessionService: SessionService,
+                        protected orderService: SpotOrderService,
+                        protected snackBar: MatSnackBar,
+                        protected dialog: MatDialog) {
     super(sessionService);
   }
 

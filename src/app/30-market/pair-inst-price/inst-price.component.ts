@@ -286,11 +286,12 @@ export class InstPriceComponent extends SessionSupportComponent implements After
             if (!placedOrders) {
               return;
             }
-            const placedLimitOrders = placedOrders.filter(po => po.orderForm.type === 'limit');
-            if (placedLimitOrders.length === 0) {
+            // 下了市价单才需要刷新列表
+            const placedMarketOrders = placedOrders.filter(po => po.orderForm.type === 'market');
+            if (placedMarketOrders.length === 0) {
               return;
             }
-            const lastOrder = placedLimitOrders[placedLimitOrders.length - 1];
+            const lastOrder = placedMarketOrders[placedMarketOrders.length - 1];
             const elapse = Date.now() - lastOrder.orderPlacedAt;
             const remain = PlaceOrderRefreshDelay - elapse;
             if (remain <= 0) {

@@ -53,9 +53,9 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
   processes: { [name: string]: boolean } = {};
 
   displayedColumns1: string[] = ['index', 'baseCcy', 'quoteCcy', 'ex', 'side', 'basePoint', 'expectingPercent', 'tradeVol'];
-  displayedColumns21: string[] = ['tradingPoint', 'lastCheckAt', 'watchLevel', 'status',];
-  displayedColumns22: string[] = ['createdAt', 'actions'];
-  displayedColumns2: string[] = [...this.displayedColumns21, ...this.displayedColumns22];
+  displayedColumns21: string[] = ['tradingPoint', 'lastCheckAt', 'watchLevel', 'status'];
+  displayedColumns22: string[] = ['executor', 'createdAt', 'actions'];
+  // displayedColumns2: string[] = [...this.displayedColumns21, ...this.displayedColumns22];
 
   displayedColumnsByType = {
     [Strategy.TypeLB]: [...this.displayedColumns1, 'drawbackPercent', 'valley', 'beyondExpect',

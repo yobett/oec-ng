@@ -29,8 +29,8 @@ export interface StrategyExPair {
   styleUrls: ['./strategy-edit-many.component.css']
 })
 export class StrategyEditManyComponent implements OnInit {
-
   statusOptions = Strategy.StatusOptions;
+  executorOptions = Strategy.ExecutorOptions;
   CoinLogoPath = Ccy.LogoPath;
 
   ex: string;

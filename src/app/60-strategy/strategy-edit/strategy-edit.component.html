@@ -64,7 +64,7 @@
               设为基点
             </button>
           </div>
-          <div>
+          <!--<div>
             上次均价 ×
             <mat-form-field floatLabel="always" class="short-field">
               <input matInput type="number" step="5" placeholder="" [(ngModel)]="lastPricePercent">
@@ -81,7 +81,7 @@
               <mat-icon>south_west</mat-icon>
               设为期望值
             </button>
-          </div>
+          </div>-->
         </div>
         <div *ngIf="!lastTransaction" class="props">
           <div>
@@ -239,7 +239,7 @@
       </div>-->
 
       <div class="field-box">
-        <div class="slide-field mat-form-field short-field" *ngIf="strategy.type==='LB'||strategy.type==='HS'">
+        <div class="slide-field mat-form-field short-field">
           <mat-slide-toggle [(ngModel)]="strategy.autoStartNext">自动接续</mat-slide-toggle>
         </div>
         <div class="slide-field mat-form-field short-field" *ngIf="strategy.type==='LS'||strategy.type==='HB'">
@@ -248,6 +248,14 @@
         <div class="slide-field mat-form-field short-field" *ngIf="strategy.peak||strategy.valley">
           <mat-slide-toggle [(ngModel)]="clearPeak">清除峰/谷值</mat-slide-toggle>
         </div>
+        <mat-form-field floatLabel="always" class="short-field">
+          <mat-label>Executor</mat-label>
+          <mat-select [(ngModel)]="strategy.executor">
+            <mat-option *ngFor="let opt of executorOptions" [value]="opt.value">
+              {{opt.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
     </div>

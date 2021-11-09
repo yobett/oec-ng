@@ -97,6 +97,14 @@
         <div class="slide-field mat-form-field short-field" *ngIf="strategy.type==='LS'||strategy.type==='HB'">
           <mat-slide-toggle [(ngModel)]="strategy.updateBasePoint">更新基点</mat-slide-toggle>
         </div>
+        <mat-form-field floatLabel="always" class="short-field">
+          <mat-label>Executor</mat-label>
+          <mat-select [(ngModel)]="strategy.executor">
+            <mat-option *ngFor="let opt of executorOptions" [value]="opt.value">
+              {{opt.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
       <div class="field-box-prompt">对于修改：</div>

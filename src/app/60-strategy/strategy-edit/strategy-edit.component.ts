@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
@@ -20,13 +20,14 @@ import { LastTransaction } from '../../models/per/last-transaction';
 })
 export class StrategyEditComponent implements OnInit {
   statusOptions = Strategy.StatusOptions;
+  executorOptions = Strategy.ExecutorOptions;
   CoinLogoPath = Ccy.LogoPath;
   getTypeLabel = Strategy.getTypeLabel;
 
   strategy: Strategy;
   oriStrategy: Strategy;
   lastTransaction: LastTransaction;
-  lastPricePercent: number;
+  // lastPricePercent: number;
 
   tickerPrice: number;
   tickerPriceAdjusted: number;
@@ -59,13 +60,13 @@ export class StrategyEditComponent implements OnInit {
             return;
           }
           this.lastTransaction = lt;
-          if (lt.side === strategy1.side) {
+          /*if (lt.side === strategy1.side) {
             this.lastPricePercent = 100;
           } else if (lt.side === 'buy' && strategy1.side === 'sell') {
             this.lastPricePercent = 110;
           } else if (lt.side === 'sell' && strategy1.side === 'buy') {
             this.lastPricePercent = 90;
-          }
+          }*/
         });
     });
 
@@ -87,7 +88,7 @@ export class StrategyEditComponent implements OnInit {
         () => this.refreshingPrice = false);
   }
 
-  setExpectingByLastTrans() {
+  /*setExpectingByLastTrans() {
     const lastPrice = this.lastTransaction.avgPrice;
     const lastPricePercent = +this.lastPricePercent;
     if (!lastPrice || !lastPricePercent) {
@@ -102,7 +103,7 @@ export class StrategyEditComponent implements OnInit {
     const basePoint = lastPrice * lastPricePercent / (100 + (watchUp ? expectingPercent : -expectingPercent))
     this.strategy.basePoint = +this.effectDigits.transform(basePoint, 5);
     this.expectingChanged();
-  }
+  }*/
 
   setBasePointFromCurrentPrice() {
     this.strategy.basePoint = this.tickerPriceAdjusted;
@@ -156,16 +157,15 @@ export class StrategyEditComponent implements OnInit {
       (100 + strategy.expectingPercent * (strategy.watchDirection === 'up' ? 1 : -1)) / 100.0;
 
     const {
-      id, status, basePoint, expectingPercent, expectingPoint,
-      drawbackPercent, /*intenseWatchPercent, mediumWatchPercent,*/
+      id, status, basePoint, expectingPercent, expectingPoint, drawbackPercent,
       tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
-      autoStartNext, updateBasePoint
+      autoStartNext, updateBasePoint, executor
     } = strategy;
 
     const toSave = {
       id, status, basePoint, expectingPercent, expectingPoint, drawbackPercent,
       tradeVolByValue, tradeVolPercent, tradeVol, applyOrder,
-      autoStartNext, updateBasePoint
+      autoStartNext, updateBasePoint, executor
     } as Strategy;
     if (this.clearPeak) {
       toSave.peak = null;

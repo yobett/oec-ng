@@ -30,6 +30,14 @@ export class Strategy extends Model {
   //   label: s.substring(0, 1).toUpperCase() + s.substr(1)
   // }));
 
+  static ExecutorPr = 'pr';
+  static ExecutorWs = 'ws';
+
+  static ExecutorOptions = [
+    {value: 'pr', label: 'PR'},
+    {value: 'ws', label: 'WS'},
+  ];
+
   constructor(type: string) {
     super();
     this.type = type;
@@ -93,6 +101,8 @@ export class Strategy extends Model {
 
   watchLevel: 'loose' | 'medium' | 'intense' = 'loose';
   status: 'initial' | 'started' | 'paused' | 'placed' | 'completed' = 'initial';
+
+  executor: string = Strategy.ExecutorPr;
 }
 
 

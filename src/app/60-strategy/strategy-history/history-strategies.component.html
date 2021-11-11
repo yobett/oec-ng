@@ -13,46 +13,58 @@
 
   <div class="table-filter-form">
 
-    <div class="form-field">
-      <span class="label subordinated">方向</span>
-      <mat-button-toggle-group [(ngModel)]="filterForm['side']"
-                               (change)="filter()">
-        <mat-button-toggle value="all">不限</mat-button-toggle>
-        <mat-button-toggle value="buy">买入</mat-button-toggle>
-        <mat-button-toggle value="sell">卖出</mat-button-toggle>
-      </mat-button-toggle-group>
+    <div>
+      <span class="field-label subordinated">基础币种</span>
+      <button mat-button [color]="filterForm['baseCcy']===ccy? 'accent':null" *ngFor="let ccy of $ccyCodes | async"
+              (click)="baseCcySelected(ccy)">
+        <img class="ccy-logo" [src]="CoinLogoPath(ccy)" alt="">
+        {{ccy}}
+      </button>
     </div>
 
-    <!--<mat-form-field>
-      <mat-label>类型</mat-label>
-      <mat-select [(ngModel)]="filterForm['type']">
-        <mat-option value="all">不限</mat-option>
-        <mat-option *ngFor="let strategyType of strategyTypes" [value]="strategyType.value">
-          {{strategyType.label}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>-->
+    <div class="operation-bar">
+      <div class="form-field">
+        <span class="label subordinated">方向</span>
+        <mat-button-toggle-group [(ngModel)]="filterForm['side']"
+                                 (change)="filter()">
+          <mat-button-toggle value="all">不限</mat-button-toggle>
+          <mat-button-toggle value="buy">买入</mat-button-toggle>
+          <mat-button-toggle value="sell">卖出</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
 
-    <mat-form-field>
-      <input matInput placeholder="基础币种" name="baseCcy" [(ngModel)]="filterForm['baseCcy']"
-             (keyup.enter)="filter()">
-    </mat-form-field>
+      <!--<mat-form-field>
+        <mat-label>类型</mat-label>
+        <mat-select [(ngModel)]="filterForm['type']">
+          <mat-option value="all">不限</mat-option>
+          <mat-option *ngFor="let strategyType of strategyTypes" [value]="strategyType.value">
+            {{strategyType.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>-->
 
-    <mat-form-field>
-      <input matInput [matDatepicker]="dateToPicker" placeholder="截止日期" [max]="today"
-             [(ngModel)]="filterForm['orderPlacedDateTo']" (dblclick)="filterForm['orderPlacedDateTo']=undefined">
-      <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
-      <mat-datepicker #dateToPicker></mat-datepicker>
-    </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="基础币种" name="baseCcy" [(ngModel)]="filterForm['baseCcy']"
+               (keyup.enter)="filter()">
+      </mat-form-field>
 
-    <button mat-button (click)="filter()">
-      <mat-icon>search</mat-icon>
-      筛选
-    </button>
-    <button mat-button (click)="resetFilter()">
-      <mat-icon>block</mat-icon>
-      全部
-    </button>
+      <mat-form-field>
+        <input matInput [matDatepicker]="dateToPicker" placeholder="截止日期" [max]="today"
+               [(ngModel)]="filterForm['orderPlacedDateTo']" (dblclick)="filterForm['orderPlacedDateTo']=undefined">
+        <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+        <mat-datepicker #dateToPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-button (click)="filter()">
+        <mat-icon>search</mat-icon>
+        筛选
+      </button>
+      <button mat-button (click)="resetFilter()">
+        <mat-icon>block</mat-icon>
+        全部
+      </button>
+
+    </div>
   </div>
 
   <table mat-table class="full-width" matSort matSortActive="orderPlacedAt" matSortDirection="desc">
@@ -140,6 +152,13 @@
       <td mat-cell *matCellDef="let row">
         {{row.valley | effectdigits}}<br>
         <span class="subordinated">{{row.valleyTime | date:'MM-dd HH:mm'}}</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="executor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>执行器</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.executor}}
       </td>
     </ng-container>
 

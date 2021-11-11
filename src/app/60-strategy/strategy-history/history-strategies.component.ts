@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { Observable } from 'rxjs';
 import { Moment } from 'moment';
 
@@ -18,9 +19,9 @@ import { OrderDetailDialogComponent } from '../../50-order/order/order-detail-di
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { Strategy } from '../../models/str/strategy';
 import { StrategyDetailDialogComponent } from '../strategy/strategy-detail-dialog.component';
-import { MatPaginator } from '@angular/material/paginator';
 import { PageableDatasource } from '../../10-common/pageable-datasource';
 import { DATE_FORMAT } from '../../config';
+import { CcyService } from '../../services/mar/ccy.service';
 
 @Component({
   selector: 'app-strategies',
@@ -39,6 +40,7 @@ export class HistoryStrategiesComponent extends SessionSupportComponent implemen
 
   dataSource: PageableDatasource<StrategyHistory>;
   $exchs: Observable<Exch[]>;
+  $ccyCodes: Observable<string[]>;
 
   today: Date = new Date();
   filterForm: any & StrategyHistoryFilter = {ex: 'all', type: 'all', side: 'all'};
@@ -46,11 +48,13 @@ export class HistoryStrategiesComponent extends SessionSupportComponent implemen
   processes: { [name: string]: boolean } = {};
 
   displayedColumns: string[] = ['index', 'baseCcy', 'quoteCcy', 'ex', 'type', /*'watchDirection',*/
-    'side', 'basePoint', 'expectingPoint', 'peak', 'valley', /*'clientOrderId',*/ 'orderPlacedAt', 'actions'];
+    'side', 'basePoint', 'expectingPoint', 'peak', 'valley', 'executor', /*'clientOrderId',*/
+    'orderPlacedAt', 'actions'];
 
   constructor(protected sessionService: SessionService,
               private strategyHistoryService: StrategyHistoryService,
               private exchService: ExchService,
+              private ccyService: CcyService,
               private spotOrderService: SpotOrderService,
               private dialog: MatDialog) {
     super(sessionService);
@@ -84,6 +88,7 @@ export class HistoryStrategiesComponent extends SessionSupportComponent implemen
 
   protected withSession(user: User) {
     this.$exchs = this.exchService.list2();
+    this.$ccyCodes = this.ccyService.listConcernedCodes();
   }
 
   ngAfterViewInit() {
@@ -100,6 +105,11 @@ export class HistoryStrategiesComponent extends SessionSupportComponent implemen
   resetFilter() {
     this.filterForm = {ex: 'all', type: 'all', side: 'all'};
     this.dataSource.refresh(this.filterForm);
+  }
+
+  baseCcySelected(baseCcy: string) {
+    this.filterForm.baseCcy = baseCcy;
+    this.filter();
   }
 
   showStrategyDetail(strategy: Strategy) {

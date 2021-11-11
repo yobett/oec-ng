@@ -1,6 +1,4 @@
 .table-filter-form {
-  display: flex;
-  flex-wrap: wrap;
   margin-bottom: 8px;
 }
 
@@ -11,6 +9,17 @@
 .table-filter-form .label {
   display: inline-block;
   margin-right: .5em;
+}
+
+.field-label {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.operation-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 @media(max-width: 640px) {

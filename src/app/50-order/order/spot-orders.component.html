@@ -31,8 +31,7 @@
 
     <div>
       <span class="field-label subordinated">基础币种</span>
-      <button mat-button [color]="filterForm['baseCcy']===ccy? 'accent':null"
-              *ngFor="let ccy of $ccyCodes | async"
+      <button mat-button [color]="filterForm['baseCcy']===ccy? 'accent':null" *ngFor="let ccy of $ccyCodes | async"
               (click)="baseCcySelected(ccy)">
         <img class="ccy-logo" [src]="CoinLogoPath(ccy)" alt="">
         {{ccy}}
@@ -40,11 +39,6 @@
     </div>
 
     <div class="operation-bar">
-
-      <!--<mat-form-field>
-        <input matInput placeholder="交易对 %" name="pairSymbol" [(ngModel)]="filterForm['pairSymbolLike']"
-               (keyup.enter)="filter()">
-      </mat-form-field>-->
 
       <mat-form-field>
         <input matInput placeholder="基础币种" name="baseCcy" [(ngModel)]="filterForm['baseCcy']"

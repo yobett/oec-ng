@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ModelCurdService } from '../model-curd.service';
-import { Strategy } from '../../models/str/strategy';
+import { BaseQuoteStrategyCounts, Strategy } from '../../models/str/strategy';
 import { ListResult, Result } from '../../models/result';
 
 
@@ -77,6 +77,12 @@ export class StrategyService extends ModelCurdService<Strategy> {
       url += '/executeAll';
     }
     return this.pipeDefault(this.http.post<Result>(url, null));
+  }
+
+  countByBaseQuote(): Observable<BaseQuoteStrategyCounts[]> {
+    const url = `${this.baseUrl}/count/bq`;
+    return super.pipeDefault(this.http.get<ListResult<BaseQuoteStrategyCounts>>(url))
+      .pipe(map(result => result.list));
   }
 
 }

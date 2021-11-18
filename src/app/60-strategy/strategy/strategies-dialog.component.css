@@ -1,0 +1,26 @@
+h3 .head-field {
+  display: inline-block;
+}
+
+.head-field .ccy-logo {
+  vertical-align: text-bottom;
+}
+
+.head-field .ccy-code {
+  display: inline-block;
+  margin-left: .5em;
+}
+
+h3 .head-field:not(:last-child) {
+  margin-right: 1em;
+}
+
+h3 .label {
+  display: inline-block;
+  margin-right: .5em;
+}
+
+.prop-name {
+  display: inline-block;
+  margin-right: 1em;
+}

@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
@@ -14,7 +14,7 @@ import { User } from '../../models/sys/user';
 import { PairService } from '../../services/mar/pair.service';
 import { Ccy } from '../../models/mar/ccy';
 import { TableDatasource } from '../../10-common/table-datasource';
-import { CurrentPrice, CurrentPrices, PairPrice } from '../../models/mar/pair-price';
+import { CurrentPrices, PairPrice } from '../../models/mar/pair-price';
 import { OrderFormComponent, OrderFormParams, PlacedOrder } from '../../50-order/order-form/order-form.component';
 import { LastTransaction } from '../../models/per/last-transaction';
 import { OrderForm } from '../../models/per/order-form';
@@ -33,6 +33,9 @@ import { AssetService } from '../../services/per/asset.service';
 import { PendingOrdersDialogComponent } from '../../50-order/order-pending/pending-orders-dialog.component';
 import { AssetsDialogComponent } from '../../40-asset/asset/assets-dialog.component';
 import { PlaceOrderRefreshDelay } from '../../config';
+import { StrategiesDialogComponent } from '../../60-strategy/strategy/strategies-dialog.component';
+import { StrategyService } from '../../services/str/strategy.service';
+import { BaseQuoteStrategyCounts, Strategy } from '../../models/str/strategy';
 
 @Component({
   selector: 'app-inst-price',
@@ -50,7 +53,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   displayedColumnsH0: string[] = [
     'index', 'baseCcy', 'quoteCcy',
     'lastTrans', 'currentPrice',
-    'actions'];
+    'strategyCount', 'actions'];
   displayedColumnsH1: string[] = [
     'ex', 'updateTs', 'side', 'avgPrice',
     'price', 'priceChangePercent', 'priceSource',
@@ -59,9 +62,10 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     'index', 'baseCcy', 'quoteCcy',
     'ex', 'updateTs', 'side', 'avgPrice',
     'price', 'priceChangePercent', 'priceSource',
-    'actions'];
+    'strategyCount', 'actions'];
 
   prices: CurrentPrices;
+  strategyCountsMap: Map<string, BaseQuoteStrategyCounts>;
   $exchs: Observable<Exch[]>;
   preferDS: string = Exch.CODE_BA;
 
@@ -75,6 +79,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
               private ccyService: CcyService,
               private assetService: AssetService,
               private orderService: SpotOrderService,
+              private strategyService: StrategyService,
               private effectDigits: EffectDigitsPipe,
               private snackBar: MatSnackBar,
               private dialog: MatDialog) {
@@ -90,6 +95,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
       execQty: p => p.lastTrans && p.lastTrans.execQty || 0,
       ex: p => p.lastTrans && p.lastTrans.ex || 0,
       updateTs: p => p.lastTrans && p.lastTrans.updateTs || 0,
+      strategyCount: p => p.strategyCount && p.strategyCount.all || 0,
     }
   }
 
@@ -108,12 +114,33 @@ export class InstPriceComponent extends SessionSupportComponent implements After
                 this.setPrice(pp);
               }
             }
+            if (this.strategyCountsMap) {
+              for (let pp of pps) {
+                pp.strategyCount = this.strategyCountsMap.get(`${pp.baseCcy}-${pp.quoteCcy}`) || {running: 0, all: 0};
+              }
+            }
             return pps;
           })
       );
     this.dataSource.setObservable(obs);
 
     this.fetchPrices(first);
+    this.loadStrategiesCount();
+  }
+
+  loadStrategiesCount() {
+    this.strategyService.countByBaseQuote()
+      .subscribe((cs: BaseQuoteStrategyCounts[]) => {
+        this.strategyCountsMap = new Map<string, BaseQuoteStrategyCounts>(
+          cs.map(c => [`${c.baseCcy}-${c.quoteCcy}`, c]));
+
+        const tableData: PairPrice[] = this.dataSource.data;
+        if (tableData) {
+          for (let pp of tableData) {
+            pp.strategyCount = this.strategyCountsMap.get(`${pp.baseCcy}-${pp.quoteCcy}`) || {running: 0, all: 0};
+          }
+        }
+      });
   }
 
   transAmountTooltip(pp: PairPrice): string {
@@ -330,6 +357,57 @@ export class InstPriceComponent extends SessionSupportComponent implements After
 
   showCurrentAssets() {
     AssetsDialogComponent.showCurrentAssets(this.assetService, this.dialog);
+  }
+
+  showCurrentStrategies() {
+    this.processes.loadingStrategies = true;
+    this.strategyService.list2(null, {status: 'started'})
+      .subscribe((strategies: Strategy[]) => {
+          this.processes.loadingStrategies = false;
+          if (strategies.length === 0) {
+            this.snackBar.open('当前无运行中的策略');
+            return;
+          }
+          StrategiesDialogComponent.showStrategies(
+            {
+              status: 'started',
+              strategies
+            }, this.dialog).afterClosed()
+            .subscribe((countChanges: BaseQuoteStrategyCounts[]) => {
+              if (!countChanges) {
+                return;
+              }
+              for (const cc of countChanges) {
+                const key = `${cc.baseCcy}-${cc.quoteCcy}`;
+                const cc0 = this.strategyCountsMap.get(key);
+                if (cc0) {
+                  cc0.running += cc.running;
+                  cc0.all += cc.all;
+                }
+              }
+            });
+        },
+        error => this.processes.loadingStrategies = false,
+        () => this.processes.loadingStrategies = false
+      );
+  }
+
+  showStrategies(pair: PairPrice) {
+    const pairBQ = {baseCcy: pair.baseCcy, quoteCcy: pair.quoteCcy};
+    this.strategyService.list2(null, pairBQ)
+      .subscribe((strategies: Strategy[]) => {
+        StrategiesDialogComponent.showStrategies(
+          {
+            pairBQ,
+            strategies
+          },
+          this.dialog).afterClosed()
+          .subscribe(countChanged => {
+            if (countChanged) {
+              this.loadStrategiesCount();
+            }
+          });
+      });
   }
 
 }

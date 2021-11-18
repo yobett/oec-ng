@@ -25,6 +25,10 @@
         <mat-icon>pending_actions</mat-icon>
         当前挂单
       </button>
+      <button mat-menu-item (click)="showCurrentStrategies()" [disabled]="processes.loadingStrategies">
+        <mat-icon>schedule</mat-icon>
+        当前策略
+      </button>
       <button mat-menu-item (click)="showCurrentAssets()">
         <mat-icon>local_atm</mat-icon>
         当前资产（ &gt; $10）
@@ -122,6 +126,19 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>来源</th>
       <td mat-cell *matCellDef="let row">
         {{row.currentPrice?.source}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="strategyCount">
+      <th mat-header-cell *matHeaderCellDef rowspan="2" class="op-head">策略</th>
+      <td mat-cell *matCellDef="let row" align="end">
+        <span class="clickable" (click)="showStrategies(row)" *ngIf="row.strategyCount">
+          <ng-template [ngIf]="row.strategyCount.running>0">
+            <span class="accent-color">{{row.strategyCount.running}}</span>
+            <span class="subordinated">/</span>
+          </ng-template>
+          <span [class.subordinated]="row.strategyCount.all===0">{{row.strategyCount.all}}</span>
+        </span>
       </td>
     </ng-container>
 

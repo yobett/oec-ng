@@ -1,4 +1,5 @@
 import { Model } from '../model';
+import { PairBQ } from '../mar/ex-pair';
 
 export class Strategy extends Model {
   static TypeLB = 'LB';
@@ -111,4 +112,11 @@ export interface StrategyFilter {
   ex?: string;
   side?: string;
   status?: string;
+  baseCcy?: string;
+  quoteCcy?: string;
+}
+
+export interface BaseQuoteStrategyCounts extends PairBQ {
+  running: number;
+  all: number;
 }

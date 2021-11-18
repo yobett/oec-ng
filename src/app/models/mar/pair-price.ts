@@ -21,7 +21,12 @@ export class PairPrice extends ExPair {
 
   // priceChange?: number;
 
-  priceChangePercent?: number
+  priceChangePercent?: number;
+
+  strategyCount?: {
+    running: number;
+    all: number;
+  };
 
   static priceKey(pair: ExPair): string {
     return `${pair.baseCcy}-${pair.quoteCcy}`;

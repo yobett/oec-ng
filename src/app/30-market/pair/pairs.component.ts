@@ -46,7 +46,7 @@ export class PairsComponent extends SessionSupportComponent implements AfterView
   dataSource: PageableDatasource<ExPair>;
 
   displayedColumns: string[] = ['index', 'concerned', 'baseCcy', 'quoteCcy',
-    'oeSymbol', 'baSymbol', 'hbSymbol', /*'createdAt',*/ 'actions'];
+    'oeSymbol', 'baSymbol', 'hbSymbol', 'createdAt', 'actions'];
 
   CoinLogoPath = Ccy.LogoPath;
   quoteCcyOptions = QuoteCcyOptions;

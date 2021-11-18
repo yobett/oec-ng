@@ -15,6 +15,10 @@
     <dd class="ccy-logo-code">
       <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt="">
       <span class="ccy-code">{{ccy.code}}</span>
+      <span class="ccy-no">
+        <ng-template [ngIf]="ccy.no<=5000">#{{ccy.no}}</ng-template>
+        <ng-template [ngIf]="ccy.no>5000">&gt; 5000</ng-template>
+      </span>
     </dd>
     <dt>查看</dt>
     <dd>

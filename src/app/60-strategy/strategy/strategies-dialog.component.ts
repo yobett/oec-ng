@@ -51,7 +51,6 @@ export class StrategiesDialogComponent implements AfterViewInit {
 
   CoinLogoPath = Ccy.LogoPath;
   getTypeLabel = Strategy.getTypeLabel;
-  strategyTypes = Strategy.TypeOptions;
   strategyTypesBuy = Strategy.TypeBuyOptions;
   strategyTypesSell = Strategy.TypeSellOptions;
 
@@ -214,17 +213,16 @@ export class StrategiesDialogComponent implements AfterViewInit {
 
 
   edit(strategy1: Strategy) {
+    let cc = this.getCountChange(strategy1);
     const editDialogRef: MatDialogRef<StrategyEditDialogComponent, Strategy> = StrategyEditDialogComponent
       .openStrategyEditDialog({strategy: strategy1}, this.dialog);
     editDialogRef.afterClosed().subscribe((strategy2: Strategy) => {
-      let cc = this.getCountChange(strategy1);
       cc.running = strategy2.status === 'started';
       Object.assign(strategy1, strategy2);
     });
   }
 
   closeDialog() {
-
     if (this.strategyCountChanges.size === 0) {
       this.dialogRef.close(null);
     }
@@ -232,6 +230,7 @@ export class StrategiesDialogComponent implements AfterViewInit {
     const scMap = new Map<string, BaseQuoteStrategyCounts>();
     for (const cc of this.strategyCountChanges.values()) {
       const key = `${cc.baseCcy}-${cc.quoteCcy}`;
+      // console.log(`${key}, ${cc.originalRunning}, ${cc.running}, ${cc.add}, ${cc.removed}`);
       let sc = scMap.get(key);
       if (!sc) {
         sc = {

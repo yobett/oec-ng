@@ -24,3 +24,7 @@ h3 .label {
   display: inline-block;
   margin-right: 1em;
 }
+
+.actions {
+  justify-content: space-between;
+}

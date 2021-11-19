@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
 import { validateForm } from '../../10-common/utils';
@@ -10,6 +10,14 @@ import { StrategyService } from '../../services/str/strategy.service';
 import { Exch } from '../../models/sys/exch';
 import { ExPair } from '../../models/mar/ex-pair';
 import { PairService } from '../../services/mar/pair.service';
+
+export interface StrategyEditNewData {
+  strategy: Strategy;
+  baseCcyFixed?: boolean;
+  quoteCcyFixed?: boolean;
+  $ccys: Observable<Ccy[]>;
+  $exchs: Observable<Exch[]>;
+}
 
 
 @Component({
@@ -29,6 +37,8 @@ export class StrategyNewComponent implements OnInit {
   getTypeLabel = Strategy.getTypeLabel;
 
   strategy: Strategy;
+  baseCcyFixed: boolean;
+  quoteCcyFixed: boolean;
   $ccys: Observable<Ccy[]>;
   $exchs: Observable<Exch[]>;
   pair: ExPair;
@@ -40,8 +50,10 @@ export class StrategyNewComponent implements OnInit {
               private pairService: PairService,
               private fb: FormBuilder,
               public dialogRef: MatDialogRef<StrategyNewComponent, Strategy>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
+              @Inject(MAT_DIALOG_DATA) public data: StrategyEditNewData) {
     this.strategy = data.strategy;
+    this.baseCcyFixed = data.baseCcyFixed;
+    this.quoteCcyFixed = data.quoteCcyFixed;
     this.$ccys = data.$ccys;
     this.$exchs = data.$exchs;
   }
@@ -95,6 +107,16 @@ export class StrategyNewComponent implements OnInit {
       .subscribe((strategy: Strategy) => {
         this.dialogRef.close(strategy);
       });
+  }
 
+  static openEditNewComponent(data: StrategyEditNewData, dialog: MatDialog)
+    : MatDialogRef<StrategyNewComponent, Strategy> {
+    return dialog.open(
+      StrategyNewComponent, {
+        disableClose: true,
+        width: '480px',
+        maxWidth: '90vw',
+        data
+      });
   }
 }

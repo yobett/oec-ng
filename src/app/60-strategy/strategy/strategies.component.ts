@@ -227,17 +227,12 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
     const strategy = new Strategy(this.strategyType);
     strategy.ex = this.filterEx == 'all' ? Exch.DefaultExch : this.filterEx;
     strategy.quoteCcy = 'USDT';
-    const dialogRef: MatDialogRef<StrategyNewComponent, Strategy> = this.dialog.open(
-      StrategyNewComponent, {
-        disableClose: true,
-        width: '480px',
-        maxWidth: '90vw',
-        data: {
-          strategy,
-          $ccys: this.$ccys,
-          $exchs: this.$exchs
-        }
-      });
+    const dialogRef: MatDialogRef<StrategyNewComponent, Strategy> = StrategyNewComponent
+      .openEditNewComponent({
+        strategy,
+        $ccys: this.$ccys,
+        $exchs: this.$exchs
+      }, this.dialog);
 
     dialogRef.afterClosed().subscribe((strategy1: Strategy) => {
       if (!strategy1) {
@@ -290,7 +285,11 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
             st.status = 'paused';
           }
         }
-        this.snackBar.open('全部已暂停');
+        if (this.strategyType) {
+          this.snackBar.open(`全部已暂停（${this.getTypeLabel(this.strategyType)}）`);
+        } else {
+          this.snackBar.open('全部已暂停');
+        }
       });
   }
 
@@ -306,7 +305,11 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
             st.status = 'started';
           }
         }
-        this.snackBar.open('全部已恢复');
+        if (this.strategyType) {
+          this.snackBar.open(`全部已恢复（${this.getTypeLabel(this.strategyType)}）`);
+        } else {
+          this.snackBar.open('全部已恢复');
+        }
       });
   }
 
@@ -328,7 +331,11 @@ export class StrategiesComponent extends SessionSupportComponent implements Afte
       .subscribe(result => {
           this.processes.executeAll = false;
           this.refresh();
-          this.snackBar.open('全部检查已完成');
+          if (this.strategyType) {
+            this.snackBar.open(`全部检查已完成（${this.getTypeLabel(this.strategyType)}）`);
+          } else {
+            this.snackBar.open('全部检查已完成');
+          }
         },
         error => this.processes.executeAll = false,
         () => this.processes.executeAll = false);

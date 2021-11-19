@@ -46,7 +46,7 @@
     <div class="field-box">
       <mat-form-field floatLabel="always">
         <mat-label>基础币种</mat-label>
-        <mat-select formControlName="baseCcy" (selectionChange)="ccyChanged($event)">
+        <mat-select formControlName="baseCcy" (selectionChange)="ccyChanged($event)" [disabled]="baseCcyFixed">
           <mat-option *ngFor="let ccy of $ccys | async" [value]="ccy.code">
             <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt=""> &nbsp;
             {{ccy.code}} &nbsp; {{ccy.nameZh}}
@@ -56,7 +56,7 @@
 
       <mat-form-field floatLabel="always">
         <mat-label>报价币种</mat-label>
-        <mat-select formControlName="quoteCcy" (selectionChange)="ccyChanged($event)">
+        <mat-select formControlName="quoteCcy" (selectionChange)="ccyChanged($event)" [disabled]="quoteCcyFixed">
           <mat-option *ngFor="let ccy of $ccys | async" [value]="ccy.code">
             <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt=""> &nbsp;
             {{ccy.code}} &nbsp; {{ccy.nameZh}}

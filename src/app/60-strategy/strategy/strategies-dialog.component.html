@@ -212,12 +212,16 @@
           <mat-icon>list</mat-icon>
           详情
         </button>
-        <button mat-button [matMenuTriggerFor]="actions">
+        <button mat-button [matMenuTriggerFor]="actions" *ngIf="row.status!=='placed'">
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #actions="matMenu">
+          <button mat-menu-item (click)="edit(row)">
+            <mat-icon>edit</mat-icon>
+            设置
+          </button>
           <button mat-menu-item (click)="start(row)"
-                  *ngIf="row.status!=='started'&&row.status!=='placed'">
+                  *ngIf="row.status!=='started'">
             <mat-icon>play_arrow</mat-icon>
             开始
           </button>
@@ -234,7 +238,7 @@
             <mat-icon>subdirectory_arrow_left</mat-icon>
             立即检查
           </button>
-          <button mat-menu-item (click)="remove(row)" *ngIf="row.status!=='placed'">
+          <button mat-menu-item (click)="remove(row)">
             <mat-icon>remove_circle_outline</mat-icon>
             删除
           </button>
@@ -248,6 +252,32 @@
   </table>
 </mat-dialog-content>
 
-<div mat-dialog-actions align="end">
+<div mat-dialog-actions align="end" class="actions">
+  <span>
+    <ng-template [ngIf]="filter.baseCcy">
+      <button mat-button [matMenuTriggerFor]="actionsBuy">
+        <mat-icon>add</mat-icon>
+        买入
+      </button>
+      <mat-menu #actionsBuy="matMenu">
+        <button mat-menu-item (click)="addStrategy(st.value)" *ngFor="let st of strategyTypesBuy">
+          <mat-icon>add</mat-icon>
+          {{st.label}}
+        </button>
+      </mat-menu>
+
+      <button mat-button [matMenuTriggerFor]="actionsSell">
+        <mat-icon>add</mat-icon>
+        卖出
+      </button>
+      <mat-menu #actionsSell="matMenu">
+        <button mat-menu-item (click)="addStrategy(st.value)" *ngFor="let st of strategyTypesSell">
+          <mat-icon>add</mat-icon>
+          {{st.label}}
+        </button>
+      </mat-menu>
+    </ng-template>
+    &nbsp;
+  </span>
   <button mat-button (click)="closeDialog()">关闭</button>
 </div>

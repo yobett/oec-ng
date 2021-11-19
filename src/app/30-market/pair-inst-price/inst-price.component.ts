@@ -33,7 +33,7 @@ import { AssetService } from '../../services/per/asset.service';
 import { PendingOrdersDialogComponent } from '../../50-order/order-pending/pending-orders-dialog.component';
 import { AssetsDialogComponent } from '../../40-asset/asset/assets-dialog.component';
 import { PlaceOrderRefreshDelay } from '../../config';
-import { StrategiesDialogComponent } from '../../60-strategy/strategy/strategies-dialog.component';
+import { NewStrategyPrefer, StrategiesDialogComponent } from '../../60-strategy/strategy/strategies-dialog.component';
 import { StrategyService } from '../../services/str/strategy.service';
 import { BaseQuoteStrategyCounts, Strategy } from '../../models/str/strategy';
 
@@ -125,22 +125,29 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     this.dataSource.setObservable(obs);
 
     this.fetchPrices(first);
-    this.loadStrategiesCount();
+    this.loadStrategiesCount(first);
   }
 
-  loadStrategiesCount() {
+  loadStrategiesCount(first = false) {
+    this.processes.loadStrategiesCount = true;
     this.strategyService.countByBaseQuote()
       .subscribe((cs: BaseQuoteStrategyCounts[]) => {
-        this.strategyCountsMap = new Map<string, BaseQuoteStrategyCounts>(
-          cs.map(c => [`${c.baseCcy}-${c.quoteCcy}`, c]));
+          this.processes.loadStrategiesCount = false;
+          this.strategyCountsMap = new Map<string, BaseQuoteStrategyCounts>(
+            cs.map(c => [`${c.baseCcy}-${c.quoteCcy}`, c]));
 
-        const tableData: PairPrice[] = this.dataSource.data;
-        if (tableData) {
-          for (let pp of tableData) {
-            pp.strategyCount = this.strategyCountsMap.get(`${pp.baseCcy}-${pp.quoteCcy}`) || {running: 0, all: 0};
+          const tableData: PairPrice[] = this.dataSource.data;
+          if (tableData) {
+            for (let pp of tableData) {
+              pp.strategyCount = this.strategyCountsMap.get(`${pp.baseCcy}-${pp.quoteCcy}`) || {running: 0, all: 0};
+            }
           }
-        }
-      });
+          if (!first) {
+            this.snackBar.open('策略数已刷新');
+          }
+        },
+        error => this.processes.loadStrategiesCount = false,
+        () => this.processes.loadStrategiesCount = false);
   }
 
   transAmountTooltip(pp: PairPrice): string {
@@ -359,6 +366,20 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     AssetsDialogComponent.showCurrentAssets(this.assetService, this.dialog);
   }
 
+  private updateStrategyCounts(countChanges: BaseQuoteStrategyCounts[]) {
+    if (!countChanges) {
+      return;
+    }
+    for (const cc of countChanges) {
+      const key = `${cc.baseCcy}-${cc.quoteCcy}`;
+      const cc0 = this.strategyCountsMap.get(key);
+      if (cc0) {
+        cc0.running += cc.running;
+        cc0.all += cc.all;
+      }
+    }
+  }
+
   showCurrentStrategies() {
     this.processes.loadingStrategies = true;
     this.strategyService.list2(null, {status: 'started'})
@@ -373,19 +394,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
               status: 'started',
               strategies
             }, this.dialog).afterClosed()
-            .subscribe((countChanges: BaseQuoteStrategyCounts[]) => {
-              if (!countChanges) {
-                return;
-              }
-              for (const cc of countChanges) {
-                const key = `${cc.baseCcy}-${cc.quoteCcy}`;
-                const cc0 = this.strategyCountsMap.get(key);
-                if (cc0) {
-                  cc0.running += cc.running;
-                  cc0.all += cc.all;
-                }
-              }
-            });
+            .subscribe(this.updateStrategyCounts.bind(this));
         },
         error => this.processes.loadingStrategies = false,
         () => this.processes.loadingStrategies = false
@@ -393,20 +402,23 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   }
 
   showStrategies(pair: PairPrice) {
+    const newStrategyPrefer: NewStrategyPrefer = {};
+    const lastTrans = pair.lastTrans;
+    if (lastTrans) {
+      newStrategyPrefer.ex = lastTrans.ex;
+      newStrategyPrefer.side = lastTrans.side === 'buy' ? 'sell' : 'buy';
+    }
     const pairBQ = {baseCcy: pair.baseCcy, quoteCcy: pair.quoteCcy};
     this.strategyService.list2(null, pairBQ)
       .subscribe((strategies: Strategy[]) => {
         StrategiesDialogComponent.showStrategies(
           {
             pairBQ,
-            strategies
+            strategies,
+            newStrategyPrefer
           },
           this.dialog).afterClosed()
-          .subscribe(countChanged => {
-            if (countChanged) {
-              this.loadStrategiesCount();
-            }
-          });
+          .subscribe(this.updateStrategyCounts.bind(this));
       });
   }
 

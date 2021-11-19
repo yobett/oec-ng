@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { Result } from '../../models/result';
 import { Ccy } from '../../models/mar/ccy';
@@ -12,13 +11,17 @@ import { EffectDigitsPipe } from '../../10-common/pipe/effect-digits-pipe';
 import { LastTransService } from '../../services/per/last-trans.service';
 import { LastTransaction } from '../../models/per/last-transaction';
 
+interface StrategyEditData {
+  strategy: Strategy;
+  lastTransaction?: LastTransaction;
+}
 
 @Component({
-  selector: 'app-strategy-edit',
-  templateUrl: './strategy-edit.component.html',
-  styleUrls: ['./strategy-edit.component.css']
+  selector: 'app-strategy-edit-dialog',
+  templateUrl: './strategy-edit-dialog.component.html',
+  styleUrls: ['./strategy-edit-dialog.component.css']
 })
-export class StrategyEditComponent implements OnInit {
+export class StrategyEditDialogComponent implements OnInit {
   statusOptions = Strategy.StatusOptions;
   executorOptions = Strategy.ExecutorOptions;
   CoinLogoPath = Ccy.LogoPath;
@@ -27,7 +30,6 @@ export class StrategyEditComponent implements OnInit {
   strategy: Strategy;
   oriStrategy: Strategy;
   lastTransaction: LastTransaction;
-  // lastPricePercent: number;
 
   tickerPrice: number;
   tickerPriceAdjusted: number;
@@ -42,38 +44,30 @@ export class StrategyEditComponent implements OnInit {
               private lastTransService: LastTransService,
               private effectDigits: EffectDigitsPipe,
               private snackBar: MatSnackBar,
-              private activatedRoute: ActivatedRoute) {
+              public dialogRef: MatDialogRef<StrategyEditDialogComponent, Strategy>,
+              @Inject(MAT_DIALOG_DATA) public data: StrategyEditData) {
 
+    const strategy1 = data.strategy;
+
+    this.oriStrategy = strategy1;
+    this.strategy = {...strategy1};
+    if (strategy1.status === 'initial' && !strategy1.basePoint) {
+      // 初次编辑
+      this.strategy.status = 'started';
+    }
+    this.drawbackField = strategy1.type === Strategy.TypeLB || strategy1.type === Strategy.TypeHS;
+    this.refreshPrice();
+
+    this.lastTransaction = data.lastTransaction;
+    if (!this.lastTransaction) {
+      this.lastTransService.findLastTransaction(strategy1.baseCcy, strategy1.quoteCcy)
+        .subscribe(lt => {
+          this.lastTransaction = lt;
+        });
+    }
   }
 
   ngOnInit() {
-    this.activatedRoute.paramMap.pipe(
-      switchMap((params: ParamMap) => this.strategyService.getById2(+params.get('id')))
-    ).subscribe((strategy1: Strategy) => {
-      this.oriStrategy = strategy1;
-      this.strategy = {...strategy1};
-      if (strategy1.status === 'initial' && !strategy1.basePoint) {
-        // 初次编辑
-        this.strategy.status = 'started';
-      }
-      this.drawbackField = strategy1.type === Strategy.TypeLB || strategy1.type === Strategy.TypeHS;
-      this.refreshPrice();
-      this.lastTransService.findLastTransaction(strategy1.baseCcy, strategy1.quoteCcy)
-        .subscribe(lt => {
-          if (!lt) {
-            return;
-          }
-          this.lastTransaction = lt;
-          /*if (lt.side === strategy1.side) {
-            this.lastPricePercent = 100;
-          } else if (lt.side === 'buy' && strategy1.side === 'sell') {
-            this.lastPricePercent = 110;
-          } else if (lt.side === 'sell' && strategy1.side === 'buy') {
-            this.lastPricePercent = 90;
-          }*/
-        });
-    });
-
   }
 
 
@@ -91,23 +85,6 @@ export class StrategyEditComponent implements OnInit {
         error => this.refreshingPrice = false,
         () => this.refreshingPrice = false);
   }
-
-  /*setExpectingByLastTrans() {
-    const lastPrice = this.lastTransaction.avgPrice;
-    const lastPricePercent = +this.lastPricePercent;
-    if (!lastPrice || !lastPricePercent) {
-      return;
-    }
-    let expectingPercent = +this.strategy.expectingPercent;
-    if (!expectingPercent) {
-      expectingPercent = Math.abs(lastPricePercent - 100);
-      this.strategy.expectingPercent = expectingPercent;
-    }
-    const watchUp = this.strategy.watchDirection === 'up';
-    const basePoint = lastPrice * lastPricePercent / (100 + (watchUp ? expectingPercent : -expectingPercent))
-    this.strategy.basePoint = +this.effectDigits.transform(basePoint, 5);
-    this.expectingChanged();
-  }*/
 
   setBasePointFromCurrentPrice() {
     this.strategy.basePoint = this.tickerPriceAdjusted;
@@ -195,7 +172,19 @@ export class StrategyEditComponent implements OnInit {
         () => this.saving = false);
   }
 
-  goback() {
-    window.history.back();
+
+  closeDialog() {
+    this.dialogRef.close(this.strategy);
+  }
+
+  static openStrategyEditDialog(data: StrategyEditData, dialog: MatDialog):
+    MatDialogRef<StrategyEditDialogComponent, Strategy> {
+    return dialog.open(
+      StrategyEditDialogComponent, {
+        disableClose: true,
+        width: '540px',
+        maxWidth: '96vw',
+        data
+      });
   }
 }

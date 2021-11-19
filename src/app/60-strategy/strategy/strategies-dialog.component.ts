@@ -3,6 +3,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
 import { TableDatasource } from '../../10-common/table-datasource';
 import { StrategyService } from '../../services/str/strategy.service';
@@ -11,18 +13,29 @@ import { Result } from '../../models/result';
 import { Ccy } from '../../models/mar/ccy';
 import { StrategyDetailDialogComponent } from './strategy-detail-dialog.component';
 import { PairBQ } from '../../models/mar/ex-pair';
+import { StrategyNewComponent } from '../strategy-edit/strategy-new.component';
+import { CcyService } from '../../services/mar/ccy.service';
+import { ExchService } from '../../services/sys/exch.service';
+import { Exch } from '../../models/sys/exch';
+import { StrategyEditDialogComponent } from '../strategy-edit/strategy-edit-dialog.component';
 
 
-interface StrategiesDialogData {
+export interface StrategiesDialogData {
   strategies?: Strategy[];
   pairBQ?: PairBQ;
-  side?: 'buy' | 'sell';
   status?: string;
+  newStrategyPrefer?: NewStrategyPrefer;
+}
+
+export interface NewStrategyPrefer {
+  side?: 'buy' | 'sell';
+  ex?: string;
 }
 
 interface CountChange extends PairBQ {
   originalRunning: boolean;
   running?: boolean;
+  add?: boolean;
   removed?: boolean;
 }
 
@@ -38,19 +51,28 @@ export class StrategiesDialogComponent implements AfterViewInit {
 
   CoinLogoPath = Ccy.LogoPath;
   getTypeLabel = Strategy.getTypeLabel;
+  strategyTypes = Strategy.TypeOptions;
+  strategyTypesBuy = Strategy.TypeBuyOptions;
+  strategyTypesSell = Strategy.TypeSellOptions;
 
   dataSource: TableDatasource<Strategy>;
 
   filter: StrategyFilter = {};
+  newStrategyPrefer: NewStrategyPrefer;
   strategyCountChanges = new Map<number, CountChange>();
 
   processes: { [name: string]: boolean } = {};
+
+  $ccys: Observable<Ccy[]>;
+  $exchs: Observable<Exch[]>;
 
   displayedColumns: string[] = ['index', 'baseCcy', 'quoteCcy', 'ex', 'type', 'side',
     'basePoint', 'expectingPercent', 'beyondExpect', 'tradingPoint', 'lastCheckAt', 'status',
     'updateBasePoint', 'autoStartNext', 'executor', /*'createdAt',*/ 'actions'];
 
-  constructor(private strategyService: StrategyService,
+  constructor(private ccyService: CcyService,
+              private strategyService: StrategyService,
+              private exchService: ExchService,
               private snackBar: MatSnackBar,
               private dialog: MatDialog,
               public dialogRef: MatDialogRef<StrategiesDialogComponent, BaseQuoteStrategyCounts[]>,
@@ -62,9 +84,7 @@ export class StrategiesDialogComponent implements AfterViewInit {
     if (data.status) {
       this.filter.status = data.status;
     }
-    if (data.side) {
-      this.filter.side = data.side;
-    }
+    this.newStrategyPrefer = data.newStrategyPrefer;
     this.dataSource = new TableDatasource<Strategy>();
     this.dataSource.setData(data.strategies);
   }
@@ -153,36 +173,97 @@ export class StrategiesDialogComponent implements AfterViewInit {
       });
   }
 
+  addStrategy(type: string) {
+    if (!this.filter.baseCcy) {
+      return;
+    }
+    if (!this.$ccys) {
+      this.$ccys = this.ccyService.listConcerned().pipe(shareReplay());
+    }
+    if (!this.$exchs) {
+      this.$exchs = this.exchService.list2();
+    }
+    const strategy = new Strategy(type);
+    strategy.baseCcy = this.filter.baseCcy;
+    strategy.quoteCcy = this.filter.quoteCcy;
+    if (this.newStrategyPrefer) {
+      strategy.side = this.newStrategyPrefer.side as any;
+      strategy.ex = this.newStrategyPrefer.ex;
+    }
+    const dialogRef: MatDialogRef<StrategyNewComponent, Strategy> = StrategyNewComponent
+      .openEditNewComponent({
+        strategy,
+        baseCcyFixed: true,
+        quoteCcyFixed: true,
+        $ccys: this.$ccys,
+        $exchs: this.$exchs
+      }, this.dialog);
+
+    dialogRef.afterClosed().subscribe((strategy1: Strategy) => {
+      if (!strategy1) {
+        return;
+      }
+      this.dataSource.append(strategy1);
+      let cc = this.getCountChange(strategy1);
+      cc.add = true;
+      cc.running = strategy1.status === 'started';
+
+      this.edit(strategy1);
+    });
+  }
+
+
+  edit(strategy1: Strategy) {
+    const editDialogRef: MatDialogRef<StrategyEditDialogComponent, Strategy> = StrategyEditDialogComponent
+      .openStrategyEditDialog({strategy: strategy1}, this.dialog);
+    editDialogRef.afterClosed().subscribe((strategy2: Strategy) => {
+      let cc = this.getCountChange(strategy1);
+      cc.running = strategy2.status === 'started';
+      Object.assign(strategy1, strategy2);
+    });
+  }
+
   closeDialog() {
-    const scs: BaseQuoteStrategyCounts[] = [];
-    if (this.strategyCountChanges.size > 0) {
-      const scMap = new Map<string, BaseQuoteStrategyCounts>();
-      for (const cc of this.strategyCountChanges.values()) {
-        const key = `${cc.baseCcy}-${cc.quoteCcy}`;
-        let sc = scMap.get(key);
-        if (!sc) {
-          sc = {
-            baseCcy: cc.baseCcy,
-            quoteCcy: cc.quoteCcy,
-            running: 0,
-            all: 0
-          }
-          scMap.set(key, sc);
+
+    if (this.strategyCountChanges.size === 0) {
+      this.dialogRef.close(null);
+    }
+
+    const scMap = new Map<string, BaseQuoteStrategyCounts>();
+    for (const cc of this.strategyCountChanges.values()) {
+      const key = `${cc.baseCcy}-${cc.quoteCcy}`;
+      let sc = scMap.get(key);
+      if (!sc) {
+        sc = {
+          baseCcy: cc.baseCcy,
+          quoteCcy: cc.quoteCcy,
+          running: 0,
+          all: 0
         }
-        if (cc.removed) {
-          sc.all--;
-          if (cc.originalRunning) {
-            sc.running--;
-          }
-        } else {
-          if (cc.originalRunning && !cc.running) {
-            sc.running--;
-          } else if (!cc.originalRunning && cc.running) {
+        scMap.set(key, sc);
+      }
+      if (cc.add) {
+        if (!cc.removed) {
+          sc.all++;
+          if (cc.running) {
             sc.running++;
           }
         }
+      } else if (cc.removed) {
+        sc.all--;
+        if (cc.originalRunning) {
+          sc.running--;
+        }
+      } else {
+        if (cc.originalRunning && !cc.running) {
+          sc.running--;
+        } else if (!cc.originalRunning && cc.running) {
+          sc.running++;
+        }
       }
     }
+
+    const scs: BaseQuoteStrategyCounts[] = Array.from(scMap.values());
     this.dialogRef.close(scs);
   }
 

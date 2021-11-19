@@ -1,0 +1,247 @@
+<h3 mat-dialog-title>
+  策略设置
+  <ng-template [ngIf]="strategy">
+    （{{getTypeLabel(strategy.type)}}）
+  </ng-template>
+</h3>
+
+<mat-dialog-content>
+
+  <div class="toolbar-sub-title" *ngIf="strategy">
+    <div class="prop">
+      <span class="prop-name subordinated">基础</span>
+      <img class="ccy-logo" [src]="CoinLogoPath(strategy.baseCcy)" alt="">
+      {{strategy.baseCcy}}
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">报价</span>
+      <img class="ccy-logo" [src]="CoinLogoPath(strategy.quoteCcy)" alt="">
+      {{strategy.quoteCcy}}
+    </div>
+    <div class="prop">
+      <span class="prop-name subordinated">方向</span>
+      <span [class.order-side-buy]="strategy.side==='buy'"
+            [class.order-side-sell]="strategy.side==='sell'">
+        {{strategy.side}}
+      </span>
+    </div>
+    <!--<div class="prop">
+      <span class="prop-name subordinated">关注价格</span>
+      <span>{{strategy.watchDirection}}</span>
+    </div>-->
+    <div class="prop">
+      <span class="prop-name subordinated">交易所</span>
+      <span>{{strategy.ex}}</span>
+    </div>
+  </div>
+
+  <div class="container" *ngIf="strategy">
+
+    <div class="section reference-section">
+      <!--<div class="section-title primary-color">Reference</div>-->
+
+      <div class="section-content">
+
+        <div class="info-bar">
+          <div class="title">上次交易</div>
+          <div *ngIf="lastTransaction" class="props">
+            <div>
+              <span class="prop-name subordinated">方向</span>
+              <span class="prop-value"
+                    [class.order-side-buy]="strategy.side==='buy'"
+                    [class.order-side-sell]="strategy.side==='sell'">{{lastTransaction.side}}</span>
+            </div>
+            <!--<div>
+              <span class="prop-name subordinated">执行数量</span>
+              <span class="prop-value">{{lastTransaction.execQty | effectdigits }}</span>
+            </div>-->
+            <div>
+              <span class="prop-name subordinated">均价</span>
+              <span class="prop-value accent-color">{{lastTransaction.avgPrice | effectdigits }}</span>
+              &nbsp;
+              <button mat-button (click)="setBasePointFromLastTrans()" *ngIf="tickerPriceAdjusted">
+                <mat-icon>south_west</mat-icon>
+                设为基点
+              </button>
+            </div>
+          </div>
+          <div *ngIf="!lastTransaction" class="props">
+            <div>
+              （无）
+            </div>
+          </div>
+        </div>
+
+        <div class="info-bar">
+          <span class="prop-name title">当前价格 ({{strategy.symbol}})</span>
+          <span class="accent-color">{{ tickerPriceAdjusted }}</span>
+          &nbsp;&nbsp;
+          <button mat-button (click)="refreshPrice()" [disabled]="refreshingPrice">
+            <mat-icon>sync</mat-icon>
+            刷新
+          </button>
+          <button mat-button (click)="setBasePointFromCurrentPrice()" *ngIf="tickerPriceAdjusted">
+            <mat-icon>south_west</mat-icon>
+            设为基点
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section strategy-section">
+
+      <div class="title-bar">
+        <span class="section-title primary-color">设置</span>
+        <span class="spacer"></span>
+        <button mat-button (click)="undoEdit()">
+          <mat-icon>undo</mat-icon>
+          重置
+        </button>
+      </div>
+
+      <div class="info-bar st-props">
+        <div class="props">
+          <div *ngIf="strategy.lastCheckAt">
+            <span class="prop-name subordinated">上次检查</span>
+            <span class="prop-value">
+            {{strategy.lastCheckPrice | effectdigits }}
+              &nbsp;&nbsp;
+              {{strategy.lastCheckAt | date: 'MM-dd HH:mm' }}
+          </span>
+          </div>
+          <div *ngIf="strategy.peak&&strategy.watchDirection==='up'">
+            <span class="prop-name subordinated">峰值</span>
+            <span class="prop-value">
+            <span class="primary-color">{{strategy.peak | effectdigits }}</span>
+            &nbsp;&nbsp;
+              {{strategy.peakTime | date: 'MM-dd HH:mm' }}
+          </span>
+          </div>
+          <div *ngIf="strategy.valley&&strategy.watchDirection==='down'">
+            <span class="prop-name subordinated">谷值</span>
+            <span class="prop-value">
+            <span class="primary-color">{{strategy.valley | effectdigits }}</span>
+            &nbsp;&nbsp;
+              {{strategy.valleyTime | date: 'MM-dd HH:mm' }}
+          </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-content">
+
+        <div class="field-box">
+          <mat-form-field floatLabel="always" class="short-field">
+            <mat-label>状态</mat-label>
+            <mat-select [(ngModel)]="strategy.status">
+              <mat-option *ngFor="let opt of statusOptions" [value]="opt.value">
+                {{opt.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always" class="short-field">
+            <input matInput placeholder="基点" [(ngModel)]="strategy.basePoint">
+            <mat-hint align="start" *ngIf="strategy.basePoint&&tickerPrice">
+              CP × {{(+strategy.basePoint) / tickerPrice | percent}}
+            </mat-hint>
+            <mat-hint align="end" *ngIf="strategy.basePoint&&lastTransaction?.avgPrice">
+              LP × {{(+strategy.basePoint) / lastTransaction.avgPrice | percent}}
+            </mat-hint>
+          </mat-form-field>
+        </div>
+
+        <div class="field-box">
+          <mat-form-field floatLabel="always" class="short-field">
+            <input matInput placeholder="期望" [(ngModel)]="strategy.expectingPercent"
+                   (blur)="expectingChanged()">
+            <span matSuffix>%</span>
+            <mat-hint>
+              <ng-template [ngIf]="strategy.expectingPoint">
+                {{strategy.expectingPoint | effectdigits}}
+              </ng-template>
+            </mat-hint>
+          </mat-form-field>
+
+          <mat-form-field floatLabel="always" class="short-field" *ngIf="drawbackField">
+            <input matInput placeholder="允许回落" [(ngModel)]="strategy.drawbackPercent">
+            <span matSuffix>%</span>
+            <mat-hint>
+              <ng-template [ngIf]="strategy.expectingPoint&&strategy.drawbackPercent">
+                {{(+strategy.expectingPoint) *
+              (100 - (+strategy.drawbackPercent) * (strategy.watchDirection === 'up' ? 1 : -1))
+              / 100.0 | effectdigits}}
+              </ng-template>
+            </mat-hint>
+          </mat-form-field>
+
+        </div>
+
+        <div class="field-box">
+
+          <mat-form-field floatLabel="always" class="short-field">
+            <input matInput placeholder="交易量" [(ngModel)]="strategy.tradeVolPercent"
+                   *ngIf="!strategy.tradeVolByValue">
+            <input matInput placeholder="交易量" [(ngModel)]="strategy.tradeVol" *ngIf="strategy.tradeVolByValue">
+            <span matSuffix [hidden]="strategy.tradeVolByValue">%</span>
+            <mat-hint>
+              <ng-template [ngIf]="strategy.side === 'buy'">
+                报价币种
+                <span *ngIf="strategy.quoteCcy">&nbsp;({{strategy.quoteCcy}})</span>
+              </ng-template>
+              <ng-template [ngIf]="strategy.side === 'sell'">
+                基础币种
+                <span *ngIf="strategy.baseCcy">&nbsp;({{strategy.baseCcy}})</span>
+              </ng-template>
+            </mat-hint>
+          </mat-form-field>
+
+          <div class="slide-field">
+            <mat-slide-toggle [(ngModel)]="strategy.tradeVolByValue">交易量：数值</mat-slide-toggle>
+          </div>
+
+        </div>
+
+        <!--<div class="field-box">
+          <mat-form-field floatLabel="always" class="short-field">
+            <input matInput type="number" placeholder="顺序" [(ngModel)]="strategy.applyOrder">
+          </mat-form-field>
+        </div>-->
+
+        <div class="field-box">
+          <div class="slide-field mat-form-field short-field">
+            <mat-slide-toggle [(ngModel)]="strategy.autoStartNext">自动接续</mat-slide-toggle>
+          </div>
+          <div class="slide-field mat-form-field short-field" *ngIf="strategy.type==='LS'||strategy.type==='HB'">
+            <mat-slide-toggle [(ngModel)]="strategy.updateBasePoint">更新基点</mat-slide-toggle>
+          </div>
+          <div class="slide-field mat-form-field short-field" *ngIf="strategy.peak||strategy.valley">
+            <mat-slide-toggle [(ngModel)]="clearPeak">清除峰/谷值</mat-slide-toggle>
+          </div>
+          <mat-form-field floatLabel="always" class="short-field">
+            <mat-label>执行器</mat-label>
+            <mat-select [(ngModel)]="strategy.executor">
+              <mat-option *ngFor="let opt of executorOptions" [value]="opt.value">
+                {{opt.label}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</mat-dialog-content>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">关闭</button>
+  <button mat-button color="primary" (click)="save()" [disabled]="saving">
+    <mat-icon>save</mat-icon>
+    保存
+  </button>
+</div>
+

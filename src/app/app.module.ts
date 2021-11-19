@@ -68,6 +68,7 @@ import { PendingOrdersDialogComponent } from './50-order/order-pending/pending-o
 import { AssetsDialogComponent } from './40-asset/asset/assets-dialog.component';
 import { Rolling24hPriceComponent } from './30-market/rolling24h-price/rolling24h-price.component';
 import { StrategiesDialogComponent } from './60-strategy/strategy/strategies-dialog.component';
+import { StrategyEditDialogComponent } from './60-strategy/strategy-edit/strategy-edit-dialog.component';
 
 
 @NgModule({
@@ -141,7 +142,8 @@ import { StrategiesDialogComponent } from './60-strategy/strategy/strategies-dia
     AssetsClearoutDialogComponent,
     PendingOrdersDialogComponent,
     Rolling24hPriceComponent,
-    StrategiesDialogComponent
+    StrategiesDialogComponent,
+    StrategyEditDialogComponent
   ],
   entryComponents: [],
   providers: [],

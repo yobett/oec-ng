@@ -273,32 +273,34 @@
             <mat-icon>show_chart</mat-icon>
             K 线
           </button>
-          <button mat-menu-item (click)="start(row)"
-                  *ngIf="row.status!=='started'&&row.status!=='placed'">
-            <mat-icon>play_arrow</mat-icon>
-            开始
-          </button>
-          <button mat-menu-item (click)="pause(row)" *ngIf="row.status==='started'">
-            <mat-icon>stop</mat-icon>
-            暂停
-          </button>
-          <button mat-menu-item (click)="clearPeak(row)" *ngIf="row.peak">
-            <mat-icon>wrong_location</mat-icon>
-            清除峰/谷值
-          </button>
-          <button mat-menu-item (click)="execute(row)" [disabled]="processes['execute-' + row.id]"
-                  *ngIf="row.executor!=='ws'&&row.status==='started'">
-            <mat-icon>subdirectory_arrow_left</mat-icon>
-            立即检查
-          </button>
-          <button mat-menu-item (click)="openOrderForm(row)">
-            <mat-icon>shopping_cart</mat-icon>
-            现在下单
-          </button>
-          <button mat-menu-item (click)="remove(row)" *ngIf="row.status!=='placed'">
-            <mat-icon>remove_circle_outline</mat-icon>
-            删除
-          </button>
+          <ng-template [ngIf]="row.status!=='placed'">
+            <button mat-menu-item (click)="start(row)"
+                    *ngIf="row.status!=='started'">
+              <mat-icon>play_arrow</mat-icon>
+              开始
+            </button>
+            <button mat-menu-item (click)="pause(row)" *ngIf="row.status==='started'">
+              <mat-icon>stop</mat-icon>
+              暂停
+            </button>
+            <button mat-menu-item (click)="clearPeak(row)" *ngIf="row.peak">
+              <mat-icon>wrong_location</mat-icon>
+              清除峰/谷值
+            </button>
+            <button mat-menu-item (click)="execute(row)" [disabled]="processes['execute-' + row.id]"
+                    *ngIf="row.executor!=='ws'&&row.status==='started'">
+              <mat-icon>subdirectory_arrow_left</mat-icon>
+              立即检查
+            </button>
+            <button mat-menu-item (click)="openOrderForm(row)">
+              <mat-icon>shopping_cart</mat-icon>
+              现在下单
+            </button>
+            <button mat-menu-item (click)="remove(row)">
+              <mat-icon>remove_circle_outline</mat-icon>
+              删除
+            </button>
+          </ng-template>
         </mat-menu>
 
       </td>

@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { Quote } from '../../models/quote';
+import { Quote } from '../../models/mar/quote';
 import { Ccy } from '../../models/mar/ccy';
 import { QuoteService } from '../../services/mar/quote.service';
 

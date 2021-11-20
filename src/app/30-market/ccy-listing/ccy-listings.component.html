@@ -1,0 +1,188 @@
+<div class="mat-elevation-z1">
+  <mat-toolbar>
+    <span class="toolbar-title">币种排名</span>
+    <span class="spacer"></span>
+  </mat-toolbar>
+
+  <div class="table-filter-form">
+    <mat-button-toggle-group [value]="ranking"
+                             (change)="listChanged($event)">
+      <mat-button-toggle value="market_cap">
+        当前市值
+      </mat-button-toggle>
+      <mat-button-toggle value="date_added">
+        加入日期
+      </mat-button-toggle>
+      <mat-button-toggle value="volume_24h">
+        交易量 24H
+      </mat-button-toggle>
+
+      <mat-button-toggle value="percent_change_1h:desc">
+        价格 1H
+        <mat-icon class="price-up">north</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="percent_change_1h:asc">
+        价格 1H
+        <mat-icon class="price-down">south</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="percent_change_24h:desc">
+        价格 24H
+        <mat-icon class="price-up">north</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="percent_change_24h:asc">
+        价格 24H
+        <mat-icon class="price-down">south</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="percent_change_7d:desc">
+        价格 7D
+        <mat-icon class="price-up">north</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle value="percent_change_7d:asc">
+        价格 7D
+        <mat-icon class="price-down">south</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+  </div>
+
+  <table mat-table class="full-width">
+
+    <ng-container matColumnDef="index">
+      <th mat-header-cell *matHeaderCellDef>#</th>
+      <td mat-cell *matCellDef="let row; let index=index">
+        {{index + 1 + (paginator ? paginator.pageIndex * paginator.pageSize : 0)}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="concerned">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-icon>star_outline</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <ng-template [ngIf]="row.ccy">
+          <mat-icon class="clickable" [class.favorite]="row.ccy.concerned" (click)="toggleConcern(row.ccy)">
+            {{row.ccy.concerned ? 'star' : 'star_outline'}}</mat-icon>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="symbol">
+      <th mat-header-cell *matHeaderCellDef>代号</th>
+      <td class="ccy-logo-code" mat-cell *matCellDef="let row">
+        <span class="ccy-logo-code clickable" (click)="showBaseCcyInfo(row.symbol)">
+          <img class="ccy-logo" [src]="CoinLogoPath(row.symbol)" alt="">
+          <span class="ccy-code">{{row.symbol}}</span>
+        </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>名称</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.name}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cmc_rank">
+      <th mat-header-cell *matHeaderCellDef>
+        市值排名
+        <mat-icon *ngIf="currentRanking==='market_cap'">south</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{row.cmc_rank}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date_added">
+      <th mat-header-cell *matHeaderCellDef>
+        加入日期
+        <mat-icon *ngIf="currentRanking==='date_added'">south</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row">{{row.date_added | date:'y-MM-dd'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="max_supply">
+      <th mat-header-cell *matHeaderCellDef>最大发行量</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.max_supply | bignumzh}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="circulating_supply">
+      <th mat-header-cell *matHeaderCellDef>流通量</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.circulating_supply | bignumzh}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="volume_24h">
+      <th mat-header-cell *matHeaderCellDef>
+        交易量 24H（美元）
+        <mat-icon *ngIf="currentRanking==='volume_24h'">south</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{row.quote.volume_24h | bignumzh}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>价格（美元）</th>
+      <td mat-cell *matCellDef="let row">
+        {{row.quote.price | money}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="percent_change_1h">
+      <th mat-header-cell *matHeaderCellDef>
+        Change 1H
+        <mat-icon class="price-up" *ngIf="currentRanking==='percent_change_1h:desc'">north</mat-icon>
+        <mat-icon class="price-down" *ngIf="currentRanking==='percent_change_1h:asc'">south</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row"
+          [class.price-up]="row.quote.percent_change_1h>0"
+          [class.price-down]="row.quote.percent_change_1h<0">
+        {{row.quote.percent_change_1h | rawpercent }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="percent_change_24h">
+      <th mat-header-cell *matHeaderCellDef>
+        Change 24H
+        <mat-icon class="price-up" *ngIf="currentRanking==='percent_change_24h:desc'">north</mat-icon>
+        <mat-icon class="price-down" *ngIf="currentRanking==='percent_change_24h:asc'">south</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row"
+          [class.price-up]="row.quote.percent_change_24h>0"
+          [class.price-down]="row.quote.percent_change_24h<0">
+        {{row.quote.percent_change_24h | rawpercent }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="percent_change_7d">
+      <th mat-header-cell *matHeaderCellDef>
+        Change 7D
+        <mat-icon class="price-up" *ngIf="currentRanking==='percent_change_7d:desc'">north</mat-icon>
+        <mat-icon class="price-down" *ngIf="currentRanking==='percent_change_7d:asc'">south</mat-icon>
+      </th>
+      <td mat-cell *matCellDef="let row"
+          [class.price-up]="row.quote.percent_change_7d>0"
+          [class.price-down]="row.quote.percent_change_7d<0">
+        {{row.quote.percent_change_7d | rawpercent }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator
+                 [length]="dataSource?.total"
+                 [pageIndex]="0"
+                 [pageSize]="20"
+                 [pageSizeOptions]="[10, 20, 50, 100]">
+  </mat-paginator>
+
+</div>
+
+<p>&nbsp;</p>
+

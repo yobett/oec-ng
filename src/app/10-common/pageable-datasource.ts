@@ -3,7 +3,7 @@ import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { Observable, merge, BehaviorSubject, EMPTY } from 'rxjs';
+import { BehaviorSubject, EMPTY, merge, Observable } from 'rxjs';
 
 import { QueryParams } from '../models/query-params';
 import { BaseService } from '../services/base.service';
@@ -19,6 +19,7 @@ export class PageableDatasource<T> extends DataSource<T> {
   total: number;
 
   paramsTransformer: (params: any) => any;
+  oneShotOnLoaded: () => void;
 
   protected reloadEmitter: BehaviorSubject<number> = new BehaviorSubject<number>(1);
 
@@ -61,6 +62,12 @@ export class PageableDatasource<T> extends DataSource<T> {
           map((cl) => {
             this.total = cl.count;
             this.data = cl.list;
+
+            if (this.oneShotOnLoaded) {
+              this.oneShotOnLoaded();
+              this.oneShotOnLoaded = null;
+            }
+
             return cl.list;
           }),
           catchError(err => EMPTY)

@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
@@ -12,10 +13,9 @@ import { SessionService } from '../../services/sys/session.service';
 import { User } from '../../models/sys/user';
 import { CcyService } from '../../services/mar/ccy.service';
 import { StableCoins, StaticResource } from '../../config';
-import { Quote } from '../../models/quote';
+import { Quote } from '../../models/mar/quote';
 import { QuoteService } from '../../services/mar/quote.service';
 import { CcyInfoDialogComponent } from '../ccy/ccy-info-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 
 declare type QuoteCcy = (Ccy & Quote);
 

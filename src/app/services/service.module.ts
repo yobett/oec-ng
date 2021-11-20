@@ -30,6 +30,7 @@ import { AssetSnapshotService } from './per/asset-snapshot.service';
 import { NotificationService } from './sys/notification.service';
 import { RoundDownPipe } from '../10-common/pipe/round-down-pipe';
 import { RollingPriceService } from './mar/rolling-price.service';
+import { CcyListingService } from './mar/ccy-listing.service';
 
 
 @NgModule({
@@ -69,6 +70,7 @@ import { RollingPriceService } from './mar/rolling-price.service';
     StrategyHistoryService,
     NotificationService,
     RollingPriceService,
+    CcyListingService,
     {provide: MatPaginatorIntl, useValue: PaginatorIntl},
     {provide: MAT_DATE_LOCALE, useValue: 'zh-cn'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

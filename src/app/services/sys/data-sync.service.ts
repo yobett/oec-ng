@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 
 import { SyncResult, SyncResultGroup } from '../../models/sync-result';
 import { BaseService } from '../base.service';
-import { Result, ValueResult } from '../../models/result';
+import { ValueResult } from '../../models/result';
 import { ExchangePair } from '../../models/mar/ex-pair';
 
 
@@ -30,8 +30,12 @@ export class DataSyncService extends BaseService<SyncResult> {
 
   // public data
 
-  syncCurrencies(limit = 1000): Observable<SyncResult> {
-    const url = `${this.baseUrl}/currencies?limit=${limit}`;
+  syncCurrencies(limit = 1000, start?: number): Observable<SyncResult> {
+    let url = `${this.baseUrl}/currencies?limit=${limit}`;
+    if (start) {
+      // 1 based
+      url += `&start=${start}`;
+    }
     return this.postForResult2(url);
   }
 

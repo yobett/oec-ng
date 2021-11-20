@@ -4,6 +4,7 @@ import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButtonToggleChange } from '@angular/material/button-toggle/button-toggle';
+import { Observable } from 'rxjs';
 
 import { SessionSupportComponent } from '../../10-common/session-support.component';
 import { SessionService } from '../../services/sys/session.service';
@@ -21,7 +22,6 @@ import { KlineChartDialogComponent } from '../kline-chart/kline-chart-dialog.com
 import { Exch } from '../../models/sys/exch';
 import { ExPair } from '../../models/mar/ex-pair';
 import { Result } from '../../models/result';
-import { Observable } from 'rxjs';
 import { ExchService } from '../../services/sys/exch.service';
 
 

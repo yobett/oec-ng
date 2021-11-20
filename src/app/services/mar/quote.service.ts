@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 
 import { BaseService } from '../base.service';
-import { Quote } from '../../models/quote';
+import { Quote } from '../../models/mar/quote';
 
 
 @Injectable()

@@ -22,12 +22,14 @@ import { SnapshotsChartComponent } from './40-asset/asset-snapshot/snapshots-cha
 import { OrdersChartComponent } from './50-order/order-chart/orders-chart.component';
 import { SnapshotsComponent } from './40-asset/asset-snapshot/snapshots.component';
 import { Rolling24hPriceComponent } from './30-market/rolling24h-price/rolling24h-price.component';
+import { CcyListingsComponent } from './30-market/ccy-listing/ccy-listings.component';
 
 const routes: Routes = [
   // {path: '', component: HomeComponent},
   {path: 'ccys', component: CcysComponent},
   {path: 'pairs', component: PairsComponent},
   {path: 'quotes', component: CcyQuotesComponent},
+  {path: 'listings', component: CcyListingsComponent},
   {path: 'prices', component: InstPriceComponent},
   {path: 'klines', component: KlineChartComponent},
   {path: 'prices24h', component: Rolling24hPriceComponent},

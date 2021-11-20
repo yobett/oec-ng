@@ -21,10 +21,10 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menuActions="matMenu">
-      <!--<button mat-menu-item (click)="loadData()" [disabled]="processes.fetchPrices">
+      <button mat-menu-item (click)="loadData()" [disabled]="processes.fetchPrices">
         <mat-icon>refresh</mat-icon>
         全部刷新
-      </button>-->
+      </button>
       <button mat-menu-item (click)="showPendingOrders()" [disabled]="processes.loadingPendingOrders">
         <mat-icon>pending_actions</mat-icon>
         当前挂单
@@ -33,7 +33,7 @@
         <mat-icon>schedule</mat-icon>
         当前策略
       </button>
-      <button mat-menu-item (click)="loadStrategiesCount()" [disabled]="processes.loadStrategiesCount">
+      <button mat-menu-item (click)="loadStrategiesCount(true)" [disabled]="processes.loadStrategiesCount">
         <mat-icon>refresh</mat-icon>
         刷新策略数
       </button>

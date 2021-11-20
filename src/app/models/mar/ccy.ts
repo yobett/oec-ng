@@ -18,6 +18,8 @@ export class Ccy extends Model {
   // cmc rank
   no: number;
 
+  cmcAddedDate: string;
+
   static LogoPath(code: string): string {
     return `${StaticResource.BASE}${StaticResource.coinsLogoDir}/${code}.png`;
   }

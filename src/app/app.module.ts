@@ -69,6 +69,8 @@ import { AssetsDialogComponent } from './40-asset/asset/assets-dialog.component'
 import { Rolling24hPriceComponent } from './30-market/rolling24h-price/rolling24h-price.component';
 import { StrategiesDialogComponent } from './60-strategy/strategy/strategies-dialog.component';
 import { StrategyEditDialogComponent } from './60-strategy/strategy-edit/strategy-edit-dialog.component';
+import { CcyListingsComponent } from './30-market/ccy-listing/ccy-listings.component';
+import { BignumZhPipe } from './10-common/pipe/bignum-zh.pipe';
 
 
 @NgModule({
@@ -109,6 +111,7 @@ import { StrategyEditDialogComponent } from './60-strategy/strategy-edit/strateg
     EffectDigitsPipe,
     RoundDownPipe,
     RawPercentPipe,
+    BignumZhPipe,
     TruncatePipe,
     LastTransComponent,
     LastTransEditComponent,
@@ -143,7 +146,8 @@ import { StrategyEditDialogComponent } from './60-strategy/strategy-edit/strateg
     PendingOrdersDialogComponent,
     Rolling24hPriceComponent,
     StrategiesDialogComponent,
-    StrategyEditDialogComponent
+    StrategyEditDialogComponent,
+    CcyListingsComponent
   ],
   entryComponents: [],
   providers: [],

@@ -125,10 +125,10 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     this.dataSource.setObservable(obs);
 
     this.fetchPrices(first);
-    this.loadStrategiesCount(first);
+    this.loadStrategiesCount();
   }
 
-  loadStrategiesCount(first = false) {
+  loadStrategiesCount(manual = false) {
     this.processes.loadStrategiesCount = true;
     this.strategyService.countByBaseQuote()
       .subscribe((cs: BaseQuoteStrategyCounts[]) => {
@@ -142,7 +142,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
               pp.strategyCount = this.strategyCountsMap.get(`${pp.baseCcy}-${pp.quoteCcy}`) || {running: 0, all: 0};
             }
           }
-          if (!first) {
+          if (manual) {
             this.snackBar.open('策略数已刷新');
           }
         },
@@ -372,6 +372,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     }
     for (const cc of countChanges) {
       const key = `${cc.baseCcy}-${cc.quoteCcy}`;
+      // console.log(`${key}, ${cc.running}, ${cc.all}`);
       const cc0 = this.strategyCountsMap.get(key);
       if (cc0) {
         cc0.running += cc.running;

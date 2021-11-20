@@ -38,7 +38,7 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
 
   dataSource: PageableDatasource<Ccy>;
 
-  displayedColumns: string[] = ['index', 'concerned', 'no', 'code', 'name', /*'createdAt',*/ 'actions'];
+  displayedColumns: string[] = ['index', 'concerned', 'code', 'name', 'no', 'cmcAddedDate', /*'createdAt',*/ 'actions'];
 
   staticBase = StaticResource.BASE;
 
@@ -98,14 +98,20 @@ export class CcysComponent extends SessionSupportComponent implements AfterViewI
     this.dataSource.refresh();
   }
 
-  syncCurrencies(limit: number) {
+  syncCurrencies(limit: number, start?: number) {
     this.processes.syncCurrencies = true;
-    this.dataSyncService.syncCurrencies(limit)
+    this.dataSyncService.syncCurrencies(limit, start)
       .subscribe((syncResult: SyncResult) => {
           this.processes.syncCurrencies = false;
+          let title;
+          if (start) {
+            title = `同步成功（${start + 1}+）`;
+          } else {
+            title = `同步成功（前${limit}条）`;
+          }
           SyncResultDialogComponent.ShowSyncResultDialog({
             syncResult,
-            title: `同步成功（前${limit}条）`
+            title
           }, this.dialog);
           this.dataSource.refresh();
         },

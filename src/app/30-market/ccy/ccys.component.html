@@ -4,7 +4,8 @@
     <mat-button-toggle-group [value]="filterForm['concerned']? 'concerned':'all'"
                              (change)="concernedGroupChanged($event)">
       <mat-button-toggle value="concerned">
-        <mat-icon class="favorite">star</mat-icon>关注
+        <mat-icon class="favorite">star</mat-icon>
+        关注
       </mat-button-toggle>
       <mat-button-toggle value="all">全部</mat-button-toggle>
     </mat-button-toggle-group>
@@ -25,6 +26,10 @@
       <button mat-menu-item (click)="syncCurrencies(5000)" [disabled]="processes.syncCurrencies">
         <mat-icon>sync</mat-icon>
         前 5000
+      </button>
+      <button mat-menu-item (click)="syncCurrencies(5000, 5001)" [disabled]="processes.syncCurrencies">
+        <mat-icon>sync</mat-icon>
+        5001 +
       </button>
       <button mat-menu-item (click)="syncCurrenciesFromPairs()" [disabled]="processes.syncCurrencies">
         <mat-icon>sync</mat-icon>
@@ -74,7 +79,7 @@
     </ng-container>
 
     <ng-container matColumnDef="no">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC排名</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>市值排名</th>
       <td mat-cell *matCellDef="let row">{{row.no}}</td>
     </ng-container>
 
@@ -89,6 +94,11 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>名称</th>
       <td mat-cell *matCellDef="let row">{{row.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cmcAddedDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC加入日期</th>
+      <td mat-cell *matCellDef="let row">{{row.cmcAddedDate | date:'y-MM-dd'}}</td>
     </ng-container>
 
     <ng-container matColumnDef="createdAt">

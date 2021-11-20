@@ -32,7 +32,7 @@ import { AssetsClearoutDialogComponent } from '../../40-asset/asset-trading/asse
 import { AssetService } from '../../services/per/asset.service';
 import { PendingOrdersDialogComponent } from '../../50-order/order-pending/pending-orders-dialog.component';
 import { AssetsDialogComponent } from '../../40-asset/asset/assets-dialog.component';
-import { PlaceOrderRefreshDelay } from '../../config';
+import { LocalStorageKeys, PlaceOrderRefreshDelay } from '../../config';
 import { NewStrategyPrefer, StrategiesDialogComponent } from '../../60-strategy/strategy/strategies-dialog.component';
 import { StrategyService } from '../../services/str/strategy.service';
 import { BaseQuoteStrategyCounts, Strategy } from '../../models/str/strategy';
@@ -84,6 +84,11 @@ export class InstPriceComponent extends SessionSupportComponent implements After
               private snackBar: MatSnackBar,
               private dialog: MatDialog) {
     super(sessionService);
+
+    const preferDS = localStorage.getItem(LocalStorageKeys.PricePreferDS);
+    if (preferDS) {
+      this.preferDS = preferDS;
+    }
   }
 
   protected onInit() {
@@ -183,6 +188,11 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     const price = currentPrice.price;
     const change = price - lastPrice;
     pp.priceChangePercent = (change / lastPrice) * 100.0;
+  }
+
+  preferDSChanged() {
+    localStorage.setItem(LocalStorageKeys.PricePreferDS, this.preferDS);
+    this.fetchPrices();
   }
 
   fetchPrices(first?: boolean) {

@@ -2,11 +2,19 @@
   <mat-toolbar>
     <span class="toolbar-title">币种排名</span>
     <span class="spacer"></span>
+
+    <div class="form-field">
+      <span class="field-label subordinated">24H交易量</span>
+      <mat-radio-group color="accent" [(ngModel)]="filterForm.volume_24h_min" (change)="filter()">
+        <mat-radio-button name="volume-24h-min" [value]="opt.value" *ngFor="let opt of volume24hMinOptions">
+          {{opt.label}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
   </mat-toolbar>
 
   <div class="table-filter-form">
-    <mat-button-toggle-group [value]="ranking"
-                             (change)="listChanged($event)">
+    <mat-button-toggle-group [(ngModel)]="ranking" (change)="filter()">
       <mat-button-toggle value="market_cap">
         当前市值
       </mat-button-toggle>

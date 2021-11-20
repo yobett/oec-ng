@@ -3,7 +3,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatButtonToggleChange } from '@angular/material/button-toggle/button-toggle';
 
 import { SessionSupportComponent } from '../../10-common/session-support.component';
 import { SessionService } from '../../services/sys/session.service';
@@ -35,7 +34,12 @@ export class CcyListingsComponent extends SessionSupportComponent implements Aft
 
   CoinLogoPath = Ccy.LogoPath;
 
-  filterForm: ListingOptions = {};
+  volume24hMinOptions = [
+    {value: undefined, label: '不限'},
+    {value: 1e6, label: '> 100万'},
+    {value: 1e8, label: '> 1 亿'}
+  ];
+  filterForm: ListingOptions = {volume_24h_min: this.volume24hMinOptions[1].value};
 
   ranking = 'market_cap'; // date_added,market_cap;
   currentRanking: string;
@@ -82,11 +86,6 @@ export class CcyListingsComponent extends SessionSupportComponent implements Aft
       this.currentRanking = ranking;
     };
     this.dataSource.refresh(this.filterForm);
-  }
-
-  listChanged(event: MatButtonToggleChange) {
-    this.ranking = event.value;
-    this.filter();
   }
 
   toggleConcern(ccy: Ccy) {

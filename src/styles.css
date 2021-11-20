@@ -184,6 +184,10 @@ table.mat-table td {
   display: inline-block;
 }
 
+.mat-radio-button {
+  margin-right: 1em;
+}
+
 .order-type-option {
   margin-right: 2em;
 }

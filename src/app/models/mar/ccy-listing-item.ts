@@ -24,4 +24,5 @@ export interface ListingOptions {
   sort?: string;
   sort_dir?: string;
   // aux?: string;
+  volume_24h_min?: number;
 }

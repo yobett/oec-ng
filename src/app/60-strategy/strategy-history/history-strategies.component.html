@@ -25,8 +25,7 @@
     <div class="operation-bar">
       <div class="form-field">
         <span class="label subordinated">方向</span>
-        <mat-button-toggle-group [(ngModel)]="filterForm['side']"
-                                 (change)="filter()">
+        <mat-button-toggle-group [(ngModel)]="filterForm['side']" (change)="filter()">
           <mat-button-toggle value="all">不限</mat-button-toggle>
           <mat-button-toggle value="buy">买入</mat-button-toggle>
           <mat-button-toggle value="sell">卖出</mat-button-toggle>

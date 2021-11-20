@@ -5,3 +5,8 @@
 th .mat-icon {
   vertical-align: middle;
 }
+
+.field-label {
+  display: inline-block;
+  margin-right: 1em;
+}

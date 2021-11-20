@@ -4,7 +4,7 @@
     <span class="spacer"></span>
     价格来源（首选）&nbsp;&nbsp;
     <mat-form-field class="ds-select">
-      <mat-select [(ngModel)]="preferDS" (selectionChange)="fetchPrices()">
+      <mat-select [(ngModel)]="preferDS" (selectionChange)="preferDSChanged()">
         <mat-option *ngFor="let exch of $exchs | async" [value]="exch.code">
           {{exch.name}}
         </mat-option>

@@ -39,7 +39,8 @@ const LocalStorageKeys = {
   AccessToken: 'access_token',
   StrategiesFilterEx: 'strategies-filterEx',
   StrategiesFilterStatus: 'strategies-filterStatus',
-  Notifications: 'notifications' // on/off
+  Notifications: 'notifications', // on/off
+  PricePreferDS: 'PricePreferDS'
 };
 
 const StaticResource = {

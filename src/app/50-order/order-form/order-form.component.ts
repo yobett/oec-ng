@@ -18,6 +18,7 @@ import { MessageDialogComponent } from '../../10-common/message-dialog/message-d
 import { RoundDownPipe } from '../../10-common/pipe/round-down-pipe';
 import { LastTransaction } from '../../models/per/last-transaction';
 import { LastTransService } from '../../services/per/last-trans.service';
+import { PriceService } from '../../services/mar/price.service';
 
 export interface PlacedOrder {
   orderPlacedAt: number;
@@ -87,6 +88,7 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
 
   constructor(private orderService: SpotOrderService,
               private pairService: PairService,
+              private priceService: PriceService,
               private assetService: AssetService,
               private lastTransService: LastTransService,
               private effectDigits: EffectDigitsPipe,
@@ -205,7 +207,7 @@ export class OrderFormComponent implements OnInit, AfterViewInit {
   refreshPrice() {
     this.refreshingPrice = true;
     const pair = this.exchangePair;
-    this.pairService.inquirePrice(pair.ex, pair.symbol)
+    this.priceService.inquirePrice(pair.ex, pair.symbol)
       .subscribe(price => {
           this.refreshingPrice = false;
           this.tickerPrice = +price;

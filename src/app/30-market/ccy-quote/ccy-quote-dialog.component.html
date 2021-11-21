@@ -12,12 +12,12 @@
       </span>
     </div>
     <div class="prop">
-      <span class="prop-name subordinated">24H 交易量（美元）</span>
-      <span class="prop-value">{{quote.volume_24h | moneysum}}</span>
+      <span class="prop-name subordinated">市场总值（美元）</span>
+      <span class="prop-value">{{quote.market_cap | bignumzh}}</span>
     </div>
     <div class="prop">
-      <span class="prop-name subordinated">市场总值（美元）</span>
-      <span class="prop-value">{{quote.market_cap | moneysum}}</span>
+      <span class="prop-name subordinated">24H 交易量（美元）</span>
+      <span class="prop-value">{{quote.volume_24h | bignumzh}}</span>
     </div>
     <div class="prop">
       <span class="prop-name subordinated">当前价格（美元）</span>

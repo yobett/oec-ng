@@ -36,6 +36,7 @@ import { LocalStorageKeys, PlaceOrderRefreshDelay } from '../../config';
 import { NewStrategyPrefer, StrategiesDialogComponent } from '../../60-strategy/strategy/strategies-dialog.component';
 import { StrategyService } from '../../services/str/strategy.service';
 import { BaseQuoteStrategyCounts, Strategy } from '../../models/str/strategy';
+import { PriceService } from '../../services/mar/price.service';
 
 @Component({
   selector: 'app-inst-price',
@@ -76,6 +77,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   constructor(protected sessionService: SessionService,
               private pairService: PairService,
               private exchService: ExchService,
+              private priceService: PriceService,
               private ccyService: CcyService,
               private assetService: AssetService,
               private orderService: SpotOrderService,
@@ -198,7 +200,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
   fetchPrices(first?: boolean) {
     this.processes.fetchPrices = true;
 
-    this.pairService.inquirePrices(this.preferDS)
+    this.priceService.inquirePrices(this.preferDS)
       .subscribe((cps: CurrentPrices) => {
           this.processes.fetchPrices = false;
           this.prices = cps;
@@ -227,7 +229,7 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     }
     let ex = currentPrice.source;
     let symbol = pp[ex + 'Symbol'];
-    this.pairService.inquirePrice(ex, symbol)
+    this.priceService.inquirePrice(ex, symbol)
       .subscribe(price => {
         currentPrice.price = +price;
         pp.currentPrice = currentPrice;

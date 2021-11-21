@@ -35,7 +35,7 @@ export class CcyListingsComponent extends SessionSupportComponent implements Aft
   CoinLogoPath = Ccy.LogoPath;
 
   volume24hMinOptions = [
-    {value: undefined, label: '不限'},
+    {value: 0, label: '不限'},
     {value: 1e6, label: '> 100万'},
     {value: 1e8, label: '> 1 亿'}
   ];

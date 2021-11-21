@@ -14,6 +14,7 @@ import { AssetService } from '../../services/per/asset.service';
 import { TableDatasource } from '../../10-common/table-datasource';
 import { StrategyExPair } from './strategy-edit-many.component';
 import { KlineChartDialogComponent } from '../../30-market/kline-chart/kline-chart-dialog.component';
+import { PriceService } from '../../services/mar/price.service';
 
 
 @Component({
@@ -50,6 +51,7 @@ export class StrategyEditCandidatesComponent implements OnInit, AfterViewInit {
 
   constructor(private strategyService: StrategyService,
               private pairService: PairService,
+              private priceService: PriceService,
               private assetService: AssetService,
               private dialog: MatDialog) {
 
@@ -150,7 +152,7 @@ export class StrategyEditCandidatesComponent implements OnInit, AfterViewInit {
 
   refreshPrices(): void {
     this.refreshingPrices = true;
-    this.pairService.inquirePrices(this.ex)
+    this.priceService.inquirePrices(this.ex)
       .subscribe((cps: CurrentPrices) => {
           this.refreshingPrices = false;
           for (const sep of this.strategyExPairs) {

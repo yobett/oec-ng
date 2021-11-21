@@ -11,6 +11,7 @@ import { PairService } from '../../services/mar/pair.service';
 import { EffectDigitsPipe } from '../../10-common/pipe/effect-digits-pipe';
 import { LastTransService } from '../../services/per/last-trans.service';
 import { LastTransaction } from '../../models/per/last-transaction';
+import { PriceService } from '../../services/mar/price.service';
 
 
 @Component({
@@ -39,6 +40,7 @@ export class StrategyEditComponent implements OnInit {
 
   constructor(private strategyService: StrategyService,
               private pairService: PairService,
+              private priceService: PriceService,
               private lastTransService: LastTransService,
               private effectDigits: EffectDigitsPipe,
               private snackBar: MatSnackBar,
@@ -79,7 +81,7 @@ export class StrategyEditComponent implements OnInit {
 
   refreshPrice() {
     this.refreshingPrice = true;
-    this.pairService.inquirePrice(this.strategy.ex, this.strategy.symbol)
+    this.priceService.inquirePrice(this.strategy.ex, this.strategy.symbol)
       .subscribe(price => {
           this.refreshingPrice = false;
           this.tickerPrice = +price;

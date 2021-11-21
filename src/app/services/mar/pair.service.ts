@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { ModelCurdService } from '../model-curd.service';
 import { ExchangePair, ExchangePairsResult, ExPair } from '../../models/mar/ex-pair';
 import { ListResult, Result, ValueResult } from '../../models/result';
-import { CurrentPrices, PairPrice, PriceRequest, PriceResponse } from '../../models/mar/pair-price';
+import { PairPrice } from '../../models/mar/pair-price';
 
 
 @Injectable()
@@ -34,27 +34,6 @@ export class PairService extends ModelCurdService<ExPair> {
 
   list2WithLastTrans(): Observable<PairPrice[]> {
     return this.list2(this.baseUrl + '/concern/withLastTrans') as Observable<PairPrice[]>;
-  }
-
-  inquirePrices(preferDS: string = null): Observable<CurrentPrices> {
-    let url = `${this.baseUrl}/concern/inquirePrices`;
-    if (preferDS) {
-      url = url + '?preferDS=' + preferDS;
-    }
-    return this.pipeDefault(this.http.post<ValueResult<CurrentPrices>>(url, null))
-      .pipe(map(result => result.value));
-  }
-
-  inquirePricesEx(priceRequests: PriceRequest[]): Observable<PriceResponse[]> {
-    const url = `${this.baseUrl}/inquirePrices`;
-    return this.pipeDefault(this.http.post<ListResult<PriceResponse>>(url, priceRequests))
-      .pipe(map(result => result.list));
-  }
-
-  inquirePrice(ex: string, symbol: string): Observable<number | string> {
-    const url = `${this.baseUrl}/ticker/${ex}/${symbol}`;
-    return this.pipeDefault(this.http.get<ValueResult<number | string>>(url))
-      .pipe(map(result => result.value));
   }
 
   updateConcerned(id: number, concerned: boolean): Observable<Result> {

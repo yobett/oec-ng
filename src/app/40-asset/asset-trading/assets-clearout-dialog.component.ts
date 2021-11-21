@@ -11,11 +11,12 @@ import { TableDatasource } from '../../10-common/table-datasource';
 import { PairService } from '../../services/mar/pair.service';
 import { Asset } from '../../models/per/asset';
 import { PriceRequest, PriceResponse } from '../../models/mar/pair-price';
-import { OrderForm, BatchPlaceOrderResult } from '../../models/per/order-form';
+import { BatchPlaceOrderResult, OrderForm } from '../../models/per/order-form';
 import { SpotOrderService } from '../../services/per/spot-order.service';
 import { PlaceOrderRefreshDelay } from '../../config';
 import { Exch } from '../../models/sys/exch';
 import { ExchService } from '../../services/sys/exch.service';
+import { PriceService } from '../../services/mar/price.service';
 
 
 export interface AssetsClearoutData {
@@ -74,6 +75,7 @@ export class AssetsClearoutDialogComponent implements AfterViewInit {
   constructor(private orderService: SpotOrderService,
               private pairService: PairService,
               private exchService: ExchService,
+              private priceService: PriceService,
               private snackBar: MatSnackBar,
               public dialogRef: MatDialogRef<AssetsClearoutDialogComponent, number>,
               @Inject(MAT_DIALOG_DATA) public data: AssetsClearoutData) {
@@ -146,7 +148,7 @@ export class AssetsClearoutDialogComponent implements AfterViewInit {
       quoteCcy: this.stableCoin,
       ex: ac.ex
     }));
-    this.pairService.inquirePricesEx(priceRequests)
+    this.priceService.inquirePricesEx(priceRequests)
       .subscribe((prs: PriceResponse[]) => {
         for (const pr of prs) {
           const ac = this.allCandidates.find(ac => pr.baseCcy === ac.ccy && pr.ex === ac.ex);

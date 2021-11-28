@@ -11,7 +11,7 @@
 
 <mat-dialog-content>
   <dl>
-    <dt>代号</dt>
+    <dt>代号/市值排名</dt>
     <dd class="ccy-logo-code">
       <img class="ccy-logo" [src]="CoinLogoPath(ccy.code)" alt="">
       <span class="ccy-code">{{ccy.code}}</span>
@@ -19,6 +19,10 @@
         <ng-template [ngIf]="ccy.no<=5000">#{{ccy.no}}</ng-template>
         <ng-template [ngIf]="ccy.no>5000">&gt; 5000</ng-template>
       </span>
+    </dd>
+    <dt>CMC加入日期</dt>
+    <dd>
+      <span class="add-date">{{ccy.cmcAddedDate | date:'y-MM-dd'}}</span>
     </dd>
     <dt>查看</dt>
     <dd>

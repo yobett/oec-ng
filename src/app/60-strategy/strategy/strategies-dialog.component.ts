@@ -28,7 +28,6 @@ export interface StrategiesDialogData {
 }
 
 export interface NewStrategyPrefer {
-  side?: 'buy' | 'sell';
   ex?: string;
 }
 
@@ -186,7 +185,6 @@ export class StrategiesDialogComponent implements AfterViewInit {
     strategy.baseCcy = this.filter.baseCcy;
     strategy.quoteCcy = this.filter.quoteCcy;
     if (this.newStrategyPrefer) {
-      strategy.side = this.newStrategyPrefer.side as any;
       strategy.ex = this.newStrategyPrefer.ex;
     }
     const dialogRef: MatDialogRef<StrategyNewComponent, Strategy> = StrategyNewComponent
@@ -271,7 +269,7 @@ export class StrategiesDialogComponent implements AfterViewInit {
     return dialog.open(
       StrategiesDialogComponent, {
         disableClose: true,
-        width: '100',
+        width: '100%',
         maxWidth: '96vw',
         data
       });

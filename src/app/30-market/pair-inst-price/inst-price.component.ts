@@ -419,7 +419,6 @@ export class InstPriceComponent extends SessionSupportComponent implements After
     const lastTrans = pair.lastTrans;
     if (lastTrans) {
       newStrategyPrefer.ex = lastTrans.ex;
-      newStrategyPrefer.side = lastTrans.side === 'buy' ? 'sell' : 'buy';
     }
     const pairBQ = {baseCcy: pair.baseCcy, quoteCcy: pair.quoteCcy};
     this.strategyService.list2(null, pairBQ)
